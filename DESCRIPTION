@@ -1,0 +1,17 @@
+Package: hud.export
+Version: 0.0.0.9000
+Title: Retrieve HUD Export CSVs from the Clarity Looker API
+Description: What the package does (one paragraph).
+Authors@R: c(person("Stephen","Holsenbeck", email = "sholsen@alumni.emory.edu", role = c("aut","cre")),
+    person("Genelle", "Denzin", email = "", role = c("aut")))
+License: AGPL (>= 3)
+Encoding: UTF-8
+Imports: 
+  dplyr,
+  feather,
+  rlang,
+  stringr,
+  cli
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
