@@ -7,11 +7,12 @@ Authors@R: c(person("Stephen","Holsenbeck", email = "sholsen@alumni.emory.edu", 
 License: AGPL (>= 3)
 Encoding: UTF-8
 Imports: 
+  cli,
   dplyr,
   feather,
+  lookr,
   rlang,
-  stringr,
-  cli
+  stringr
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
