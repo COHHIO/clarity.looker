@@ -1,7 +1,13 @@
 
+
+
 # hud_export object ----
 # Mon Jul 19 16:05:14 2021
-hud_export <-
+#' @title HUD Export saved values
+#' @description The Look Ids for various filter criteria and the column specifications
+#' @export
+
+.hud_export <-
   list(
     Affiliation = list(
       look = c(
@@ -10,12 +16,14 @@ hud_export <-
         daily = 65914
       ),
       col_types = c(
+        AffiliationID = "n",
         ProjectID = "n",
-        ResProjectID = "c",
-        UserID = "n",
+        ResProjectID = "n",
         DateCreated = "T",
         DateUpdated = "T",
-        DateDeleted = "l"
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Client = list(
@@ -25,41 +33,42 @@ hud_export <-
         daily = 65915
       ),
       col_types = c(
-        AfghanistanOEF = "n",
+        PersonalID = "n",
+        FirstName = "c",
+        MiddleName = "c",
+        LastName = "c",
+        NameSuffix = "c",
+        NameDataQuality = "n",
+        SSN = "c",
+        SSNDataQuality = "n",
+        DOB = "D",
+        DOBDataQuality = "n",
         AmIndAKNative = "n",
         Asian = "n",
         BlackAfAmerican = "n",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        DesertStorm = "n",
-        DischargeStatus = "n",
-        DOB = "D",
-        DOBDataQuality = "n",
+        NativeHIOtherPacific = "n",
+        White = "n",
+        RaceNone = "n",
         Ethnicity = "n",
-        FirstName = "c",
         Gender = "n",
+        VeteranStatus = "n",
+        YearEnteredService = "n",
+        YearSeparated = "n",
+        WorldWarII = "n",
+        KoreanWar = "n",
+        VietnamWar = "n",
+        DesertStorm = "n",
+        AfghanistanOEF = "n",
         IraqOIF = "n",
         IraqOND = "n",
-        KoreanWar = "n",
-        LastName = "c",
-        MiddleName = "c",
-        MilitaryBranch = "n",
-        NameDataQuality = "n",
-        NameSuffix = "c",
-        NativeHIOtherPacific = "n",
         OtherTheater = "n",
-        PersonalID = "n",
-        RaceNone = "l",
-        SSN = "c",
-        SSNDataQuality = "n",
-        UserID = "n",
-        VeteranStatus = "n",
-        VietnamWar = "n",
-        White = "n",
-        WorldWarII = "n",
-        YearEnteredService = "n",
-        YearSeparated = "n"
+        MilitaryBranch = "n",
+        DischargeStatus = "n",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     CurrentLivingSituation = list(
@@ -71,21 +80,22 @@ hud_export <-
       api_nm = "Current Living Situation",
       col_types = c(
         CurrentLivingSitID = "n",
-        CurrentLivingSituation = "n",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
         EnrollmentID = "n",
-        InformationDate = "D",
-        LeaseOwn60Day = "l",
-        LeaveSituation14Days = "l",
-        LocationDetails = "c",
-        MovedTwoOrMore = "l",
         PersonalID = "n",
-        ResourcesToObtain = "l",
-        SubsequentResidence = "l",
-        UserID = "n",
-        VerifiedBy = "l"
+        InformationDate = "T",
+        CurrentLivingSituation = "n",
+        VerifiedBy = "c",
+        LeaveSituation14Days = "n",
+        SubsequentResidence = "n",
+        ResourcesToObtain = "n",
+        LeaseOwn60Day = "n",
+        MovedTwoOrMore = "n",
+        LocationDetails = "c",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "c"
       )
     ),
     Disabilities = list(
@@ -95,24 +105,25 @@ hud_export <-
         daily = 65919
       ),
       col_types = c(
+        DisabilitiesID = "c",
+        EnrollmentID = "n",
+        PersonalID = "n",
+        InformationDate = "D",
+        DisabilityType = "n",
+        DisabilityResponse = "n",
+        IndefiniteAndImpairs = "n",
+        TCellCountAvailable = "n",
+        TCellCount = "n",
+        TCellSource = "n",
+        ViralLoadAvailable = "n",
+        ViralLoad = "n",
+        ViralLoadSource = "n",
         DataCollectionStage = "n",
         DateCreated = "T",
-        DateDeleted = "l",
         DateUpdated = "T",
-        DisabilitiesID = "c",
-        DisabilityResponse = "n",
-        DisabilityType = "n",
-        EnrollmentID = "n",
-        IndefiniteAndImpairs = "n",
-        InformationDate = "D",
-        PersonalID = "n",
-        TCellCount = "l",
-        TCellCountAvailable = "l",
-        TCellSource = "l",
-        ViralLoadAvailable = "l",
-        ViralLoad = "l",
-        ViralLoadSource = "l",
-        UserID = "n"
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     EmploymentEducation = list(
@@ -123,20 +134,21 @@ hud_export <-
       ),
       api_nm = "Employment Education",
       col_types = c(
-        UserID = "n",
-        SchoolStatus = "l",
-        PersonalID = "n",
-        NotEmployedReason = "n",
-        LastGradeCompleted = "n",
-        InformationDate = "D",
-        EnrollmentID = "n",
-        EmploymentType = "l",
         EmploymentEducationID = "c",
+        EnrollmentID = "n",
+        PersonalID = "n",
+        InformationDate = "D",
+        LastGradeCompleted = "n",
+        SchoolStatus = "n",
         Employed = "n",
-        DateUpdated = "T",
-        DateDeleted = "l",
+        EmploymentType = "n",
+        NotEmployedReason = "n",
+        DataCollectionStage = "n",
         DateCreated = "T",
-        DataCollectionStage = "n"
+        DateUpdated = "T",
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Enrollment = list(
@@ -146,78 +158,77 @@ hud_export <-
         daily = 65921
       ),
       col_types = c(
-        AddressDataQuality = "n",
-        AlcoholDrugAbuseFam = "l",
-        AnnualPercentAMI = "n",
-        ChildWelfareMonths = "l",
-        ChildWelfareYears = "l",
-        ClientEnrolledInPATH = "n",
-        CountOutreachReferralApproaches = "l",
-        ZeroIncome = "n",
-        WorstHousingSituation = "l",
-        VAMCStation = "n",
-        UserID = "n",
-        UrgentReferral = "n",
-        UnemploymentFam = "l",
-        TimeToHousingLoss = "n",
-        TimesHomelessPastThreeYears = "n",
-        ThresholdScore = "n",
-        SubsidyAtRisk = "n",
-        SingleParent = "n",
-        SexualOrientationOther = "l",
-        SexualOrientation = "n",
-        SexOffender = "n",
-        RunawayYouth = "l",
-        `Reporting Period Start Date` = "D",
-        `Reporting Period End Date` = "D",
-        RelationshipToHoH = "n",
-        ReferralSource = "l",
-        ReasonNotEnrolled = "n",
-        ReasonNoServices = "l",
-        ProjectID = "n",
-        PreviousStreetESSH = "n",
-        PhysicalDisabilityFam = "l",
+        EnrollmentID = "n",
         PersonalID = "n",
-        PercentAMI = "n",
-        MoveInDate = "D",
-        LOSUnderThreshold = "n",
-        LivingSituation = "n",
-        LiteralHomelessHistory = "n",
-        MonthsHomelessPastThreeYears = "n",
-        MentalHealthIssuesFam = "l",
-        LengthOfStay = "n",
-        LastPermanentZIP = "n",
-        LastPermanentState = "l",
-        LastPermanentCity = "c",
-        LastPermanentStreet = "c",
-        JuvenileJusticeYears = "l",
-        JuvenileJusticeMonths = "l",
-        IraqAfghanistan = "n",
-        InsufficientIncome = "l",
-        IncarceratedParent = "l",
-        HPScreeningScore = "n",
-        HouseholdID = "c",
-        HouseholdChange = "n",
-        HH5Plus = "n",
-        FormerWardJuvenileJustice = "l",
-        FormerWardChildWelfare = "l",
-        FemVet = "n",
-        FinancialChange = "n",
-        EvictionHistory = "n",
+        ProjectID = "n",
         EntryDate = "D",
-        DisablingCondition = "n",
-        EligibleForRHY = "l",
-        DisabledHoH = "n",
-        DependentUnder6 = "n",
-        DateUpdated = "T",
+        HouseholdID = "c",
+        RelationshipToHoH = "n",
+        LivingSituation = "n",
+        LengthOfStay = "n",
+        LOSUnderThreshold = "l",
+        PreviousStreetESSH = "n",
         DateToStreetESSH = "D",
-        DateOfPATHStatus = "D",
+        TimesHomelessPastThreeYears = "n",
+        MonthsHomelessPastThreeYears = "n",
+        DisablingCondition = "n",
         DateOfEngagement = "D",
-        DateOfBCPStatus = "l",
+        MoveInDate = "D",
+        DateOfPATHStatus = "D",
+        ClientEnrolledInPATH = "n",
+        ReasonNotEnrolled = "n",
+        WorstHousingSituation = "n",
+        PercentAMI = "n",
+        LastPermanentStreet = "c",
+        LastPermanentCity = "c",
+        LastPermanentState = "c",
+        LastPermanentZIP = "n",
+        AddressDataQuality = "n",
+        DateOfBCPStatus = "D",
+        EligibleForRHY = "n",
+        ReasonNoServices = "n",
+        RunawayYouth = "n",
+        SexualOrientation = "n",
+        SexualOrientationOther = "c",
+        FormerWardChildWelfare = "n",
+        ChildWelfareYears = "n",
+        ChildWelfareMonths = "n",
+        FormerWardJuvenileJustice = "n",
+        JuvenileJusticeYears = "n",
+        JuvenileJusticeMonths = "n",
+        UnemploymentFam = "n",
+        MentalHealthIssuesFam = "n",
+        PhysicalDisabilityFam = "n",
+        AlcoholDrugAbuseFam = "n",
+        InsufficientIncome = "n",
+        IncarceratedParent = "n",
+        ReferralSource = "n",
+        CountOutreachReferralApproaches = "n",
+        UrgentReferral = "n",
+        TimeToHousingLoss = "n",
+        ZeroIncome = "n",
+        AnnualPercentAMI = "n",
+        FinancialChange = "n",
+        HouseholdChange = "n",
+        EvictionHistory = "n",
+        SubsidyAtRisk = "n",
+        LiteralHomelessHistory = "n",
+        DisabledHoH = "n",
         CriminalRecord = "n",
+        SexOffender = "n",
+        DependentUnder6 = "n",
+        SingleParent = "n",
+        HH5Plus = "n",
+        IraqAfghanistan = "n",
+        FemVet = "n",
+        HPScreeningScore = "n",
+        ThresholdScore = "n",
+        VAMCStation = "n",
         DateCreated = "T",
-        DateDeleted = "l",
-        EnrollmentID = "n"
+        DateUpdated = "T",
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     EnrollmentCoC = list(
@@ -228,18 +239,19 @@ hud_export <-
       ),
       api_nm = "Enrollment CoC",
       col_types = c(
-        CoCCode = "c",
-        DataCollectionStage = "n",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
         EnrollmentCoCID = "c",
         EnrollmentID = "n",
         HouseholdID = "c",
-        InformationDate = "D",
-        PersonalID = "n",
         ProjectID = "n",
-        UserID = "n"
+        PersonalID = "n",
+        InformationDate = "D",
+        CoCCode = "c",
+        DataCollectionStage = "n",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Event = list(
@@ -249,20 +261,21 @@ hud_export <-
         daily = 65923
       ),
       col_types = c(
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        EnrollmentID = "n",
-        Event = "n",
-        EventDate = "D",
         EventID = "n",
-        LocationCrisisOrPHHousing = "l",
+        EnrollmentID = "n",
         PersonalID = "n",
+        EventDate = "D",
+        Event = "n",
         ProbSolDivRRResult = "n",
         ReferralCaseManageAfter = "n",
-        ReferralResult = "n",
-        ResultDate = "D",
-        UserID = "n"
+        LocationCrisisOrPHHousing = "c",
+        ReferralResult = "D",
+        ResultDate = "T",
+        DateCreated = "T",
+        DateUpdated = "c",
+        UserID = "T",
+        DateDeleted = "c",
+        ExportID = "c"
       )
     ),
     Exit = list(
@@ -272,55 +285,77 @@ hud_export <-
         daily = 65924
       ),
       col_types = c(
-        AftercareDate = "l",
-        AftercareProvided = "l",
-        AskedOrForcedToExchangeForSex = "l",
-        AskedOrForcedToExchangeForSexPastThreeMonths = "l",
-        CMExitReason = "l",
-        CoercedToContinueWork = "l",
-        CounselingReceived = "l",
-        CountOfExchangeForSex = "l",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        Destination = "n",
-        DestinationSafeClient = "l",
-        DestinationSafeWorker = "l",
-        EarlyExitReason = "l",
-        EmailSocialMedia = "l",
-        EnrollmentID = "n",
-        ExchangeForSex = "l",
-        ExchangeForSexPastThreeMonths = "l",
-        ExitDate = "D",
         ExitID = "n",
-        FamilyCounseling = "l",
-        GroupCounseling = "l",
-        HousingAssessment = "n",
-        IndividualCounseling = "l",
-        InPersonGroup = "l",
-        InPersonIndividual = "l",
-        LaborExploitPastThreeMonths = "l",
-        OtherDestination = "c",
+        EnrollmentID = "n",
         PersonalID = "n",
-        PosAdultConnections = "l",
-        PosCommunityConnections = "l",
-        PosPeerConnections = "l",
-        PostExitCounselingPlan = "l",
-        ProjectCompletionStatus = "l",
-        SessionCountAtExit = "l",
-        SessionsInPlan = "l",
+        ExitDate = "D",
+        Destination = "n",
+        OtherDestination = "c",
+        HousingAssessment = "n",
         SubsidyInformation = "n",
-        Telephone = "l",
+        ProjectCompletionStatus = "n",
+        EarlyExitReason = "n",
+        ExchangeForSex = "n",
+        ExchangeForSexPastThreeMonths = "n",
+        CountOfExchangeForSex = "n",
+        AskedOrForcedToExchangeForSex = "n",
+        AskedOrForcedToExchangeForSexPastThreeMonths = "n",
+        WorkPlaceViolenceThreats = "n",
+        WorkPlacePromiseDifference = "n",
+        CoercedToContinueWork = "n",
+        LaborExploitPastThreeMonths = "n",
+        CounselingReceived = "n",
+        IndividualCounseling = "n",
+        FamilyCounseling = "n",
+        GroupCounseling = "n",
+        SessionCountAtExit = "n",
+        PostExitCounselingPlan = "n",
+        SessionsInPlan = "n",
+        DestinationSafeClient = "n",
+        DestinationSafeWorker = "n",
+        PosAdultConnections = "n",
+        PosPeerConnections = "n",
+        PosCommunityConnections = "n",
+        AftercareDate = "D",
+        AftercareProvided = "n",
+        EmailSocialMedia = "n",
+        Telephone = "n",
+        InPersonIndividual = "n",
+        InPersonGroup = "n",
+        CMExitReason = "n",
+        DateCreated = "T",
+        DateUpdated = "T",
         UserID = "n",
-        WorkPlacePromiseDifference = "l",
-        WorkPlaceViolenceThreats = "l"
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
-    Export = list(look = c(
-      year2 = 65961,
-      s2020 = 65962,
-      daily = 65963
-    )),
+    Export = list(
+      look = c(
+        year2 = 65961,
+        s2020 = 65962,
+        daily = 65963
+      ),
+      col_types = c(
+        ExportID = "n",
+        SourceType = "n",
+        SourceID = "n",
+        SourceName = "c",
+        SourceContactFirst = "c",
+        SourceContactLast = "c",
+        SourceContactPhone = "c",
+        SourceContactExtension = "n",
+        SourceContactEmail = "c",
+        ExportDate = "T",
+        ExportStartDate = "D",
+        ExportEndDate = "D",
+        SoftwareName = "c",
+        SoftwareVersion = "c",
+        ExportPeriodType = "n",
+        ExportDirective = "n",
+        HashStatus = "n"
+      )
+    ),
     Funder = list(
       look = c(
         year2 = 65949,
@@ -328,17 +363,18 @@ hud_export <-
         daily = 65925
       ),
       col_types = c(
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        EndDate = "D",
-        Funder = "n",
         FunderID = "n",
-        GrantID = "c",
-        OtherFunder = "c",
         ProjectID = "n",
+        Funder = "n",
+        OtherFunder = "c",
+        GrantID = "c",
         StartDate = "D",
-        UserID = "n"
+        EndDate = "D",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     HealthAndDV = list(
@@ -349,23 +385,24 @@ hud_export <-
       ),
       api_nm = "Health DV",
       col_types = c(
+        HealthAndDVID = "c",
+        EnrollmentID = "n",
+        PersonalID = "n",
+        InformationDate = "D",
+        DomesticViolenceVictim = "n",
+        WhenOccurred = "n",
         CurrentlyFleeing = "n",
+        GeneralHealthStatus = "n",
+        DentalHealthStatus = "n",
+        MentalHealthStatus = "n",
+        PregnancyStatus = "n",
+        DueDate = "D",
         DataCollectionStage = "n",
         DateCreated = "T",
-        DateDeleted = "l",
         DateUpdated = "T",
-        DentalHealthStatus = "l",
-        DomesticViolenceVictim = "n",
-        DueDate = "l",
-        EnrollmentID = "n",
-        GeneralHealthStatus = "l",
-        HealthAndDVID = "c",
-        InformationDate = "D",
-        MentalHealthStatus = "l",
-        PersonalID = "n",
-        PregnancyStatus = "n",
         UserID = "n",
-        WhenOccurred = "n"
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     IncomeBenefits = list(
@@ -376,82 +413,83 @@ hud_export <-
       ),
       api_nm = "Income Benefits",
       col_types = c(
-        ADAP = "l",
-        Alimony = "n",
-        AlimonyAmount = "l",
-        BenefitsFromAnySource = "n",
+        IncomeBenefitsID = "c",
+        EnrollmentID = "n",
+        PersonalID = "n",
+        InformationDate = "D",
+        IncomeFromAnySource = "n",
+        TotalMonthlyIncome = "n",
+        Earned = "n",
+        EarnedAmount = "n",
+        Unemployment = "n",
+        UnemploymentAmount = "n",
+        SSI = "n",
+        SSIAmount = "n",
+        SSDI = "n",
+        SSDIAmount = "n",
+        VADisabilityService = "n",
+        VADisabilityServiceAmount = "n",
+        VADisabilityNonService = "n",
+        VADisabilityNonServiceAmount = "n",
+        PrivateDisability = "n",
+        PrivateDisabilityAmount = "n",
+        WorkersComp = "n",
+        WorkersCompAmount = "n",
+        TANF = "n",
+        TANFAmount = "n",
+        GA = "n",
+        GAAmount = "n",
+        SocSecRetirement = "n",
+        SocSecRetirementAmount = "n",
+        Pension = "n",
+        PensionAmount = "n",
         ChildSupport = "n",
         ChildSupportAmount = "n",
+        Alimony = "n",
+        AlimonyAmount = "n",
+        OtherIncomeSource = "n",
+        OtherIncomeAmount = "n",
+        OtherIncomeSourceIdentify = "c",
+        BenefitsFromAnySource = "n",
+        SNAP = "n",
+        WIC = "n",
+        TANFChildCare = "n",
+        TANFTransportation = "n",
+        OtherTANF = "n",
+        OtherBenefitsSource = "n",
+        OtherBenefitsSourceIdentify = "c",
+        InsuranceFromAnySource = "n",
+        Medicaid = "n",
+        NoMedicaidReason = "n",
+        Medicare = "n",
+        NoMedicareReason = "n",
+        SCHIP = "n",
+        NoSCHIPReason = "n",
+        VAMedicalServices = "n",
+        NoVAMedReason = "n",
+        EmployerProvided = "n",
+        NoEmployerProvidedReason = "n",
         COBRA = "n",
+        NoCOBRAReason = "n",
+        PrivatePay = "n",
+        NoPrivatePayReason = "n",
+        StateHealthIns = "n",
+        NoStateHealthInsReason = "n",
+        IndianHealthServices = "n",
+        NoIndianHealthServicesReason = "n",
+        OtherInsurance = "n",
+        OtherInsuranceIdentify = "c",
+        HIVAIDSAssistance = "n",
+        NoHIVAIDSAssistanceReason = "n",
+        ADAP = "n",
+        NoADAPReason = "n",
         ConnectionWithSOAR = "n",
         DataCollectionStage = "n",
         DateCreated = "T",
-        DateDeleted = "l",
         DateUpdated = "T",
-        Earned = "n",
-        EarnedAmount = "n",
-        EmployerProvided = "n",
-        EnrollmentID = "n",
-        GA = "n",
-        GAAmount = "n",
-        HIVAIDSAssistance = "l",
-        IncomeBenefitsID = "c",
-        IncomeFromAnySource = "n",
-        IndianHealthServices = "n",
-        InformationDate = "D",
-        InsuranceFromAnySource = "n",
-        Medicaid = "n",
-        Medicare = "n",
-        NoCOBRAReason = "n",
-        NoEmployerProvidedReason = "n",
-        NoHIVAIDSAssistanceReason = "l",
-        NoMedicaidReason = "n",
-        NoIndianHealthServicesReason = "n",
-        NoADAPReason = "l",
-        NoMedicareReason = "n",
-        NoPrivatePayReason = "n",
-        NoSCHIPReason = "n",
-        NoStateHealthInsReason = "n",
-        NoVAMedReason = "n",
-        OtherBenefitsSource = "n",
-        OtherBenefitsSourceIdentify = "c",
-        OtherIncomeAmount = "n",
-        OtherIncomeSource = "n",
-        OtherIncomeSourceIdentify = "c",
-        OtherInsurance = "n",
-        OtherInsuranceIdentify = "l",
-        OtherTANF = "n",
-        Pension = "n",
-        PensionAmount = "n",
-        PersonalID = "n",
-        PrivateDisability = "n",
-        PrivateDisabilityAmount = "l",
-        PrivatePay = "n",
-        SCHIP = "n",
-        SNAP = "n",
-        SocSecRetirement = "n",
-        SocSecRetirementAmount = "n",
-        SSDI = "n",
-        SSDIAmount = "n",
-        SSI = "n",
-        SSIAmount = "n",
-        StateHealthIns = "n",
-        TANF = "n",
-        TANFAmount = "n",
-        TANFChildCare = "n",
-        TANFTransportation = "n",
-        TotalMonthlyIncome = "n",
-        Unemployment = "n",
-        UnemploymentAmount = "n",
         UserID = "n",
-        VADisabilityNonService = "n",
-        VADisabilityNonServiceAmount = "n",
-        VADisabilityService = "n",
-        VADisabilityServiceAmount = "n",
-        VAMedicalServices = "n",
-        WIC = "n",
-        WorkersComp = "n",
-        WorkersCompAmount = "l"
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Inventory = list(
@@ -461,27 +499,28 @@ hud_export <-
         daily = 65928
       ),
       col_types = c(
-        Availability = "n",
-        BedInventory = "n",
-        CHBedInventory = "n",
-        CHVetBedInventory = "n",
-        CHYouthBedInventory = "n",
-        CoCCode = "c",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        ESBedType = "n",
-        HouseholdType = "n",
-        InventoryEndDate = "D",
         InventoryID = "n",
-        InventoryStartDate = "D",
-        OtherBedInventory = "n",
         ProjectID = "n",
+        CoCCode = "c",
+        HouseholdType = "n",
+        Availability = "n",
         UnitInventory = "n",
-        UserID = "n",
+        BedInventory = "n",
+        CHVetBedInventory = "n",
+        YouthVetBedInventory = "n",
         VetBedInventory = "n",
+        CHYouthBedInventory = "n",
         YouthBedInventory = "n",
-        YouthVetBedInventory = "n"
+        CHBedInventory = "n",
+        OtherBedInventory = "n",
+        ESBedType = "n",
+        InventoryStartDate = "D",
+        InventoryEndDate = "D",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Organization = list(
@@ -491,14 +530,15 @@ hud_export <-
         daily = 65930
       ),
       col_types = c(
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        OrganizationCommonName = "c",
         OrganizationID = "n",
         OrganizationName = "c",
-        UserID = "c",
-        VictimServicesProvider = "n"
+        VictimServicesProvider = "n",
+        OrganizationCommonName = "c",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "n",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Project = list(
@@ -508,24 +548,25 @@ hud_export <-
         daily = 65931
       ),
       col_types = c(
-        ContinuumProject = "n",
-        DateCreated = "T",
-        DateDeleted = "l",
-        DateUpdated = "T",
-        HMISParticipatingProject = "n",
-        HousingType = "n",
-        OperatingEndDate = "D",
-        OperatingStartDate = "D",
-        OrganizationID = "n",
-        PITCount = "l",
-        ProjectCommonName = "c",
         ProjectID = "n",
+        OrganizationID = "n",
         ProjectName = "c",
+        ProjectCommonName = "c",
+        OperatingStartDate = "D",
+        OperatingEndDate = "D",
+        ContinuumProject = "n",
         ProjectType = "n",
+        HousingType = "n",
         ResidentialAffiliation = "n",
-        TargetPopulation = "n",
         TrackingMethod = "n",
-        UserID = "n"
+        HMISParticipatingProject = "n",
+        TargetPopulation = "n",
+        PITCount = "n",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     ProjectCoC = list(
@@ -536,20 +577,21 @@ hud_export <-
         api_nm = "Project CoC"
       ),
       col_types = c(
-        ZIP = "n",
-        UserID = "n",
-        State = "c",
-        ProjectID = "n",
         ProjectCoCID = "n",
-        GeographyType = "n",
-        Geocode = "n",
-        DateUpdated = "T",
-        DateDeleted = "l",
+        ProjectID = "n",
         CoCCode = "c",
-        DateCreated = "T",
+        Geocode = "n",
+        Address1 = "c",
+        Address2 = "c",
         City = "c",
-        Address2 = "l",
-        Address1 = "c"
+        State = "c",
+        ZIP = "n",
+        GeographyType = "n",
+        DateCreated = "T",
+        DateUpdated = "T",
+        UserID = "c",
+        DateDeleted = "T",
+        ExportID = "n"
       )
     ),
     Services = list(
@@ -568,14 +610,14 @@ hud_export <-
       ),
       col_types = c(
         DateCreated = "T",
-        DateDeleted = "l",
+        DateDeleted = "T",
         DateUpdated = "T",
         UserEmail = "c",
-        UserExtension = "l",
+        UserExtension = "n",
         UserFirstName = "c",
         UserID = "n",
         UserLastName = "c",
-        UserPhone = "l"
+        UserPhone = "c"
       )
     )
   )
@@ -585,11 +627,13 @@ hud_export <-
 
 
 hud_rename <- function(x, .nm) {
-  if (is.null(x)) return(NULL)
+  if (is.null(x))
+    return(NULL)
   x %>%
-    dplyr::rename_with(.fn = ~{
+    dplyr::rename_with(.fn = ~ {
       # All column names are prefixed with the HUD CSV Export BETA report name from Looker - with spaces between capitalized words. This is removed
-      out <- trimws(stringr::str_remove(.x, stringr::fixed(paste0(.nm, " ")))) %>%
+      out <-
+        trimws(stringr::str_remove(.x, stringr::fixed(paste0(.nm, " ")))) %>%
         stringr::str_replace_all("(?<!a)[Ii][Dd]$", "ID") %>%
         stringr::str_remove("^Enrollment ") %>%
         stringr::str_replace_all("[Cc][Oo][Cc]", "CoC") %>%
@@ -603,7 +647,10 @@ hud_rename <- function(x, .nm) {
 }
 
 call_csv <- function(look_type = "year2", write = FALSE) {
-  fetch(deparse(match.call()[[1]][[3]]), look_type, write, self$.__enclos_env__)
+  fetch(deparse(match.call()[[1]][[3]]),
+        look_type,
+        write,
+        self$.__enclos_env__)
 }
 
 
@@ -613,8 +660,7 @@ call_csv <- function(look_type = "year2", write = FALSE) {
 hud_export <- R6::R6Class(
   "hud_export",
   public = rlang::exec(
-    rlang::list2,
-    !!!purrr::map(hud_export, ~ call_csv),
+    rlang::list2,!!!purrr::map(.hud_export, ~ call_csv),
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
     initialize = function(configFile) {
@@ -630,7 +676,7 @@ hud_export <- R6::R6Class(
     }
   ),
   lock_objects = FALSE,
-  private = list(item = hud_export),
+  private = list(item = .hud_export),
 )
 
 
@@ -670,27 +716,37 @@ hud_export <- R6::R6Class(
 fetch <- function(x,
                   look_type = "year2",
                   write = FALSE,
-                  ee
-) {
+                  ee) {
   .y <- x
   .x <- ee$private$item[[x]]
   .nm <- .x$api_nm %||% .y
 
   if (look_type != "daily")
-    data <- .x[[look_type]] %||% try(feather::read_feather(file.path("data", "API", paste0(.y, ".feather"))))
+    data <-
+    .x[[look_type]] %||% try(feather::read_feather(file.path("data", "API", paste0(.y, ".feather"))))
 
   if ((inherits(data, "try-error")) || look_type == "daily") {
     message(.y, ": fetching data")
-    if (is.null(.x$look[look_type])) return(NULL)
-    data <- ee$self$sdk$runLook(.x$look[look_type], "csv", as = "parsed", col_types = .x$col_types)
+    if (is.null(.x$look[look_type]))
+      return(NULL)
+    # Rename col_types to match the way they appear coming from the API
+    names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
+    data <-
+      ee$self$sdk$runLook(.x$look[look_type],
+                          "csv",
+                          as = "parsed",
+                          col_types = .x$col_types)
+    message(.y, ": data retrieved")
     if (write) {
+      message(.y, "writing raw to feather")
       feather::write_feather(data, file.path("data", "API", paste0(.y, "_raw.feather")))
     }
-    if (nrow(data) %in% c(0, 500)) stop(.y, " row count is", nrow(data))
+    if (nrow(data) %in% c(0, 500))
+      stop(.y, " row count is", nrow(data))
   }
 
-  if (any(stringr::str_detect(names(data), paste0("^",.nm,"\\s")))) {
-    data <- hud_rename(data, .y)
+  if (any(stringr::str_detect(names(data), paste0("^", .nm, "\\s")))) {
+    data <- hud_rename(data, .nm)
   }
 
   if (write) {
@@ -703,11 +759,18 @@ fetch <- function(x,
 #' @title Write object to the *data* directory
 #' @description Writes a \code{tibble/data.frame} as a feather file to the *data* directory using the name of the object as the file name.
 #' @param x \code{(tibble/data.frame)} The object to write to feather
-#' @param path \code{(character vector)} A character vector of the directory path to be passed to \link[base](file.path)
+#' @param path \code{(character vector)} A character vector of the directory path to be passed to \link[base]{file.path}
 #' @return A success message at the console
 #' @export
 to_feather <- function(x, path = "data") {
-  fn <- rlang::exec(file.path, !!!path, !!!ifelse(stringr::str_detect(path, "feather$"), path, paste0(deparse(rlang::enexpr(x)), ".feather")))
+  fn <-
+    rlang::exec(file.path,
+                !!!path,
+                !!!ifelse(
+                  stringr::str_detect(path, "feather$"),
+                  path,
+                  paste0(deparse(rlang::enexpr(x)), ".feather")
+                ))
   feather::write_feather(x, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
 }

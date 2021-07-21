@@ -9,7 +9,7 @@ to_feather(x, path = "data")
 \arguments{
 \item{x}{\code{(tibble/data.frame)} The object to write to feather}
 
-\item{path}{\code{(character vector)} A character vector of the directory path to be passed to \link\href{file.path}{base}}
+\item{path}{\code{(character vector)} A character vector of the directory path to be passed to \link[base]{file.path}}
 }
 \value{
 A success message at the console
