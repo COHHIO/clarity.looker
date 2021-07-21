@@ -1,6 +1,7 @@
 
 
 
+
 # hud_export object ----
 # Mon Jul 19 16:05:14 2021
 #' @title HUD Export saved values
@@ -24,6 +25,16 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        AffiliationID = "csv_affiliation.affiliation_id",
+        DateCreated = "csv_affiliation.added_date",
+        DateDeleted = "csv_affiliation.date_deleted",
+        DateUpdated = "csv_affiliation.last_updated",
+        ExportID = "csv_affiliation.export_id",
+        ProjectID = "csv_affiliation.id",
+        ResProjectID = "csv_affiliation.aff_res_proj_id",
+        UserID = "csv_affiliation.ref_user"
       )
     ),
     Client = list(
@@ -69,6 +80,21 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        DOB = "csv_client.birth_date",
+        DOBDataQuality = "csv_client.dob_quality",
+        DateCreated = "csv_client.added_date",
+        DateDeleted = "csv_client.date_deleted",
+        DateUpdated = "csv_client.last_updated",
+        ExportID = "csv_client.export_id",
+        FirstName = "csv_client.first_name",
+        LastName = "csv_client.last_name",
+        NameDataQuality = "csv_client.name_quality",
+        ID = "csv_client.id",
+        SSN = "csv_client.ssn",
+        SSNDataQuality = "csv_client.ssn_quality",
+        RefUserUpdated = "csv_client.ref_user_updated"
       )
     ),
     CurrentLivingSituation = list(
@@ -96,6 +122,27 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "c"
+      ),
+      fields = c(
+        ID = "csv_current_living_situation.id",
+        CurrentLivingSituation = "csv_current_living_situation.current_living_situation",
+        AddedDate = "csv_current_living_situation.added_date",
+        DateDeleted = "csv_current_living_situation.date_deleted",
+        LastUpdated = "csv_current_living_situation.last_updated",
+        RefProgram = "csv_current_living_situation.ref_program",
+        ExportID = "csv_current_living_situation.ExportID",
+        ProgramDate = "csv_current_living_situation.program_date",
+        Ph60Days = "csv_current_living_situation.ph_60_days",
+        LivingSituation14Days = "csv_current_living_situation.living_situation_14_days",
+        LocationDetails = "csv_current_living_situation.location_details",
+        Moved60Days = "csv_current_living_situation.moved_60_days",
+        RefClient = "csv_current_living_situation.ref_client",
+        ResourceNetworksPh = "csv_current_living_situation.resource_networks_ph",
+        ScreenType = "csv_current_living_situation.screen_type",
+        StatusScreenType = "csv_current_living_situation.status_screen_type",
+        SubswquentResidence = "csv_current_living_situation.subswquent_residence",
+        RefUser = "csv_current_living_situation.ref_user",
+        VerifiedBy = "csv_current_living_situation.verified_by"
       )
     ),
     Disabilities = list(
@@ -124,6 +171,27 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        ScreenType = "csv_disabilities.screen_type",
+        AddedDate = "csv_disabilities.added_date",
+        DateDeleted = "csv_disabilities.date_deleted",
+        LastUpdated = "csv_disabilities.last_updated",
+        ID = "csv_disabilities.id",
+        DisabilityResponse = "csv_disabilities.disability_response",
+        DisabilityType = "csv_disabilities.disability_type",
+        RefProgram = "csv_disabilities.ref_program",
+        ExportID = "csv_disabilities.ExportID",
+        DisablingCondition = "csv_disabilities.disabling_condition",
+        ProgramDate = "csv_disabilities.program_date",
+        RefClient = "csv_disabilities.ref_client",
+        TcellCountNumber = "csv_disabilities.tcell_count_number",
+        TcellCountAvailable = "csv_disabilities.tcell_count_available",
+        TcellDataObtained = "csv_disabilities.tcell_data_obtained",
+        RefUser = "csv_disabilities.ref_user",
+        ViralLoadNumber = "csv_disabilities.viral_load_number",
+        ViralLoadAvailable = "csv_disabilities.viral_load_available",
+        ViralLoadObtained = "csv_disabilities.viral_load_obtained"
       )
     ),
     EmploymentEducation = list(
@@ -149,6 +217,23 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        ScreenType = "csv_employment_education.screen_type",
+        AddedDate = "csv_employment_education.added_date",
+        DateDeleted = "csv_employment_education.date_deleted",
+        LastUpdated = "csv_employment_education.last_updated",
+        EmploymentIs = "csv_employment_education.employment_is",
+        ID = "csv_employment_education.id",
+        RhyEmploymentType = "csv_employment_education.rhy_employment_type",
+        RefProgram = "csv_employment_education.ref_program",
+        ExportID = "csv_employment_education.ExportID",
+        ProgramDate = "csv_employment_education.program_date",
+        RhyEducationLevel = "csv_employment_education.rhy_education_level",
+        RhyReasonNotEmployed = "csv_employment_education.rhy_reason_not_employed",
+        RefClient = "csv_employment_education.ref_client",
+        RhySchoolStatus = "csv_employment_education.rhy_school_status",
+        RefUser = "csv_employment_education.ref_user"
       )
     ),
     Enrollment = list(
@@ -252,6 +337,21 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        CoC = "csv_enrollment_coc.coc",
+        DataCollectionStage = "csv_enrollment_coc.data_collection_stage",
+        AddedDate = "csv_enrollment_coc.added_date",
+        Datedeleted = "csv_enrollment_coc.datedeleted",
+        LastUpdated = "csv_enrollment_coc.last_updated",
+        EnrollmentCoCID = "csv_enrollment_coc.enrollment_coc_id",
+        EnrollmentID = "csv_enrollment_coc.enrollment_id",
+        ExportID = "csv_enrollment_coc.exportid",
+        RefHousehold = "csv_enrollment_coc.ref_household",
+        StartDate = "csv_enrollment_coc.start_date",
+        RefClient = "csv_enrollment_coc.ref_client",
+        ID = "csv_enrollment_coc.id",
+        RefUser = "csv_enrollment_coc.ref_user"
       )
     ),
     Event = list(
@@ -276,6 +376,23 @@
         UserID = "T",
         DateDeleted = "c",
         ExportID = "c"
+      ),
+      fields = c(
+        DateCreated = "csv_event.date_created",
+        DateDeleted = "csv_event.date_deleted",
+        DateUpdated = "csv_event.date_updated",
+        EnrollmentID = "csv_event.enrollment_id",
+        Event = "csv_event.event",
+        EventDate = "csv_event.event_date",
+        EventID = "csv_event.event_id",
+        ExportID = "csv_event.export_id",
+        LocationCrisisOrPhHousing = "csv_event.location_crisis_or_ph_housing",
+        PersonalID = "csv_event.personal_id",
+        ProbSolDivRrResult = "csv_event.prob_sol_div_rr_result",
+        ReferralCaseManageAfter = "csv_event.referral_case_manage_after",
+        ReferralResult = "csv_event.referral_result",
+        ResultDate = "csv_event.result_date",
+        UserID = "csv_event.user_id"
       )
     ),
     Exit = list(
@@ -328,6 +445,51 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        Aftercaredate = "csv_exit.aftercaredate",
+        RhyAftercareYn = "csv_exit.rhy_aftercare_yn",
+        RhyExploitationAsk = "csv_exit.rhy_exploitation_ask",
+        RhyExploitationAskTimes = "csv_exit.rhy_exploitation_ask_times",
+        VashCaseMgtExitReason = "csv_exit.vash_case_mgt_exit_reason",
+        RhyLaborExploitationForcedTricked = "csv_exit.rhy_labor_exploitation_forced_tricked",
+        RhyCounseling = "csv_exit.rhy_counseling",
+        RhyExploitationFrequency = "csv_exit.rhy_exploitation_frequency",
+        AddedDate = "csv_exit.added_date",
+        Datedeleted = "csv_exit.datedeleted",
+        LastUpdated = "csv_exit.last_updated",
+        ExitDestination = "csv_exit.exit_destination",
+        RhyDestSafeClient = "csv_exit.rhy_dest_safe_client",
+        RhyDestSafeCaseworker = "csv_exit.rhy_dest_safe_caseworker",
+        RhyCompletionInvoluntaryReason = "csv_exit.rhy_completion_involuntary_reason",
+        RhyAftercareEmailsocialmedia = "csv_exit.rhy_aftercare_emailsocialmedia",
+        EnrollmentID = "csv_exit.enrollment_id",
+        RhyExploitation = "csv_exit.rhy_exploitation",
+        RhyExploitationTimes = "csv_exit.rhy_exploitation_times",
+        EndDate = "csv_exit.end_date",
+        ID = "csv_exit.id",
+        ExportID = "csv_exit.exportid",
+        RhyCounselingFamily = "csv_exit.rhy_counseling_family",
+        RhyCounselingGroup = "csv_exit.rhy_counseling_group",
+        HousingAssExit = "csv_exit.housing_ass_exit",
+        RhyAftercareInpersongroup = "csv_exit.rhy_aftercare_inpersongroup",
+        RhyAftercareInpersonindividual = "csv_exit.rhy_aftercare_inpersonindividual",
+        RhyCounselingIndividual = "csv_exit.rhy_counseling_individual",
+        RhyLaborExploitationTimes = "csv_exit.rhy_labor_exploitation_times",
+        ExitDestinationOther = "csv_exit.exit_destination_other",
+        RefClient = "csv_exit.ref_client",
+        RhyAdultConnect = "csv_exit.rhy_adult_connect",
+        RhyCommunityConnect = "csv_exit.rhy_community_connect",
+        RhyPeerConnect = "csv_exit.rhy_peer_connect",
+        RhyCounselingPostExitPlan = "csv_exit.rhy_counseling_post_exit_plan",
+        RhyCompletionStatus = "csv_exit.rhy_completion_status",
+        RhyCounselingNumSessions = "csv_exit.rhy_counseling_num_sessions",
+        RhyCounselingNumPlanned = "csv_exit.rhy_counseling_num_planned",
+        SubsidyInformation = "csv_exit.subsidy_information",
+        RhyAftercareTelephone = "csv_exit.rhy_aftercare_telephone",
+        RefUser = "csv_exit.ref_user",
+        RhyLaborExploitationThreats = "csv_exit.rhy_labor_exploitation_threats",
+        RhyLaborExploitationPayment = "csv_exit.rhy_labor_exploitation_payment"
       )
     ),
     Export = list(
@@ -354,6 +516,25 @@
         ExportPeriodType = "n",
         ExportDirective = "n",
         HashStatus = "n"
+      ),
+      fields = c(
+        ExportDate = "csv_export.export_date",
+        ExportDirective = "csv_export.export_directive",
+        ExportEndDate = "csv_export.export_end_date",
+        ExportID = "csv_export.export_id",
+        ExportPeriodType = "csv_export.export_period_type",
+        ExportStartDate = "csv_export.export_start_date",
+        HashStatus = "csv_export.hash_status",
+        SoftwareName = "csv_export.software_name",
+        SoftwareVersion = "csv_export.software_version",
+        SourceContactEmail = "csv_export.source_contact_email",
+        SouceContactExtension = "csv_export.souce_contact_extension",
+        SourceContactFirst = "csv_export.source_contact_first",
+        SourceContactLast = "csv_export.source_contact_last",
+        SourceContactPhone = "csv_export.source_contact_phone",
+        SourceID = "csv_export.source_id",
+        SourceName = "csv_export.source_name",
+        SourceType = "csv_export.source_type"
       )
     ),
     Funder = list(
@@ -375,6 +556,21 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        DateCreated = "csv_funder.date_created",
+        DateDeleted = "csv_funder.DateDeleted",
+        LastUpdated = "csv_funder.last_updated",
+        End = "csv_funder.end",
+        ExportID = "csv_funder.ExportId",
+        FundingSource = "csv_funder.funding_source",
+        ID = "csv_funder.id",
+        Identifier = "csv_funder.identifier",
+        NonFederalFundingSource = "csv_funder.non_federal_funding_source",
+        RefProgram = "csv_funder.ref_program",
+        RawID = "csv_funder.raw_id",
+        Added = "csv_funder.added",
+        RefUser = "csv_funder.ref_user"
       )
     ),
     HealthAndDV = list(
@@ -403,6 +599,26 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        HealthDvFleeing = "csv_health_dv.health_dv_fleeing",
+        ScreenType = "csv_health_dv.screen_type",
+        AddedDate = "csv_health_dv.added_date",
+        DateDeleted = "csv_health_dv.date_deleted",
+        LastUpdated = "csv_health_dv.last_updated",
+        RhyDentalHealth = "csv_health_dv.rhy_dental_health",
+        HealthDv = "csv_health_dv.health_dv",
+        HealthPregnancyDate = "csv_health_dv.health_pregnancy_date",
+        RefProgram = "csv_health_dv.ref_program",
+        ExportID = "csv_health_dv.ExportID",
+        HealthGeneral = "csv_health_dv.health_general",
+        ID = "csv_health_dv.id",
+        ProgramDate = "csv_health_dv.program_date",
+        HealthMental = "csv_health_dv.health_mental",
+        RefClient = "csv_health_dv.ref_client",
+        HealthPregnancy = "csv_health_dv.health_pregnancy",
+        RefUser = "csv_health_dv.ref_user",
+        HealthDvOccurred = "csv_health_dv.health_dv_occurred"
       )
     ),
     IncomeBenefits = list(
@@ -490,6 +706,85 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        HealthHivAdap = "csv_income_benefits.health_hiv_adap",
+        IncomeSpousalSupportIs = "csv_income_benefits.income_spousal_support_is",
+        IncomeSpousalSupport = "csv_income_benefits.income_spousal_support",
+        BenefitsNoncash = "csv_income_benefits.benefits_noncash",
+        HealthInsCobra = "csv_income_benefits.health_ins_cobra",
+        IncomeChildsupportIs = "csv_income_benefits.income_childsupport_is",
+        IncomeChildsupport = "csv_income_benefits.income_childsupport",
+        SoarConnected = "csv_income_benefits.soar_connected",
+        ScreenType = "csv_income_benefits.screen_type",
+        AddedDate = "csv_income_benefits.added_date",
+        DateDeleted = "csv_income_benefits.date_deleted",
+        LastUpdated = "csv_income_benefits.last_updated",
+        IncomeEarnedIs = "csv_income_benefits.income_earned_is",
+        IncomeEarned = "csv_income_benefits.income_earned",
+        HealthInsEmp = "csv_income_benefits.health_ins_emp",
+        RefProgram = "csv_income_benefits.ref_program",
+        ExportID = "csv_income_benefits.export_id",
+        IncomeGaIs = "csv_income_benefits.income_ga_is",
+        IncomeGa = "csv_income_benefits.income_ga",
+        HealthHiv = "csv_income_benefits.health_hiv",
+        ID = "csv_income_benefits.id",
+        IncomeCash = "csv_income_benefits.income_cash",
+        CIndianHealthServiceProgram = "csv_income_benefits.c_indian_health_service_program",
+        Program = "csv_income_benefits.program",
+        HealthInsurance = "csv_income_benefits.health_insurance",
+        BenefitsMedicaid = "csv_income_benefits.benefits_medicaid",
+        BenefitsMedicare = "csv_income_benefits.benefits_medicare",
+        HopwaHivAdapReason = "csv_income_benefits.hopwa_hiv_adap_reason",
+        HopwaCobraReason = "csv_income_benefits.hopwa_cobra_reason",
+        HopwaEmpReason = "csv_income_benefits.hopwa_emp_reason",
+        HopwaHivServicesReason = "csv_income_benefits.hopwa_hiv_services_reason",
+        IndianHealthReason = "csv_income_benefits.indian_health_reason",
+        HopwaMedicaidReason = "csv_income_benefits.hopwa_medicaid_reason",
+        HopwaMedicareReason = "csv_income_benefits.hopwa_medicare_reason",
+        HopwaPpayReason = "csv_income_benefits.hopwa_ppay_reason",
+        HopwaSchipReason = "csv_income_benefits.hopwa_schip_reason",
+        HopwaStateReason = "csv_income_benefits.hopwa_state_reason",
+        HopwaVaMedicalReason = "csv_income_benefits.hopwa_va_medical_reason",
+        BenefitsOther = "csv_income_benefits.benefits_other",
+        BenefitsOtherSource = "csv_income_benefits.benefits_other_source",
+        IncomeOther = "csv_income_benefits.income_other",
+        IncomeOtherIs = "csv_income_benefits.income_other_is",
+        IncomeOtherSource = "csv_income_benefits.income_other_source",
+        OtherHealthInsurance = "csv_income_benefits.other_health_insurance",
+        OtherHealthInsuranceSpecify = "csv_income_benefits.other_health_insurance_specify",
+        BenefitsTanfOther = "csv_income_benefits.benefits_tanf_other",
+        IncomePrivatePensionIs = "csv_income_benefits.income_private_pension_is",
+        IncomePrivatePension = "csv_income_benefits.income_private_pension",
+        RefClient = "csv_income_benefits.ref_client",
+        IncomePrivateDisabilityIs = "csv_income_benefits.income_private_disability_is",
+        IncomePrivateDisability = "csv_income_benefits.income_private_disability",
+        HealthInsPpay = "csv_income_benefits.health_ins_ppay",
+        BenefitsSchip = "csv_income_benefits.benefits_schip",
+        BenefitSnap = "csv_income_benefits.benefit_snap",
+        IncomeSsdiIs = "csv_income_benefits.income_ssdi_is",
+        IncomeSsdi = "csv_income_benefits.income_ssdi",
+        IncomeSsiIs = "csv_income_benefits.income_ssi_is",
+        IncomeSsi = "csv_income_benefits.income_ssi",
+        IncomeSsRetirementIs = "csv_income_benefits.income_ss_retirement_is",
+        IncomeSsRetirement = "csv_income_benefits.income_ss_retirement",
+        HealthInsState = "csv_income_benefits.health_ins_state",
+        IncomeTanfIs = "csv_income_benefits.income_tanf_is",
+        IncomeTanf = "csv_income_benefits.income_tanf",
+        BenefitsTanfChildcare = "csv_income_benefits.benefits_tanf_childcare",
+        BenefitsTanfTransportation = "csv_income_benefits.benefits_tanf_transportation",
+        IncomeIndividual = "csv_income_benefits.income_individual",
+        IncomeUnemploymentIs = "csv_income_benefits.income_unemployment_is",
+        IncomeUnemployment = "csv_income_benefits.income_unemployment",
+        RefUser = "csv_income_benefits.ref_user",
+        IncomeVetPensionIs = "csv_income_benefits.income_vet_pension_is",
+        IncomeVetPension = "csv_income_benefits.income_vet_pension",
+        IncomeVetDisabilityIs = "csv_income_benefits.income_vet_disability_is",
+        IncomeVetDisability = "csv_income_benefits.income_vet_disability",
+        BenefitsVaMedical = "csv_income_benefits.benefits_va_medical",
+        BenefitsWic = "csv_income_benefits.benefits_wic",
+        IncomeWorkersCompIs = "csv_income_benefits.income_workers_comp_is",
+        IncomeWorkersComp = "csv_income_benefits.income_workers_comp"
       )
     ),
     Inventory = list(
@@ -521,6 +816,30 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        Availability = "csv_inventory.availability",
+        BedInventory = "csv_inventory.bed_inventory",
+        ChronicInventory = "csv_inventory.chronic_inventory",
+        BedChVeteran = "csv_inventory.bed_ch_veteran",
+        BedChYouth = "csv_inventory.bed_ch_youth",
+        CoC = "csv_inventory.coc",
+        AddedDate = "csv_inventory.added_date",
+        DateDeleted = "csv_inventory.date_deleted",
+        LastUpdated = "csv_inventory.last_updated",
+        RefBedType = "csv_inventory.ref_bed_type",
+        ExportID = "csv_inventory.export_id",
+        RefHouseholdType = "csv_inventory.ref_household_type",
+        EndDate = "csv_inventory.end_date",
+        ID = "csv_inventory.id",
+        StartDate = "csv_inventory.start_date",
+        BedNonDedicated = "csv_inventory.bed_non_dedicated",
+        RefProgram = "csv_inventory.ref_program",
+        UnitInventory = "csv_inventory.unit_inventory",
+        RefUserUpdated = "csv_inventory.ref_user_updated",
+        VeteranInventory = "csv_inventory.veteran_inventory",
+        YouthInventory = "csv_inventory.youth_inventory",
+        BedYouthVeteran = "csv_inventory.bed_youth_veteran"
       )
     ),
     Organization = list(
@@ -539,6 +858,17 @@
         UserID = "n",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        Added = "csv_organization.added",
+        Deleted = "csv_organization.deleted",
+        LastUpdated = "csv_organization.last_updated",
+        ExportID = "csv_organization.export_id",
+        CommonName = "csv_organization.common_name",
+        ID = "csv_organization.id",
+        Name = "csv_organization.name",
+        RefUserUpdated = "csv_organization.ref_user_updated",
+        VictimServiceProvider = "csv_organization.victim_service_provider"
       )
     ),
     Project = list(
@@ -567,6 +897,27 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        ContinuumProject = "csv_project.continuum_project",
+        DateCreated = "csv_project.date_created",
+        DateDeleted = "csv_project.date_deleted",
+        DateUpdated = "csv_project.date_updated",
+        ExportID = "csv_project.export_id",
+        HmisParticipatingProject = "csv_project.hmis_participating_project",
+        HousingType = "csv_project.housing_type",
+        OperatingEndDate = "csv_project.operating_end_date",
+        OperatingStartDate = "csv_project.operating_start_date",
+        OrganizationID = "csv_project.organization_id",
+        PitCount = "csv_project.pit_count",
+        ProjectCommonName = "csv_project.project_common_name",
+        ProjectID = "csv_project.project_id",
+        ProjectName = "csv_project.project_name",
+        ProjectType = "csv_project.project_type",
+        ResidentialAffiliation = "csv_project.residential_affiliation",
+        RefTargetB = "csv_project.ref_target_b",
+        TrackingMethod = "csv_project.tracking_method",
+        UserID = "csv_project.user_id"
       )
     ),
     ProjectCoC = list(
@@ -592,6 +943,23 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "n"
+      ),
+      fields = c(
+        Address = "csv_project_coc.address",
+        Address2 = "csv_project_coc.address2",
+        City = "csv_project_coc.city",
+        CoC = "csv_project_coc.coc",
+        AddedDate = "csv_project_coc.added_date",
+        DateDeleted = "csv_project_coc.date_deleted",
+        LastUpdated = "csv_project_coc.last_updated",
+        ExportID = "csv_project_coc.export_id",
+        RefGeolocation = "csv_project_coc.ref_geolocation",
+        RefGeographyType = "csv_project_coc.ref_geography_type",
+        ID = "csv_project_coc.id",
+        RefProgram = "csv_project_coc.ref_program",
+        State = "csv_project_coc.state",
+        RefUserUpdated = "csv_project_coc.ref_user_updated",
+        Zipcode = "csv_project_coc.zipcode"
       )
     ),
     Services = list(
@@ -600,7 +968,27 @@
         s2020 = 65884,
         daily = 65933
       ),
-      col_types = character(0)
+      col_types = character(0),
+      fields = c(
+        DateCreated = "csv_client_services.date_created",
+        DateDeleted = "csv_client_services.date_deleted",
+        DateProvided = "csv_client_services.date_provided",
+        DateProvidedRaw = "csv_client_services.date_provided_raw",
+        DateUpdated = "csv_client_services.date_updated",
+        EnrollmentID = "csv_client_services.enrollment_id",
+        ExportID = "csv_client_services.export_id",
+        FaAmount = "csv_client_services.fa_amount",
+        OtherTypeProvided = "csv_client_services.other_type_provided",
+        PersonalID = "csv_client_services.personal_id",
+        RecordType = "csv_client_services.record_type",
+        RefServiceItem = "csv_client_services.ref_service_item",
+        ReferralOutcome = "csv_client_services.referral_outcome",
+        ServicesIdRaw = "csv_client_services.services_id_raw",
+        ServicesID = "csv_client_services.services_id",
+        SubTypeProvided = "csv_client_services.sub_type_provided",
+        TypeProvided = "csv_client_services.type_provided",
+        UserID = "csv_client_services.user_id"
+      )
     ),
     User = list(
       look = c(
@@ -618,159 +1006,19 @@
         UserID = "n",
         UserLastName = "c",
         UserPhone = "c"
+      ),
+      fields = c(
+        DateCreated = "csv_user.date_created",
+        DateDeleted = "csv_user.date_deleted",
+        DateUpdated = "csv_user.date_updated",
+        ExportID = "csv_user.export_id",
+        RefAgency = "csv_user.ref_agency",
+        UserEmail = "csv_user.user_email",
+        UserExtension = "csv_user.user_extension",
+        UserFirstName = "csv_user.user_first_name",
+        UserID = "csv_user.user_id",
+        UserLastName = "csv_user.user_last_name",
+        UserPhone = "csv_user.user_phone"
       )
     )
   )
-
-# Supporting functions ----
-# Mon Jul 19 16:05:32 2021
-
-
-hud_rename <- function(x, .nm) {
-  if (is.null(x))
-    return(NULL)
-  x %>%
-    dplyr::rename_with(.fn = ~ {
-      # All column names are prefixed with the HUD CSV Export BETA report name from Looker - with spaces between capitalized words. This is removed
-      out <-
-        trimws(stringr::str_remove(.x, stringr::fixed(paste0(.nm, " ")))) %>%
-        stringr::str_replace_all("(?<!a)[Ii][Dd]$", "ID") %>%
-        stringr::str_remove("^Enrollment ") %>%
-        stringr::str_replace_all("[Cc][Oo][Cc]", "CoC") %>%
-        stringr::str_replace_all("^[Zz][Ii][Pp]$", "ZIP") %>%
-        stringr::str_replace_all("(?<=rk)p(?=lace)", "P")
-
-      if (all(is.na(out)))
-        out <- .x
-      out
-    })
-}
-
-call_csv <- function(look_type = "year2", write = FALSE) {
-  fetch(deparse(match.call()[[1]][[3]]),
-        look_type,
-        write,
-        self$.__enclos_env__)
-}
-
-
-#' @title Call HUD Export Items from the Clarity Looker API
-#' @description Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks.
-#' @export
-hud_export <- R6::R6Class(
-  "hud_export",
-  public = rlang::exec(
-    rlang::list2,!!!purrr::map(.hud_export, ~ call_csv),
-    #' @description initialize the Looker API connection given the path to the ini configuration file.
-    #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
-    initialize = function(configFile) {
-      self$sdk <- lookr::LookerSDK$new(configFile = ifelse(
-        stringr::str_detect(configFile, "ini$"),
-        file.path(configFile),
-        file.path(configFile, "Looker.ini")
-      ))
-    },
-    #' @description Close the Looker API Connection
-    close = function() {
-      self$sdk$on_connection_closed()
-    }
-  ),
-  lock_objects = FALSE,
-  private = list(item = .hud_export),
-)
-
-
-#' @title Retrieve data from disk or the API
-#' @description Determines the appropriate location from which to retrieve HUD Export data
-#' @param x \code{(character)} The HUD Export item to retrieve. One of:
-#' \itemize{
-#'   \item{Affiliation}
-#'   \item{Client}
-#'   \item{CurrentLivingSituation}
-#'   \item{Disabilities}
-#'   \item{EmploymentEducation}
-#'   \item{Enrollment}
-#'   \item{EnrollmentCoC}
-#'   \item{Event}
-#'   \item{Exit}
-#'   \item{Export}
-#'   \item{Funder}
-#'   \item{HealthAndDV}
-#'   \item{IncomeBenefits}
-#'   \item{Inventory}
-#'   \item{Organization}
-#'   \item{Project}
-#'   \item{ProjectCoC}
-#'   \item{Services}
-#'   \item{User}
-#' }
-#' @param look_type \code{(character)} The look type to retrieve. One of:
-#' \itemize{
-#'   \item{year2}{Two Complete Years}
-#'   \item{s2020}{Since the beginning of 2020}
-#'   \item{daily}{Created or updated in the last complete day}
-#' }
-#' @param write \code{(logical)} Whether to write the raw data from the API and the renamed data to the data/API folder
-#' @return \code{(tibble)} The HUD Export item requested.
-
-fetch <- function(x,
-                  look_type = "year2",
-                  write = FALSE,
-                  ee) {
-  .y <- x
-  .x <- ee$private$item[[x]]
-  .nm <- .x$api_nm %||% .y
-
-  if (look_type != "daily")
-    data <-
-    .x[[look_type]] %||% try(feather::read_feather(file.path("data", "API", paste0(.y, ".feather"))))
-
-  if ((inherits(data, "try-error")) || look_type == "daily") {
-    message(.y, ": fetching data")
-    if (is.null(.x$look[look_type]))
-      return(NULL)
-    # Rename col_types to match the way they appear coming from the API
-    names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
-    data <-
-      ee$self$sdk$runLook(.x$look[look_type],
-                          "csv",
-                          as = "parsed",
-                          col_types = .x$col_types)
-    message(.y, ": data retrieved")
-    if (write) {
-      message(.y, "writing raw to feather")
-      feather::write_feather(data, file.path("data", "API", paste0(.y, "_raw.feather")))
-    }
-    if (nrow(data) %in% c(0, 500))
-      stop(.y, " row count is", nrow(data))
-  }
-
-  if (any(stringr::str_detect(names(data), paste0("^", .nm, "\\s")))) {
-    data <- hud_rename(data, .nm)
-  }
-
-  if (write) {
-    feather::write_feather(data, file.path("data", "API", paste0(.y, ".feather")))
-  }
-
-  return(data)
-}
-
-#' @title Write object to the *data* directory
-#' @description Writes a \code{tibble/data.frame} as a feather file to the *data* directory using the name of the object as the file name.
-#' @param x \code{(tibble/data.frame)} The object to write to feather
-#' @param path \code{(character vector)} A character vector of the directory path to be passed to \link[base]{file.path}
-#' @return A success message at the console
-#' @export
-to_feather <- function(x, path = "data") {
-  fn <-
-    rlang::exec(file.path,
-                !!!path,
-                !!!ifelse(
-                  stringr::str_detect(path, "feather$"),
-                  path,
-                  paste0(deparse(rlang::enexpr(x)), ".feather")
-                ))
-  feather::write_feather(x, fn)
-  cli::cli_alert_success(paste0(fn, " saved"))
-}
