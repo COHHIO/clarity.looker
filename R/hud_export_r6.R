@@ -107,7 +107,7 @@ fetch <- function(x,
   if (look_type == "disk")
     .data <- try(feather::read_feather(file.path("data", "API", paste0(.y, ".feather"))), silent = TRUE)
 
-  .data_error <- inherits(.data, "try-error")
+  .data_error <- inherits(get0(".data", inherits = FALSE), "try-error")
   if (.data_error || look_type == "daily") {
     if (.data_error && look_type == "disk")
       look_type <- "s2020"

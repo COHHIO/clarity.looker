@@ -37,6 +37,14 @@
         UserID = "csv_affiliation.ref_user"
       )
     ),
+    Assessment = list(
+    ),
+    AssessmentQuestions = list(
+
+    ),
+    AssessmentResults = list(
+
+    ),
     Client = list(
       look = c(
         year2 = 65504,
@@ -1020,5 +1028,8 @@
         UserLastName = "csv_user.user_last_name",
         UserPhone = "csv_user.user_phone"
       )
+    ),
+    YouthEducationStatus = list(
+
     )
   )
