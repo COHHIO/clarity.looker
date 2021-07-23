@@ -1,3 +1,4 @@
 ^hud\.export\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^.reprex*
