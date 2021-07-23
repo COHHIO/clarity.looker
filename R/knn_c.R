@@ -1,0 +1,30 @@
+knn_row <- function(x, y) {
+  purrr::imap_dfc(x, ~{
+    knn_dist(.x, y[[.y]])
+  }) %>%
+    dplyr::mutate(across(.fns = dplyr::percent_rank)) %>%
+    slider::slide_dbl(sum, na.rm = TRUE) %>%
+    which.min()
+}
+
+#' @export
+knn_dist <- function(x, y) {
+  UseMethod("knn_dist")
+}
+
+#' @export
+knn_dist.character <- function(x, y) {
+  stringdist::stringdist(x, y)
+}
+
+#' @export
+knn_dist.factor <- function(x, y) {
+  stringdist::seq_sim(as.character(x), as.character(y))
+}
+
+#' @export
+knn_dist.default <- function(x, y) {
+  x - y
+}
+
+
