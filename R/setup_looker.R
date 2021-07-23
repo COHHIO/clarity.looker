@@ -1,4 +1,4 @@
-setup_looker <- function(ini_filepath, base_url = "https://looker.clarityhs.com:19999", client_id, client_secret) {
+setup_looker <- function(ini_filepath = "Looker.ini", base_url = "https://looker.clarityhs.com:19999", client_id, client_secret) {
   write(paste0(
     "[Looker]\n",
     "# API version is required\n",
