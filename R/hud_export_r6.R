@@ -29,9 +29,10 @@ hud_rename <- function(x, .nm) {
     })
 }
 
-call_csv <- function(look_type = "disk", write = FALSE) {
+call_data <- function(look_type = "disk", path = file.path("data"), write = FALSE) {
   fetch(deparse(match.call()[[1]][[3]]),
         look_type,
+        path,
         write,
         self$.__enclos_env__)
 }
@@ -43,11 +44,11 @@ call_csv <- function(look_type = "disk", write = FALSE) {
 hud_export <- R6::R6Class(
   "hud_export",
   public = rlang::exec(
-    rlang::list2,!!!purrr::map(.hud_export, ~ call_csv),
+    rlang::list2,!!!purrr::map(.hud_export, ~ call_data),
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
     initialize = function(configFile) {
-      self$sdk <- lookr::LookerSDK$new(configFile = ifelse(
+      self$api <- lookr::LookerSDK$new(configFile = ifelse(
         stringr::str_detect(configFile, "ini$"),
         file.path(configFile),
         file.path(configFile, "Looker.ini")
@@ -55,7 +56,7 @@ hud_export <- R6::R6Class(
     },
     #' @description Close the Looker API Connection
     close = function() {
-      self$sdk$on_connection_closed()
+      self$api$on_connection_closed()
     }
   ),
   lock_objects = FALSE,
@@ -98,16 +99,28 @@ hud_export <- R6::R6Class(
 
 fetch <- function(x,
                   look_type,
+                  path,
                   write = FALSE,
                   ee) {
   .y <- x
   .x <- ee$private$item[[x]]
   .nm <- .x$api_nm %||% .y
 
-  if (look_type == "disk")
-    .data <- try(feather::read_feather(file.path("data", "API", paste0(.y, ".feather"))), silent = TRUE)
+  if (look_type == "disk") {
+    .files <- list.files(path, recursive = FALSE)
+    .ext <- .mode(stringr::str_extract(.files, "(?<=\\.)[A-Za-z]+$"))
+    import_fn <- switch(.ext,
+           csv = readr::read_csv,
+           feather = feather::read_feather)
+    .args <- list(file.path(path, paste0(.y, ".", .ext)))
+    if (.ext == "csv")
+      .args$col_types <- .x$col_types
 
-  .data_error <- inherits(get0(".data", inherits = FALSE), "try-error")
+    .data <- try(do.call(import_fn, .args), silent = TRUE)
+  }
+
+
+  .data_error <- inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
   if (.data_error || look_type == "daily") {
     if (.data_error && look_type == "disk")
       look_type <- "s2020"
@@ -118,7 +131,7 @@ fetch <- function(x,
     names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types)) %>%
       stringr::str_replace_all("(?<!a)[I][D]$", "Id")
     .data <-
-      ee$self$sdk$runLook(.x$look[look_type],
+      ee$self$api$runLook(.x$look[look_type],
                           "csv",
                           as = "parsed",
                           col_types = .x$col_types)
@@ -132,7 +145,7 @@ fetch <- function(x,
   }
 
   if (write && look_type != "disk") {
-    fp <- file.path("data", "API", paste0(.y, ".feather"))
+    fp <- file.path(path, paste0(.y, ".feather"))
     feather::write_feather(.data, fp)
     message(.y, ": data written to ", fp)
   }
@@ -157,4 +170,10 @@ to_feather <- function(x, path = "data") {
                 ))
   feather::write_feather(x, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
+}
+
+.mode <- function(.) {
+  .u <- unique(.)
+  tab <- tabulate(match(., .u))
+  .u[tab == max(tab)]
 }
