@@ -15,7 +15,7 @@ setup_looker <- function(ini_filepath = "Looker.ini", base_url = "https://looker
     "user_id=\n",
     "  # Set to false if testing locally against self-signed certs. Otherwise leave True",
     "  verify_ssl=True"
-  ), purrr::when(ini_file,
+  ), purrr::when(ini_filepath,
                  stringr::str_detect(., "ini$") ~ ini_filepath,
                  file.path(ini_filepath, "Looker.ini")))
 }
