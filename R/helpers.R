@@ -1,6 +1,16 @@
 # Supporting functions ----
 # Mon Jul 19 16:05:32 2021
 
+hud_formatted <- function(x) {
+  x <- stringr::str_extract(x, "[A-Za-z]+")
+}
+
+hud_regex <- function(x) {
+  x <- paste0(hud_formatted(x), "\\.")
+}
+
+
+
 #' @title Retrieve the HUD Export item file path on disk
 #' @description Get the full file path for a HUD Export item given a directory `path`
 #' @param x \code{(character)} The HUD CSV Export item name
@@ -36,7 +46,7 @@
 #' @export
 
 hud_filename <- function(x, path = "data") {
-  .file <- list.files(path, pattern = x, full.names = TRUE, recursive = FALSE)
+  .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE)
   purrr::when(.file,
               rlang::is_empty(.) ~ stop(x, ": file not found. Please retrieve full dataset."),
               length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present"))
@@ -115,7 +125,6 @@ hud_rename <- function(x, .nm) {
 hud_feather <- function(.data, path = "data") {
   fn <-
     rlang::exec(file.path,
-                !!!path,
                 !!!ifelse(
                   stringr::str_detect(path, "feather$"),
                   path,

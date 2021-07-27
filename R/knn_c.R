@@ -1,5 +1,5 @@
 knn_row <- function(x, y) {
-  purrr::imap_dfc(x, ~{
+  purrr::imap_dfc(dplyr::select(x, ~inherits(.x, c("character", "numeric"))), ~{
     knn_dist(.x, y[[.y]])
   }) %>%
     dplyr::mutate(across(.fns = dplyr::percent_rank)) %>%
@@ -19,12 +19,12 @@ knn_dist.character <- function(x, y) {
 
 #' @export
 knn_dist.factor <- function(x, y) {
-  stringdist::seq_sim(as.character(x), as.character(y))
+  stringdist::stringdist(as.character(x), as.character(y))
 }
 
 #' @export
 knn_dist.default <- function(x, y) {
-  x - y
+  log(x - y)
 }
 
 

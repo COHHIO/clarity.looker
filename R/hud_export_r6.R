@@ -1,15 +1,14 @@
 
-
-call_data <- function(look_type = "disk", path = file.path("data"), write = FALSE) {
-  fetch(deparse(match.call()[[1]][[3]]),
+call_data <- function(look_type = "disk", path = file.path("data"), .write = FALSE) {
+  fetch(hud_formatted(deparse(match.call()[[1]][[3]])),
         look_type,
         path,
-        write,
+        .write,
         self$.__enclos_env__)
 }
 
-update_data <- function(x, look_type = "daily", path = "data", write = TRUE) {
-  x <- deparse(match.call()[[1]][[3]])
+update_data <- function(x, look_type = "daily", path = "data", .write = TRUE, self) {
+  x <- hud_formatted(deparse(match.call()[[1]][[3]]))
   last_updated <- hud_last_updated(x, path)
   old_data <- hud_load(x, path)
   do_update <- last_updated < Sys.Date()
@@ -18,7 +17,7 @@ update_data <- function(x, look_type = "daily", path = "data", write = TRUE) {
     new_data <- fetch(x,
                       look_type,
                       path,
-                      write = FALSE,
+                      .write = FALSE,
                       self$.__enclos_env__)
     modifications <- purrr::map2_lgl(new_data$DateCreated, new_data$DateUpdated, ~!identical(.x,.y))
     if (any(modifications)) {
@@ -30,8 +29,8 @@ update_data <- function(x, look_type = "daily", path = "data", write = TRUE) {
     }
 
     updated_data <- dplyr::distinct(dplyr::bind_rows(old_data, new_data[!modifications,]))
-    if (write) {
-      to_feather(updated_data, file.path(path, paste0(x,".feather")))
+    if (.write) {
+      hud_feather(updated_data, x)
     }
   } else {
     updated_data <- old_data
@@ -55,19 +54,14 @@ update_data <- function(x, look_type = "daily", path = "data", write = TRUE) {
 fetch <- function(x,
                   look_type,
                   path,
-                  write = FALSE,
+                  .write = FALSE,
                   ee) {
   .y <- x
   .x <- ee$private$item[[x]]
   .nm <- .x$api_nm %||% .y
 
   if (look_type == "disk") {
-    .file <- hud_filename(x, path)
-    if (is_legit(.file)) {
-
-    } else
-      .data <- NULL
-
+    .data <- try(hud_load(x, path), silent = TRUE)
   }
 
 
@@ -95,10 +89,9 @@ fetch <- function(x,
     .data <- hud_rename(.data, .nm)
   }
 
-  if (write && look_type != "disk") {
+  if (.write && look_type != "disk") {
     fp <- file.path(path, paste0(.y, ".feather"))
-    feather::write_feather(.data, fp)
-    message(.y, ": data written to ", fp)
+    hud_feather(.data, fp)
   }
 
   return(.data)
@@ -113,6 +106,36 @@ hud_export <- R6::R6Class(
     rlang::list2,
     !!!purrr::map(.hud_export, ~ call_data),
     update = rlang::list2(!!!purrr::map(.hud_export, ~ update_data)),
+    #' @description Run daily update for all HUD Export items on disk
+    #' @inheritParams hud_filename
+    update_all = function(path = "data",
+                          skip = c(
+                            "Assessment",
+                            "AssessmentQuestions",
+                            "AssessmentResults",
+                            "Services",
+                            "User",
+                            "YouthEducationStatus"
+                          )) {
+      to_update <- names(.hud_export) %>% {.[!. %in% skip]}
+      purrr::walk(to_update, ~ rlang::eval_bare(rlang::expr(
+        self$update[[!!.x]](
+          path = path,
+          .write = TRUE,
+          self = self
+        )
+      )))
+
+      all(purrr::map_lgl(
+        c("Client",
+          "Enrollment",
+          "Export",
+          #"Services",
+          "Exit"),
+        ~ hud_last_updated(.x, path = path) >= Sys.Date()
+      ))
+    },
+
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
     initialize = function(configFile) {
