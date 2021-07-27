@@ -6,7 +6,10 @@ hud_formatted <- function(x) {
 }
 
 hud_regex <- function(x) {
-  x <- paste0(hud_formatted(x), "\\.")
+  purrr::when(stringr::str_detect(x, "\\."),
+              isTRUE(.) ~ x,
+              ~ paste0(hud_formatted(x), "\\.")
+  )
 }
 
 
@@ -125,10 +128,10 @@ hud_rename <- function(x, .nm) {
 hud_feather <- function(.data, path = "data") {
   fn <-
     rlang::exec(file.path,
-                !!!ifelse(
+                !!!purrr::when(
                   stringr::str_detect(path, "feather$"),
-                  path,
-                  paste0(deparse(rlang::enexpr(.data)), ".feather")
+                  isTRUE(.) ~ path,
+                  list(path, paste0(deparse(rlang::enexpr(.data)), ".feather"))
                 ))
   feather::write_feather(.data, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
