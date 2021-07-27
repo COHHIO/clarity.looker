@@ -1,4 +1,5 @@
 
+
 # hud_export object ----
 # Mon Jul 19 16:05:14 2021
 #' @title HUD Export saved values
@@ -10,7 +11,7 @@
     Affiliation = list(
       look = c(
         year2 = 65501,
-        s2020 = 65869,
+        s2019_10 = 65869,
         daily = 65914
       ),
       col_types = c(
@@ -32,7 +33,8 @@
         ProjectID = "csv_affiliation.id",
         ResProjectID = "csv_affiliation.aff_res_proj_id",
         UserID = "csv_affiliation.ref_user"
-      )
+      ),
+      s2019_10 = 66534
     ),
     Assessment = list(
       col_types = c(
@@ -86,7 +88,7 @@
     Client = list(
       look = c(
         year2 = 65504,
-        s2020 = 65870,
+        s2019_10 = 65870,
         daily = 65915
       ),
       col_types = c(
@@ -146,12 +148,13 @@
         SSN = "csv_client.ssn",
         SSNDataQuality = "csv_client.ssn_quality",
         RefUserUpdated = "csv_client.ref_user_updated"
-      )
+      ),
+      s2019_10 = 66535
     ),
     CurrentLivingSituation = list(
       look = c(
         year2 = 65506,
-        s2020 = 65871,
+        s2019_10 = 65871,
         daily = 65918
       ),
       api_nm = "Current Living Situation",
@@ -194,12 +197,13 @@
         SubswquentResidence = "csv_current_living_situation.subswquent_residence",
         RefUser = "csv_current_living_situation.ref_user",
         VerifiedBy = "csv_current_living_situation.verified_by"
-      )
+      ),
+      s2019_10 = 66536
     ),
     Disabilities = list(
       look = c(
         year2 = 65508,
-        s2020 = 65872,
+        s2019_10 = 65872,
         daily = 65919
       ),
       col_types = c(
@@ -244,12 +248,13 @@
         ViralLoadNumber = "csv_disabilities.viral_load_number",
         ViralLoadAvailable = "csv_disabilities.viral_load_available",
         ViralLoadObtained = "csv_disabilities.viral_load_obtained"
-      )
+      ),
+      s2019_10 = 66537
     ),
     EmploymentEducation = list(
       look = c(
         year2 = 65509,
-        s2020 = 65873,
+        s2019_10 = 65873,
         daily = 65920
       ),
       api_nm = "Employment Education",
@@ -286,12 +291,13 @@
         RefClient = "csv_employment_education.ref_client",
         RhySchoolStatus = "csv_employment_education.rhy_school_status",
         RefUser = "csv_employment_education.ref_user"
-      )
+      ),
+      s2019_10 = 66538
     ),
     Enrollment = list(
       look = c(
         year2 = 65514,
-        s2020 = 65875,
+        s2019_10 = 65875,
         daily = 65921
       ),
       col_types = c(
@@ -368,12 +374,13 @@
         UserID = "c",
         DateDeleted = "T",
         ExportID = "c"
-      )
+      ),
+      s2019_10 = 66539
     ),
     EnrollmentCoC = list(
       look = c(
         year2 = 65515,
-        s2020 = 65876,
+        s2019_10 = 65876,
         daily = 65922
       ),
       api_nm = "Enrollment CoC",
@@ -406,12 +413,13 @@
         RefClient = "csv_enrollment_coc.ref_client",
         ID = "csv_enrollment_coc.id",
         RefUser = "csv_enrollment_coc.ref_user"
-      )
+      ),
+      s2019_10 = 66540
     ),
     Event = list(
       look = c(
         year2 = 65516,
-        s2020 = 65877,
+        s2019_10 = 65877,
         daily = 65923
       ),
       col_types = c(
@@ -447,12 +455,13 @@
         ReferralResult = "csv_event.referral_result",
         ResultDate = "csv_event.result_date",
         UserID = "csv_event.user_id"
-      )
+      ),
+      s2019_10 = 66541
     ),
     Exit = list(
       look = c(
         year2 = 65512,
-        s2020 = 65874,
+        s2019_10 = 65874,
         daily = 65924
       ),
       col_types = c(
@@ -552,7 +561,7 @@
     Export = list(
       look = c(
         year2 = 65961,
-        s2020 = 65962,
+        s2019_10 = 65962,
         daily = 65963
       ),
       col_types = c(
@@ -593,12 +602,13 @@
         SourceID = "csv_export.source_id",
         SourceName = "csv_export.source_name",
         SourceType = "csv_export.source_type"
-      )
+      ),
+      s2019_10 = 66543
     ),
     Funder = list(
       look = c(
         year2 = 65949,
-        s2020 = 65948,
+        s2019_10 = 65948,
         daily = 65925
       ),
       col_types = c(
@@ -629,12 +639,13 @@
         RawID = "csv_funder.raw_id",
         Added = "csv_funder.added",
         RefUser = "csv_funder.ref_user"
-      )
+      ),
+      s2019_10 = 66544
     ),
     HealthAndDV = list(
       look = c(
         year2 = 65517,
-        s2020 = 65878,
+        s2019_10 = 65878,
         daily = 65926
       ),
       api_nm = "Health DV",
@@ -681,12 +692,13 @@
         HealthPregnancy = "csv_health_dv.health_pregnancy",
         RefUser = "csv_health_dv.ref_user",
         HealthDvOccurred = "csv_health_dv.health_dv_occurred"
-      )
+      ),
+      s2019_10 = 66542
     ),
     IncomeBenefits = list(
       look = c(
         year2 = 65518,
-        s2020 = 65879,
+        s2019_10 = 65879,
         daily = 65927
       ),
       api_nm = "Income Benefits",
@@ -849,12 +861,13 @@
         BenefitsWic = "csv_income_benefits.benefits_wic",
         IncomeWorkersCompIs = "csv_income_benefits.income_workers_comp_is",
         IncomeWorkersComp = "csv_income_benefits.income_workers_comp"
-      )
+      ),
+      s2019_10 = 66545
     ),
     Inventory = list(
       look = c(
         year2 = 65519,
-        s2020 = 65880,
+        s2019_10 = 65880,
         daily = 65928
       ),
       col_types = c(
@@ -904,12 +917,13 @@
         VeteranInventory = "csv_inventory.veteran_inventory",
         YouthInventory = "csv_inventory.youth_inventory",
         BedYouthVeteran = "csv_inventory.bed_youth_veteran"
-      )
+      ),
+      s2019_10 = 66547
     ),
     Organization = list(
       look = c(
         year2 = 65525,
-        s2020 = 65881,
+        s2019_10 = 65881,
         daily = 65930
       ),
       col_types = c(
@@ -933,12 +947,13 @@
         Name = "csv_organization.name",
         RefUserUpdated = "csv_organization.ref_user_updated",
         VictimServiceProvider = "csv_organization.victim_service_provider"
-      )
+      ),
+      s2019_10 = 66548
     ),
     Project = list(
       look = c(
         year2 = 65526,
-        s2020 = 65882,
+        s2019_10 = 65882,
         daily = 65931
       ),
       col_types = c(
@@ -983,12 +998,13 @@
         RefTargetB = "csv_project.ref_target_b",
         TrackingMethod = "csv_project.tracking_method",
         UserID = "csv_project.user_id"
-      )
+      ),
+      s2019_10 = 66549
     ),
     ProjectCoC = list(
       look = c(
         year2 = "65527",
-        s2020 = "65883",
+        s2019_10 = "65883",
         daily = "65932",
         api_nm = "Project CoC"
       ),
@@ -1025,12 +1041,13 @@
         State = "csv_project_coc.state",
         RefUserUpdated = "csv_project_coc.ref_user_updated",
         Zipcode = "csv_project_coc.zipcode"
-      )
+      ),
+      s2019_10 = 66550
     ),
     Services = list(
       look = c(
         year2 = 65528,
-        s2020 = 65884,
+        s2019_10 = 65884,
         daily = 65933
       ),
       col_types = c(
@@ -1070,12 +1087,13 @@
         SubTypeProvided = "csv_client_services.sub_type_provided",
         TypeProvided = "csv_client_services.type_provided",
         UserID = "csv_client_services.user_id"
-      )
+      ),
+      s2019_10 = 66551
     ),
     User = list(
       look = c(
         year2 = 65529,
-        s2020 = 65885,
+        s2019_10 = 65885,
         daily = 65934
       ),
       col_types = c(
@@ -1102,7 +1120,8 @@
         UserID = "csv_user.user_id",
         UserLastName = "csv_user.user_last_name",
         UserPhone = "csv_user.user_phone"
-      )
+      ),
+      s2019_10 = 66552
     ),
     YouthEducationStatus = list(
       col_types = c(
