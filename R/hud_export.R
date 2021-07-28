@@ -11,7 +11,7 @@
   Affiliation = list(
     look = c(
       year2 = 65501,
-      s2019 = 66534,
+      since2019 = 66534,
       daily = 65914
     ),
     col_types = c(
@@ -87,7 +87,7 @@
   Client = list(
     look = c(
       year2 = 65504,
-      s2019 = 66535,
+      since2019 = 66535,
       daily = 65915
     ),
     col_types = c(
@@ -152,7 +152,7 @@
   CurrentLivingSituation = list(
     look = c(
       year2 = 65506,
-      s2019 = 66536,
+      since2019 = 66536,
       daily = 65918
     ),
     api_nm = "Current Living Situation",
@@ -200,7 +200,7 @@
   Disabilities = list(
     look = c(
       year2 = 65508,
-      s2019 = 66537,
+      since2019 = 66537,
       daily = 65919
     ),
     col_types = c(
@@ -250,7 +250,7 @@
   EmploymentEducation = list(
     look = c(
       year2 = 65509,
-      s2019 = 66538,
+      since2019 = 66538,
       daily = 65920
     ),
     api_nm = "Employment Education",
@@ -292,7 +292,7 @@
   Enrollment = list(
     look = c(
       year2 = 65514,
-      s2019 = 66539,
+      since2019 = 66539,
       daily = 65921
     ),
     col_types = c(
@@ -374,7 +374,7 @@
   EnrollmentCoC = list(
     look = c(
       year2 = 65515,
-      s2019 = 66540,
+      since2019 = 66540,
       daily = 65922
     ),
     api_nm = "Enrollment CoC",
@@ -412,7 +412,7 @@
   Event = list(
     look = c(
       year2 = 65516,
-      s2019 = 66541,
+      since2019 = 66541,
       daily = 65923
     ),
     col_types = c(
@@ -453,7 +453,7 @@
   Exit = list(
     look = c(
       year2 = 65512,
-      s2019_10 = 65874,
+      since2019 = 66613,
       daily = 65924
     ),
     col_types = c(
@@ -553,7 +553,7 @@
   Export = list(
     look = c(
       year2 = 65961,
-      s2019 = 66543,
+      since2019 = 66543,
       daily = 65963
     ),
     col_types = c(
@@ -599,7 +599,7 @@
   Funder = list(
     look = c(
       year2 = 65949,
-      s2019 = 66544,
+      since2019 = 66544,
       daily = 65925
     ),
     col_types = c(
@@ -635,7 +635,7 @@
   HealthAndDV = list(
     look = c(
       year2 = 65517,
-      s2019 = 66542,
+      since2019 = 66542,
       daily = 65926
     ),
     api_nm = "Health DV",
@@ -687,7 +687,7 @@
   IncomeBenefits = list(
     look = c(
       year2 = 65518,
-      s2019 = 66545,
+      since2019 = 66545,
       daily = 65927
     ),
     api_nm = "Income Benefits",
@@ -855,7 +855,7 @@
   Inventory = list(
     look = c(
       year2 = 65519,
-      s2019 = 66547,
+      since2019 = 66547,
       daily = 65928
     ),
     col_types = c(
@@ -910,7 +910,7 @@
   Organization = list(
     look = c(
       year2 = 65525,
-      s2019 = 66548,
+      since2019 = 66548,
       daily = 65930
     ),
     col_types = c(
@@ -939,7 +939,7 @@
   Project = list(
     look = c(
       year2 = 65526,
-      s2019 = 66549,
+      since2019 = 66549,
       daily = 65931
     ),
     col_types = c(
@@ -989,7 +989,7 @@
   ProjectCoC = list(
     look = c(
       year2 = "65527",
-      s2019 = "66550",
+      since2019 = "66550",
       daily = "65932",
       api_nm = "Project CoC"
     ),
@@ -1031,7 +1031,7 @@
   Services = list(
     look = c(
       year2 = 65528,
-      s2019 = 66551,
+      since2019 = 66551,
       daily = 65933
     ),
     col_types = c(
@@ -1076,7 +1076,7 @@
   User = list(
     look = c(
       year2 = 65529,
-      s2019 = 66552,
+      since2019 = 66552,
       daily = 65934
     ),
     col_types = c(

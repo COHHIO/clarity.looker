@@ -21,7 +21,7 @@ update_data <- function(x, look_type = "daily", path = "data", .write = TRUE, se
                       self$.__enclos_env__)
     modifications <- purrr::map2_lgl(new_data$DateCreated, new_data$DateUpdated, ~!identical(.x,.y))
     if (any(modifications)) {
-      #KNN that uses stringdist?
+      #TODO Merge based on ProjectID, ClientID, EnrollmentID, Etc
       row_matches <- slider::slide_dbl(new_data[modifications,], ~{
         knn_row(.x, old_data)
       })
@@ -68,18 +68,22 @@ fetch <- function(x,
   .data_error <- inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
   if (.data_error || look_type == "daily") {
     if (.data_error && look_type == "disk")
-      look_type <- "s2020"
+      look_type <- "since2019"
     message(.y, ": fetching data")
     if (is.null(.x$look[look_type]))
       return(NULL)
     # Rename col_types to match the way they appear coming from the API
-    names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types)) %>%
+    names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
+    if (.y != "Services")
+      names(.x$col_types) <- names(.x$col_types) %>%
       stringr::str_replace_all("(?<!a)[I][D]$", "Id")
     .data <-
       ee$self$api$runLook(.x$look[look_type],
                           "csv",
                           as = "parsed",
                           col_types = .x$col_types)
+    if (names(.data)[1] == "message")
+      stop(purrr::imap_chr(.data, ~paste0(.y,": ",.x, "\n")))
     message(.y, ": data retrieved")
     if (nrow(.data) %in% c(0, 500))
       stop(.y, " row count is ", nrow(.data))
@@ -106,6 +110,18 @@ hud_export <- R6::R6Class(
     rlang::list2,
     !!!purrr::map(.hud_export, ~ call_data),
     update = rlang::list2(!!!purrr::map(.hud_export, ~ update_data)),
+    #' @description Pull all Export items with associate Looks
+    #' @inheritParams hud_filename
+    get_all = function(path) {
+      if (!dir.exists(path))
+        file_path_create(path)
+      purrr::iwalk(.hud_export, ~rlang::eval_bare(rlang::expr(
+        self[[!!.y]](
+          path = path,
+          .write = TRUE
+        )
+      )))
+    },
     #' @description Run daily update for all HUD Export items on disk
     #' @inheritParams hud_filename
     update_all = function(path = "data",

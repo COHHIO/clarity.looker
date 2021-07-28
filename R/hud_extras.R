@@ -1,19 +1,19 @@
 .hud_extras <- c(
   # Formerly Provider_extras, provider_geo, provider_tel, provider_services
   Project_extras = list(
-    look = c(s2019 = 66520)
+    look = c(since2019 = 66520)
   ),
   # Formerly Counties
   Enrollment_extras = list(
-    look = c(s2019 = 66254)
+    look = c(since2019 = 66254)
   ),
   # Formerly VeteranCE
   Client_COVID_extras = list(
-    look = c(s2019 = 66252,
+    look = c(since2019 = 66252,
              daily = 66546)
   ),
   User_extras = list(
-    look = c(s2019 = )
+    look = c()
   ),
   # Replaced by CurrentLivingSituation
   #Contacts = 4,
