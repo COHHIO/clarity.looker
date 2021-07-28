@@ -8,11 +8,12 @@
     look = c(s2019 = 66254)
   ),
   # Formerly VeteranCE
-  Client_extras = list(
-    look = c(s2019 = 66252)
+  Client_COVID_extras = list(
+    look = c(s2019 = 66252,
+             daily = 66546)
   ),
   User_extras = list(
-    look = c()
+    look = c(s2019 = )
   ),
   # Replaced by CurrentLivingSituation
   #Contacts = 4,
