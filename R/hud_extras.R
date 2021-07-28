@@ -1,18 +1,19 @@
 .hud_extras <- c(
   # Formerly Provider_extras, provider_geo, provider_tel, provider_services
   Project_extras = list(
-    look = c("year2" = 66520)
+    look = c(s2019 = 66520)
   ),
   # Formerly Counties
   Enrollment_extras = list(
-    look = c("year2" = 66254)
+    look = c(s2019 = 66254)
   ),
   # Formerly VeteranCE
   Client_extras = list(
-    look = c("year2" = 66252)
+    look = c(s2019 = 66252)
   ),
-  # Removed as per card-63683974
-  # Rm_Users = 2,
+  User_extras = list(
+    look = c()
+  )
   # Replaced by CurrentLivingSituation
   #Contacts = 4,
   # Removed as per card-63683974
