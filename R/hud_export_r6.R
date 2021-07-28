@@ -1,5 +1,5 @@
 
-call_data <- function(look_type = "disk", path = file.path("data"), .write = FALSE) {
+call_data <- function(look_type = "disk", path = self$dirs$export, .write = FALSE) {
   fetch(hud_formatted(deparse(match.call()[[1]][[3]])),
         look_type,
         path,
@@ -7,7 +7,7 @@ call_data <- function(look_type = "disk", path = file.path("data"), .write = FAL
         self$.__enclos_env__)
 }
 
-update_data <- function(x, look_type = "daily", path = "data", .write = TRUE, self) {
+update_data <- function(x, look_type = "daily", path = self$dirs$export, .write = TRUE, self) {
   x <- hud_formatted(deparse(match.call()[[1]][[3]]))
   last_updated <- hud_last_updated(x, path)
   old_data <- hud_load(x, path)
@@ -112,7 +112,7 @@ hud_export <- R6::R6Class(
     update = rlang::list2(!!!purrr::map(.hud_export, ~ update_data)),
     #' @description Pull all Export items with associate Looks
     #' @inheritParams hud_filename
-    get_all = function(path) {
+    get_all = function(path = self$dirs$export) {
       if (!dir.exists(path))
         file_path_create(path)
       purrr::iwalk(.hud_export, ~rlang::eval_bare(rlang::expr(
@@ -124,13 +124,11 @@ hud_export <- R6::R6Class(
     },
     #' @description Run daily update for all HUD Export items on disk
     #' @inheritParams hud_filename
-    update_all = function(path = "data",
+    update_all = function(path = self$dirs$export,
                           skip = c(
                             "Assessment",
                             "AssessmentQuestions",
                             "AssessmentResults",
-                            "Services",
-                            "User",
                             "YouthEducationStatus"
                           )) {
       to_update <- names(.hud_export) %>% {.[!. %in% skip]}
@@ -146,7 +144,7 @@ hud_export <- R6::R6Class(
         c("Client",
           "Enrollment",
           "Export",
-          #"Services",
+          "Services",
           "Exit"),
         ~ hud_last_updated(.x, path = path) >= Sys.Date()
       ))
@@ -154,12 +152,25 @@ hud_export <- R6::R6Class(
 
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
-    initialize = function(configFile) {
+    #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
+#' \itemize{
+#'   \item{\code{export}}{ The HUD Export items}
+#'   \item{\code{public}}{ The public items}
+#'   \item{\code{spdat}}{ The SPDAT items}
+#'   \item{\code{extra}}{ The HUD Extras (custom items)}
+#' }
+#' This is optional and the path can be provided to individual methods as needed.
+
+    initialize = function(configFile, dirs = list(export = "data/API",
+                                                  public = "data/public",
+                                                  spdat = "data/spdat"),
+                          extra = "data/extra") {
       self$api <- lookr::LookerSDK$new(configFile = ifelse(
         stringr::str_detect(configFile, "ini$"),
         file.path(configFile),
         file.path(configFile, "Looker.ini")
       ))
+      self$dirs <- dirs
     },
     #' @description Close the Looker API Connection
     close = function() {
