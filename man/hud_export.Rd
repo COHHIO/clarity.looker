@@ -32,6 +32,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \item \href{#method-Services}{\code{hud_export$Services()}}
 \item \href{#method-User}{\code{hud_export$User()}}
 \item \href{#method-YouthEducationStatus}{\code{hud_export$YouthEducationStatus()}}
+\item \href{#method-get_all}{\code{hud_export$get_all()}}
+\item \href{#method-update_all}{\code{hud_export$update_all()}}
 \item \href{#method-new}{\code{hud_export$new()}}
 \item \href{#method-close}{\code{hud_export$close()}}
 \item \href{#method-clone}{\code{hud_export$clone()}}
@@ -44,8 +46,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Affiliation(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -57,8 +59,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Assessment(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -70,8 +72,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$AssessmentQuestions(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -83,8 +85,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$AssessmentResults(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -94,7 +96,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Client}{}}}
 \subsection{Method \code{Client()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -105,8 +107,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$CurrentLivingSituation(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -118,8 +120,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Disabilities(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -131,8 +133,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$EmploymentEducation(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -144,8 +146,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Enrollment(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -157,8 +159,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$EnrollmentCoC(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -168,7 +170,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Event}{}}}
 \subsection{Method \code{Event()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Event(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Event(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -177,7 +179,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Exit}{}}}
 \subsection{Method \code{Exit()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Exit(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Exit(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -186,7 +188,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Export}{}}}
 \subsection{Method \code{Export()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Export(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Export(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -195,7 +197,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Funder}{}}}
 \subsection{Method \code{Funder()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Funder(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Funder(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -206,8 +208,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$HealthAndDV(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -219,8 +221,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$IncomeBenefits(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -232,8 +234,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Inventory(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -245,8 +247,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Organization(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -256,7 +258,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-Project}{}}}
 \subsection{Method \code{Project()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Project(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Project(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -267,8 +269,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$ProjectCoC(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -280,8 +282,8 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$Services(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -291,7 +293,7 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \if{latex}{\out{\hypertarget{method-User}{}}}
 \subsection{Method \code{User()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$User(look_type = "disk", path = file.path("data"), write = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$User(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
 }
 
 }
@@ -302,8 +304,32 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$YouthEducationStatus(
   look_type = "disk",
-  path = file.path("data"),
-  write = FALSE
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_all"></a>}}
+\if{latex}{\out{\hypertarget{method-get_all}{}}}
+\subsection{Method \code{get_all()}}{
+Pull all Export items with associate Looks
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$get_all(path = self$dirs$export)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_all"></a>}}
+\if{latex}{\out{\hypertarget{method-update_all}{}}}
+\subsection{Method \code{update_all()}}{
+Run daily update for all HUD Export items on disk
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$update_all(
+  path = self$dirs$export,
+  skip = c("Assessment", "AssessmentQuestions", "AssessmentResults",
+    "YouthEducationStatus")
 )}\if{html}{\out{</div>}}
 }
 
@@ -314,13 +340,26 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \subsection{Method \code{new()}}{
 initialize the Looker API connection given the path to the ini configuration file.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$new(configFile)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$new(
+  configFile,
+  dirs = list(export = "data/API", public = "data/public", spdat = "data/spdat"),
+  extra = "data/extra"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{configFile}}{\code{(character)} Path to the Looker \emph{.ini} configuration file. Only the directory path is needed if the file is entitled \emph{Looker.ini}}
+
+\item{\code{dirs}}{\code{(named list)} of default directory paths for where to store the feather files for the following data types:
+\itemize{
+\item{\code{export}}{ The HUD Export items \strong{Default}: \emph{data/API}}
+\item{\code{public}}{ The public items \strong{Default}: \emph{data/public}}
+\item{\code{spdat}}{ The SPDAT items \strong{Default}: \emph{data/spdat}}
+\item{\code{extra}}{ The HUD Extras (custom items) \strong{Default}: \emph{data/extra}}
+}
+This is optional and the path can be provided to individual methods as needed.}
 }
 \if{html}{\out{</div>}}
 }

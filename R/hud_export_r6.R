@@ -154,10 +154,10 @@ hud_export <- R6::R6Class(
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
     #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
 #' \itemize{
-#'   \item{\code{export}}{ The HUD Export items}
-#'   \item{\code{public}}{ The public items}
-#'   \item{\code{spdat}}{ The SPDAT items}
-#'   \item{\code{extra}}{ The HUD Extras (custom items)}
+#'   \item{\code{export}}{ The HUD Export items **Default**: *data/API*}
+#'   \item{\code{public}}{ The public items **Default**: *data/public*}
+#'   \item{\code{spdat}}{ The SPDAT items **Default**: *data/spdat*}
+#'   \item{\code{extra}}{ The HUD Extras (custom items) **Default**: *data/extra*}
 #' }
 #' This is optional and the path can be provided to individual methods as needed.
 

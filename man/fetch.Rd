@@ -4,7 +4,7 @@
 \alias{fetch}
 \title{Retrieve data from disk or the API}
 \usage{
-fetch(x, look_type, path, write = FALSE, ee)
+fetch(x, look_type, path, .write = FALSE, ee)
 }
 \arguments{
 \item{x}{\code{(character)} The HUD CSV Export item name}
