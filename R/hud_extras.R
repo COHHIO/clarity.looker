@@ -13,7 +13,7 @@
   ),
   User_extras = list(
     look = c()
-  )
+  ),
   # Replaced by CurrentLivingSituation
   #Contacts = 4,
   # Removed as per card-63683974
