@@ -60,7 +60,7 @@ fetch <- function(x,
   .x <- ee$private$item[[x]]
   .nm <- .x$api_nm %||% .y
 
-  if (look_type == "disk") {
+  if (look_type == "disk" && !.write) {
     .data <- try(hud_load(x, path), silent = TRUE)
   }
 
@@ -69,9 +69,9 @@ fetch <- function(x,
   if (.data_error || look_type == "daily") {
     if (.data_error && look_type == "disk")
       look_type <- "since2019"
-    message(.y, ": fetching data")
     if (is.null(.x$look[look_type]))
       return(NULL)
+    message(.y, ": fetching data")
     # Rename col_types to match the way they appear coming from the API
     names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
     if (!.y %in% c("Services", "Client"))
