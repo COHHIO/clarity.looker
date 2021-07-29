@@ -30,7 +30,7 @@ update_data <- function(x, look_type = "daily", path = self$dirs$export, .write 
 
     updated_data <- dplyr::distinct(dplyr::bind_rows(old_data, new_data[!modifications,]))
     if (.write) {
-      hud_feather(updated_data, x)
+      hud_feather(updated_data, file.path(path, paste0(x, ".feather")))
     }
   } else {
     updated_data <- old_data
@@ -74,7 +74,7 @@ fetch <- function(x,
       return(NULL)
     # Rename col_types to match the way they appear coming from the API
     names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
-    if (.y != "Services")
+    if (!.y %in% c("Services", "Client"))
       names(.x$col_types) <- names(.x$col_types) %>%
       stringr::str_replace_all("(?<!a)[I][D]$", "Id")
     .data <-
@@ -85,7 +85,7 @@ fetch <- function(x,
     if (names(.data)[1] == "message")
       stop(purrr::imap_chr(.data, ~paste0(.y,": ",.x, "\n")))
     message(.y, ": data retrieved")
-    if (nrow(.data) %in% c(0, 500))
+    if (nrow(.data) %in% c(0, 500) && look_type != "daily")
       stop(.y, " row count is ", nrow(.data))
   }
 
@@ -161,7 +161,7 @@ hud_export <- R6::R6Class(
 #' }
 #' This is optional and the path can be provided to individual methods as needed.
 
-    initialize = function(configFile, dirs = list(export = "data/API",
+    initialize = function(configFile, dirs = list(export = "data/export",
                                                   public = "data/public",
                                                   spdat = "data/spdat"),
                           extra = "data/extra") {

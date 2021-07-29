@@ -97,7 +97,7 @@
       LastName = "c",
       NameSuffix = "c",
       NameDataQuality = "i",
-      SSN5 = "c",
+      SSN = "c",
       SSNDataQuality = "i",
       DOB = "D",
       DOBDataQuality = "i",
