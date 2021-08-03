@@ -36,7 +36,7 @@ parse_look_table <- function(htm) {
     .htm %>%
       rvest::html_nodes(xpath = "//div[@ng-bind = 'item.title']") %>%
       rvest::html_attr("title") %>%
-      stringr::str_extract("[A-Za-z]+$")
+      stringr::str_extract("[A-Za-z\\_]+$")
   )
 }
 
@@ -47,10 +47,16 @@ parse_look_table <- function(htm) {
 #' @param look_type \code{(character)} which Look type to update (or add)
 #' @return Console output from dput with the new spec to copy/paste into hud_export.R
 
-hud_export_look_update <- function(look_table, look_type) {
-  purrr::imap(.hud_export, ~{
-    if (.y %in% names(look_table))
-      .x[[look_type]] <- look_table[[.y]]
-    .x
-  }) %>% dput
+hud_look_table_update <- function(look_table, look_html, look_type, add_new = FALSE) {
+  .new_look_table <- parse_look_table(look_html)
+  for (nm in names(.new_look_table)[names(.new_look_table) %in% look_table]) {
+    look_table[[nm]]$look <- setNames(c(look_table[[nm]]$look, .new_look_table[[.y]]), c(names(look_table[[nm]]$look), look_type))
+    browser()
+  }
+
+  if (add_new) {
+    .to_add <- !names(.new_look_table) %in% names(look_table)
+    look_table <- append(look_table, purrr::imap(setNames(.new_look_table[.to_add], names(.new_look_table)[.to_add]), ~list(look = setNames(c(.x), look_type))))
+  }
+  dput(look_table)
 }
