@@ -2,7 +2,7 @@
   Project_extras = list(look = c(since2019 = 66520)),
   Enrollment_extras = list(look = c(since2019 = 66254)),
   Client_COVID_extras = list(look = c(since2019 = 66252, daily = 66546)),
-  User_extras = list(look = NULL),
+  User_extras = list(look = 66523),
   # Replaced by CurrentLivingSituation
   #Contacts = 4,
   # Removed as per card-63683974
