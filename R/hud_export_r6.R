@@ -1,8 +1,23 @@
+
+
+#' @title Retrieve data from disk or the API
+#' @description Determines the appropriate location from which to retrieve HUD Export data
+#' @inheritSection hud_filename Export_Items
+#' @inheritParams hud_filename
+#' @param look_type \code{(character)} The look type to retrieve. One of:
+#' \itemize{
+#'   \item{year2}{Two Complete Years}
+#'   \item{since2020}{Since the beginning of 2020}
+#'   \item{daily}{Created or updated in the last complete day}
+#' }
+#' @param write \code{(logical)} Whether to write the raw data from the API and the renamed data to the data/API folder
+#' @return \code{(tibble)} The HUD Export item requested.
+
 call_data <- function(look_type = "disk", path = self$dirs$export, .write = FALSE) {
   .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
   # For extras, spdats, public data entities amend the path based on the function name
   if (!.data_nm %in% names(.hud_export))
-    path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0("(?<=\\_)", c("extras", "public", "spdat"), "$"), collapse = "|"))]]
+    path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0("(?<=\\_)", purrr::map_chr(dirs[-1], basename), "$"), collapse = "|"))]]
   fetch(.data_nm,
         look_type,
         path,
@@ -42,18 +57,21 @@ update_data <- function(x, look_type = "daily", path = self$dirs$export, .write 
   return(updated_data)
 }
 
-#' @title Retrieve data from disk or the API
-#' @description Determines the appropriate location from which to retrieve HUD Export data
-#' @inheritSection hud_filename Export_Items
-#' @inheritParams hud_filename
-#' @param look_type \code{(character)} The look type to retrieve. One of:
-#' \itemize{
-#'   \item{year2}{Two Complete Years}
-#'   \item{s2020}{Since the beginning of 2020}
-#'   \item{daily}{Created or updated in the last complete day}
-#' }
-#' @param write \code{(logical)} Whether to write the raw data from the API and the renamed data to the data/API folder
-#' @return \code{(tibble)} The HUD Export item requested.
+dirs <- list(export = "data/export",
+             public = "data/public",
+             spm = "data/spm",
+             extras = "data/extras")
+
+.init <- rlang::new_function(body = base::quote({
+  self$api <- lookr::LookerSDK$new(configFile = ifelse(
+    stringr::str_detect(configFile, "ini$"),
+    file.path(configFile),
+    file.path(configFile, "Looker.ini")
+  ))
+  self$dirs <- dirs
+}), args = rlang::pairlist2(configFile = , dirs = rlang::expr(!!dirs))
+)
+
 
 fetch <- function(x,
                   look_type,
@@ -108,8 +126,12 @@ fetch <- function(x,
   return(.data)
 }
 
+
+
+
+
 #' @title Call HUD Export Items from the Clarity Looker API
-#' @description Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks.
+#' @description Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks. See `?fetch` for details on using all data methods.
 #' @include hud_export.R
 #' @include hud_extras.R
 #' @export
@@ -199,25 +221,14 @@ hud_export <- R6::R6Class(
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
     #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
 #' \itemize{
-#'   \item{\code{export}}{ The HUD Export items **Default**: *data/API*}
+#'   \item{\code{export}}{ The HUD Export items **Default**: *data/export*}
 #'   \item{\code{public}}{ The public items **Default**: *data/public*}
-#'   \item{\code{spdat}}{ The SPDAT items **Default**: *data/spdat*}
-#'   \item{\code{extra}}{ The HUD Extras (custom items) **Default**: *data/extra*}
+#'   \item{\code{spm}}{ The SPM items **Default**: *data/spm*}
+#'   \item{\code{extras}}{ The HUD Extras (custom items) **Default**: *data/extras*}
 #' }
 #' This is optional and the path can be provided to individual methods as needed.
 
-    initialize = function(configFile, dirs = list(export = "data/export",
-                                                  public = "data/public",
-                                                  spdat = "data/spdat",
-                                                  extras = "data/extras")
-                          ) {
-      self$api <- lookr::LookerSDK$new(configFile = ifelse(
-        stringr::str_detect(configFile, "ini$"),
-        file.path(configFile),
-        file.path(configFile, "Looker.ini")
-      ))
-      self$dirs <- dirs
-    },
+    initialize = .init,
     #' @description Close the Looker API Connection
     close = function() {
       self$api$on_connection_closed()
@@ -226,5 +237,6 @@ hud_export <- R6::R6Class(
   lock_objects = FALSE,
   private = rlang::list2(item = rlang::list2(!!!.hud_export, !!!.hud_extras))
 )
+
 
 

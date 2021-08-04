@@ -1,4 +1,17 @@
-setup_looker <- function(ini_filepath = "Looker.ini", base_url = "https://looker.clarityhs.com:19999", client_id, client_secret) {
+#' @title Setup the Looker ini file
+#' @description Connecting to the Looker API via \href{https://github.com/looker-open-source/lookr}{`lookr`} requires an ini file with credentials to access the API. This function creates that ini file in a directory of your choosing.
+#' @param client_id \code{(character)} The Client ID provided by Clarity
+#' @param client_secret \code{(character)} The Client Secret provided by Clarity
+#' @param ini_filepath \code{(character)} The directory and name of the ini file. **Default** creates *Looker.ini* in the working directory. A path can also be provided, and the file will be named *Looker.ini* in that directory.
+#' @param base_url \code{(character)} The base URL to the Clarity Looker instance. This is typically the same for all Clarity users.
+#' @export
+
+setup_looker <- function(client_id, client_secret, ini_filepath = "Looker.ini", base_url = "https://looker.clarityhs.com:19999") {
+  fp <- purrr::when(ini_filepath,
+              stringr::str_detect(., "ini$") ~ ini_filepath,
+              file.path(ini_filepath, "Looker.ini"))
+  if (!dir.exists(dirname(fp)))
+    file_path_create(dirname(fp))
   write(paste0(
     "[Looker]\n",
     "# API version is required\n",
@@ -15,9 +28,15 @@ setup_looker <- function(ini_filepath = "Looker.ini", base_url = "https://looker
     "user_id=\n",
     "  # Set to false if testing locally against self-signed certs. Otherwise leave True\n",
     "verify_ssl=True"
-  ), purrr::when(ini_filepath,
-                 stringr::str_detect(., "ini$") ~ ini_filepath,
-                 file.path(ini_filepath, "Looker.ini")))
+  ), fp)
+
+  purrr::walk(c(".gitignore", ".Rbuildignore"), ~{
+    if (file.exists(.x)) {
+      write(fp, .x, append = TRUE)
+      cli::cli_alert_info(paste0(fp, " added to ", .x))
+    }
+  })
+
 }
 
 #' @title Extract Looks and their names from the folder browse table in Looker

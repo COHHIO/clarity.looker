@@ -41,8 +41,10 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \item \href{#method-Client_extras}{\code{hud_export$Client_extras()}}
 \item \href{#method-Client_Offer_extras}{\code{hud_export$Client_Offer_extras()}}
 \item \href{#method-Services_extras}{\code{hud_export$Services_extras()}}
-\item \href{#method-get_all}{\code{hud_export$get_all()}}
-\item \href{#method-update_all}{\code{hud_export$update_all()}}
+\item \href{#method-get_export}{\code{hud_export$get_export()}}
+\item \href{#method-update_export}{\code{hud_export$update_export()}}
+\item \href{#method-get_extras}{\code{hud_export$get_extras()}}
+\item \href{#method-update_extras}{\code{hud_export$update_extras()}}
 \item \href{#method-new}{\code{hud_export$new()}}
 \item \href{#method-close}{\code{hud_export$close()}}
 \item \href{#method-clone}{\code{hud_export$clone()}}
@@ -437,26 +439,46 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_all"></a>}}
-\if{latex}{\out{\hypertarget{method-get_all}{}}}
-\subsection{Method \code{get_all()}}{
+\if{html}{\out{<a id="method-get_export"></a>}}
+\if{latex}{\out{\hypertarget{method-get_export}{}}}
+\subsection{Method \code{get_export()}}{
 Pull all Export items with associate Looks
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$get_all(path = self$dirs$export)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$get_export(path = self$dirs$export)}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_all"></a>}}
-\if{latex}{\out{\hypertarget{method-update_all}{}}}
-\subsection{Method \code{update_all()}}{
+\if{html}{\out{<a id="method-update_export"></a>}}
+\if{latex}{\out{\hypertarget{method-update_export}{}}}
+\subsection{Method \code{update_export()}}{
 Run daily update for all HUD Export items on disk
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$update_all(
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$update_export(
   path = self$dirs$export,
   skip = c("Assessment", "AssessmentQuestions", "AssessmentResults",
     "YouthEducationStatus")
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-get_extras}{}}}
+\subsection{Method \code{get_extras()}}{
+Pull all Extra items with associate Looks
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$get_extras(path = self$dirs$extras)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-update_extras}{}}}
+\subsection{Method \code{update_extras()}}{
+Run daily update for all HUD Export items on disk
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$update_extras(path = self$dirs$extras, skip = NULL)}\if{html}{\out{</div>}}
 }
 
 }
@@ -468,8 +490,8 @@ initialize the Looker API connection given the path to the ini configuration fil
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$new(
   configFile,
-  dirs = list(export = "data/export", public = "data/public", spdat = "data/spdat"),
-  extra = "data/extra"
+  dirs = list(export = "data/export", public = "data/public", spdat = "data/spdat",
+    extras = "data/extras")
 )}\if{html}{\out{</div>}}
 }
 

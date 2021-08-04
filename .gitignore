@@ -39,3 +39,5 @@ vignettes/*.pdf
 # COHHIO data
 data/*
 inst/*
+
+Looker.ini
