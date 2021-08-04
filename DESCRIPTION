@@ -17,3 +17,13 @@ Imports:
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Collate: 
+    'aaa_imports.R'
+    'export_fields.R'
+    'helpers.R'
+    'hud_export.R'
+    'hud_extras.R'
+    'hud_export_r6.R'
+    'knn_c.R'
+    'setup_looker.R'
+    'universal_useful.R'

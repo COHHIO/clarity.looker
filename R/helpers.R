@@ -2,7 +2,7 @@
 # Mon Jul 19 16:05:32 2021
 
 hud_formatted <- function(x) {
-  x <- stringr::str_extract(x, "[A-Za-z]+")
+  x <- stringr::str_extract(x, "[A-Za-z\\_]+")
 }
 
 hud_regex <- function(x) {
@@ -133,6 +133,8 @@ hud_feather <- function(.data, path = "data") {
                   isTRUE(.) ~ path,
                   list(path, paste0(deparse(rlang::enexpr(.data)), ".feather"))
                 ))
+  if (!dir.exists(dirname(fn)))
+    file_path_create(dirname(fn))
   feather::write_feather(.data, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
 }

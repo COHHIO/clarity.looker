@@ -32,6 +32,15 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \item \href{#method-Services}{\code{hud_export$Services()}}
 \item \href{#method-User}{\code{hud_export$User()}}
 \item \href{#method-YouthEducationStatus}{\code{hud_export$YouthEducationStatus()}}
+\item \href{#method-Project_extras}{\code{hud_export$Project_extras()}}
+\item \href{#method-Enrollment_extras}{\code{hud_export$Enrollment_extras()}}
+\item \href{#method-Client_COVID_extras}{\code{hud_export$Client_COVID_extras()}}
+\item \href{#method-User_extras}{\code{hud_export$User_extras()}}
+\item \href{#method-CE_Referrals_extras}{\code{hud_export$CE_Referrals_extras()}}
+\item \href{#method-Client_Doses_extras}{\code{hud_export$Client_Doses_extras()}}
+\item \href{#method-Client_extras}{\code{hud_export$Client_extras()}}
+\item \href{#method-Client_Offer_extras}{\code{hud_export$Client_Offer_extras()}}
+\item \href{#method-Services_extras}{\code{hud_export$Services_extras()}}
 \item \href{#method-get_all}{\code{hud_export$get_all()}}
 \item \href{#method-update_all}{\code{hud_export$update_all()}}
 \item \href{#method-new}{\code{hud_export$new()}}
@@ -311,6 +320,123 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Project_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Project_extras}{}}}
+\subsection{Method \code{Project_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Project_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Enrollment_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Enrollment_extras}{}}}
+\subsection{Method \code{Enrollment_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Enrollment_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client_COVID_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Client_COVID_extras}{}}}
+\subsection{Method \code{Client_COVID_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_COVID_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-User_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-User_extras}{}}}
+\subsection{Method \code{User_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$User_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CE_Referrals_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-CE_Referrals_extras}{}}}
+\subsection{Method \code{CE_Referrals_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$CE_Referrals_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client_Doses_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Client_Doses_extras}{}}}
+\subsection{Method \code{Client_Doses_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_Doses_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Client_extras}{}}}
+\subsection{Method \code{Client_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Client_Offer_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Client_Offer_extras}{}}}
+\subsection{Method \code{Client_Offer_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_Offer_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Services_extras"></a>}}
+\if{latex}{\out{\hypertarget{method-Services_extras}{}}}
+\subsection{Method \code{Services_extras()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{hud_export$Services_extras(
+  look_type = "disk",
+  path = self$dirs$export,
+  .write = FALSE
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_all"></a>}}
 \if{latex}{\out{\hypertarget{method-get_all}{}}}
 \subsection{Method \code{get_all()}}{
@@ -342,7 +468,7 @@ initialize the Looker API connection given the path to the ini configuration fil
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$new(
   configFile,
-  dirs = list(export = "data/API", public = "data/public", spdat = "data/spdat"),
+  dirs = list(export = "data/export", public = "data/public", spdat = "data/spdat"),
   extra = "data/extra"
 )}\if{html}{\out{</div>}}
 }
