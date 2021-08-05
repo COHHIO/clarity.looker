@@ -249,6 +249,7 @@
       "csv_employment_education.rhy_school_status",
       "csv_employment_education.ref_user"
     ),
+    Enrollment = unique(purrr::flatten_chr(stringr::str_extract_all(readLines("inst/SQL/Enrollment.SQL"), "(?<=\\`)[\\w\\.]+(?=\\`)"))),
     csv_enrollment_coc = c(
       "csv_enrollment_coc.coc",
       "csv_enrollment_coc.data_collection_stage",

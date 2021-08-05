@@ -4,43 +4,41 @@
 \alias{hud_export}
 \title{Call HUD Export Items from the Clarity Looker API}
 \description{
-Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks.
+Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks. See \code{?fetch} for details on using all data methods.
 }
+\section{Export_Items}{
+
+Available HUD Export Items are
+\itemize{
+\item{Affiliation}
+\item{Assessment}
+\item{AssessmentQuestions}
+\item{AssessmentResults}
+\item{Client}
+\item{CurrentLivingSituation}
+\item{Disabilities}
+\item{EmploymentEducation}
+\item{Enrollment}
+\item{EnrollmentCoC}
+\item{Event}
+\item{Exit}
+\item{Export}
+\item{Funder}
+\item{HealthAndDV}
+\item{IncomeBenefits}
+\item{Inventory}
+\item{Organization}
+\item{Project}
+\item{ProjectCoC}
+\item{Services}
+\item{User}
+\item{YouthEducationStatus}
+}
+}
+
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-Affiliation}{\code{hud_export$Affiliation()}}
-\item \href{#method-Assessment}{\code{hud_export$Assessment()}}
-\item \href{#method-AssessmentQuestions}{\code{hud_export$AssessmentQuestions()}}
-\item \href{#method-AssessmentResults}{\code{hud_export$AssessmentResults()}}
-\item \href{#method-Client}{\code{hud_export$Client()}}
-\item \href{#method-CurrentLivingSituation}{\code{hud_export$CurrentLivingSituation()}}
-\item \href{#method-Disabilities}{\code{hud_export$Disabilities()}}
-\item \href{#method-EmploymentEducation}{\code{hud_export$EmploymentEducation()}}
-\item \href{#method-Enrollment}{\code{hud_export$Enrollment()}}
-\item \href{#method-EnrollmentCoC}{\code{hud_export$EnrollmentCoC()}}
-\item \href{#method-Event}{\code{hud_export$Event()}}
-\item \href{#method-Exit}{\code{hud_export$Exit()}}
-\item \href{#method-Export}{\code{hud_export$Export()}}
-\item \href{#method-Funder}{\code{hud_export$Funder()}}
-\item \href{#method-HealthAndDV}{\code{hud_export$HealthAndDV()}}
-\item \href{#method-IncomeBenefits}{\code{hud_export$IncomeBenefits()}}
-\item \href{#method-Inventory}{\code{hud_export$Inventory()}}
-\item \href{#method-Organization}{\code{hud_export$Organization()}}
-\item \href{#method-Project}{\code{hud_export$Project()}}
-\item \href{#method-ProjectCoC}{\code{hud_export$ProjectCoC()}}
-\item \href{#method-Services}{\code{hud_export$Services()}}
-\item \href{#method-User}{\code{hud_export$User()}}
-\item \href{#method-YouthEducationStatus}{\code{hud_export$YouthEducationStatus()}}
-\item \href{#method-Project_extras}{\code{hud_export$Project_extras()}}
-\item \href{#method-Enrollment_extras}{\code{hud_export$Enrollment_extras()}}
-\item \href{#method-Client_COVID_extras}{\code{hud_export$Client_COVID_extras()}}
-\item \href{#method-User_extras}{\code{hud_export$User_extras()}}
-\item \href{#method-CE_Referrals_extras}{\code{hud_export$CE_Referrals_extras()}}
-\item \href{#method-Client_Doses_extras}{\code{hud_export$Client_Doses_extras()}}
-\item \href{#method-Client_extras}{\code{hud_export$Client_extras()}}
-\item \href{#method-Client_Offer_extras}{\code{hud_export$Client_Offer_extras()}}
-\item \href{#method-Services_extras}{\code{hud_export$Services_extras()}}
 \item \href{#method-get_export}{\code{hud_export$get_export()}}
 \item \href{#method-update_export}{\code{hud_export$update_export()}}
 \item \href{#method-get_extras}{\code{hud_export$get_extras()}}
@@ -49,394 +47,6 @@ Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export 
 \item \href{#method-close}{\code{hud_export$close()}}
 \item \href{#method-clone}{\code{hud_export$clone()}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Affiliation"></a>}}
-\if{latex}{\out{\hypertarget{method-Affiliation}{}}}
-\subsection{Method \code{Affiliation()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Affiliation(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Assessment"></a>}}
-\if{latex}{\out{\hypertarget{method-Assessment}{}}}
-\subsection{Method \code{Assessment()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Assessment(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-AssessmentQuestions"></a>}}
-\if{latex}{\out{\hypertarget{method-AssessmentQuestions}{}}}
-\subsection{Method \code{AssessmentQuestions()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$AssessmentQuestions(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-AssessmentResults"></a>}}
-\if{latex}{\out{\hypertarget{method-AssessmentResults}{}}}
-\subsection{Method \code{AssessmentResults()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$AssessmentResults(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Client"></a>}}
-\if{latex}{\out{\hypertarget{method-Client}{}}}
-\subsection{Method \code{Client()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CurrentLivingSituation"></a>}}
-\if{latex}{\out{\hypertarget{method-CurrentLivingSituation}{}}}
-\subsection{Method \code{CurrentLivingSituation()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$CurrentLivingSituation(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Disabilities"></a>}}
-\if{latex}{\out{\hypertarget{method-Disabilities}{}}}
-\subsection{Method \code{Disabilities()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Disabilities(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-EmploymentEducation"></a>}}
-\if{latex}{\out{\hypertarget{method-EmploymentEducation}{}}}
-\subsection{Method \code{EmploymentEducation()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$EmploymentEducation(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Enrollment"></a>}}
-\if{latex}{\out{\hypertarget{method-Enrollment}{}}}
-\subsection{Method \code{Enrollment()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Enrollment(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-EnrollmentCoC"></a>}}
-\if{latex}{\out{\hypertarget{method-EnrollmentCoC}{}}}
-\subsection{Method \code{EnrollmentCoC()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$EnrollmentCoC(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event"></a>}}
-\if{latex}{\out{\hypertarget{method-Event}{}}}
-\subsection{Method \code{Event()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Event(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Exit"></a>}}
-\if{latex}{\out{\hypertarget{method-Exit}{}}}
-\subsection{Method \code{Exit()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Exit(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Export"></a>}}
-\if{latex}{\out{\hypertarget{method-Export}{}}}
-\subsection{Method \code{Export()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Export(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Funder"></a>}}
-\if{latex}{\out{\hypertarget{method-Funder}{}}}
-\subsection{Method \code{Funder()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Funder(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-HealthAndDV"></a>}}
-\if{latex}{\out{\hypertarget{method-HealthAndDV}{}}}
-\subsection{Method \code{HealthAndDV()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$HealthAndDV(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IncomeBenefits"></a>}}
-\if{latex}{\out{\hypertarget{method-IncomeBenefits}{}}}
-\subsection{Method \code{IncomeBenefits()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$IncomeBenefits(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Inventory"></a>}}
-\if{latex}{\out{\hypertarget{method-Inventory}{}}}
-\subsection{Method \code{Inventory()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Inventory(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Organization"></a>}}
-\if{latex}{\out{\hypertarget{method-Organization}{}}}
-\subsection{Method \code{Organization()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Organization(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Project"></a>}}
-\if{latex}{\out{\hypertarget{method-Project}{}}}
-\subsection{Method \code{Project()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Project(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ProjectCoC"></a>}}
-\if{latex}{\out{\hypertarget{method-ProjectCoC}{}}}
-\subsection{Method \code{ProjectCoC()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$ProjectCoC(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Services"></a>}}
-\if{latex}{\out{\hypertarget{method-Services}{}}}
-\subsection{Method \code{Services()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Services(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-User"></a>}}
-\if{latex}{\out{\hypertarget{method-User}{}}}
-\subsection{Method \code{User()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$User(look_type = "disk", path = self$dirs$export, .write = FALSE)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-YouthEducationStatus"></a>}}
-\if{latex}{\out{\hypertarget{method-YouthEducationStatus}{}}}
-\subsection{Method \code{YouthEducationStatus()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$YouthEducationStatus(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Project_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Project_extras}{}}}
-\subsection{Method \code{Project_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Project_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Enrollment_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Enrollment_extras}{}}}
-\subsection{Method \code{Enrollment_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Enrollment_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Client_COVID_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Client_COVID_extras}{}}}
-\subsection{Method \code{Client_COVID_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_COVID_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-User_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-User_extras}{}}}
-\subsection{Method \code{User_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$User_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CE_Referrals_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-CE_Referrals_extras}{}}}
-\subsection{Method \code{CE_Referrals_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$CE_Referrals_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Client_Doses_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Client_Doses_extras}{}}}
-\subsection{Method \code{Client_Doses_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_Doses_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Client_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Client_extras}{}}}
-\subsection{Method \code{Client_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Client_Offer_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Client_Offer_extras}{}}}
-\subsection{Method \code{Client_Offer_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Client_Offer_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Services_extras"></a>}}
-\if{latex}{\out{\hypertarget{method-Services_extras}{}}}
-\subsection{Method \code{Services_extras()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hud_export$Services_extras(
-  look_type = "disk",
-  path = self$dirs$export,
-  .write = FALSE
-)}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_export"></a>}}
@@ -490,8 +100,8 @@ initialize the Looker API connection given the path to the ini configuration fil
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hud_export$new(
   configFile,
-  dirs = list(export = "data/export", public = "data/public", spdat = "data/spdat",
-    extras = "data/extras")
+  dirs = list(export = "data/export", public = "data/public", spm = "data/spm", extras
+    = "data/extras")
 )}\if{html}{\out{</div>}}
 }
 
@@ -502,10 +112,10 @@ initialize the Looker API connection given the path to the ini configuration fil
 
 \item{\code{dirs}}{\code{(named list)} of default directory paths for where to store the feather files for the following data types:
 \itemize{
-\item{\code{export}}{ The HUD Export items \strong{Default}: \emph{data/API}}
+\item{\code{export}}{ The HUD Export items \strong{Default}: \emph{data/export}}
 \item{\code{public}}{ The public items \strong{Default}: \emph{data/public}}
-\item{\code{spdat}}{ The SPDAT items \strong{Default}: \emph{data/spdat}}
-\item{\code{extra}}{ The HUD Extras (custom items) \strong{Default}: \emph{data/extra}}
+\item{\code{spm}}{ The SPM items \strong{Default}: \emph{data/spm}}
+\item{\code{extras}}{ The HUD Extras (custom items) \strong{Default}: \emph{data/extras}}
 }
 This is optional and the path can be provided to individual methods as needed.}
 }

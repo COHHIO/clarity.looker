@@ -46,3 +46,8 @@ Individual HUD Export CSVs, extras, spms can be called using the similarly named
 hud$Clients()
 hud$Client_extras()
 ```
+
+All Export items can be retrieved like so
+```r
+hud$get_export()
+```
