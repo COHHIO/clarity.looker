@@ -122,13 +122,15 @@ fetch <- function(x,
     # Rename col_types to match the way they appear coming from the API
     if (!is.null(names(.x$col_types))) {
       names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
-      if (!.y %in% c("Services", "Client", "Enrollment"))
-        names(.x$col_types) <- names(.x$col_types) %>%
-          c(stringr::str_replace_all(
-            stringr::str_subset(., "[Ii][Dd]$"),
-            "(?<!a)[I][D]$",
-            "Id"
-          ))
+      if (!.y %in% c("Services", "Client", "Enrollment")) {
+        # Add both versions of ID columns (ID/Id) since it is non uniform
+        .is_id <- .x$col_types %>%
+          {stringr::str_detect(names(.), "[Ii][Dd]$")}
+        .x$col_types <- c(.x$col_types,
+          .x$col_types[.is_id] %>% {setNames(., nm = stringr::str_replace_all(names(.), "(?<!a)[I][D]$", "Id"))})
+      }
+
+
 
 
     }
