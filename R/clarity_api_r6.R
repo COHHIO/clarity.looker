@@ -154,7 +154,11 @@ fetch <- function(x,
   }
 
   if (.write && look_type != "disk") {
-    fp <- file.path(path, paste0(.y, ".feather"))
+    if (stringr::str_detect(path, "feather$", negate = TRUE)) {
+      fp <- file.path(path, paste0(.y, ".feather"))
+    } else {
+      fp <- path
+    }
     hud_feather(.data, fp)
   }
 
