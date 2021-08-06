@@ -33,7 +33,7 @@ file_io_fn <- function(object, ext) {
   if (!missing(ext))
     purrr::when(
     ext,
-    !hud.export::is_legit(.) ~ stop(x, " not found"),
+    !clarity.looker::is_legit(.) ~ stop(x, " not found"),
     length(.) > 1 ~ stop("Duplicate files found for ", x),
     grepl("csv", ., ignore.case = TRUE) ~ readr::read_csv,
     grepl("feather", ., ignore.case = TRUE) ~ feather::read_feather,

@@ -163,8 +163,8 @@ fetch <- function(x,
 
 
 
-#' @title Call HUD Export Items from the Clarity Looker API
-#' @description Calls the Clarity Looker HUD CSV Export  (BETA) API to return to the HUD Export Items on various time ranges via pre-constructed Looks. See `?fetch` for details on using all data methods.
+#' @title Call HUD Export Items & Extras from the Clarity Looker API
+#' @description Calls the Clarity Looker API HUD CSV Export  (BETA) & LookML models to return to the HUD Export Items & other datasets on various time ranges via pre-constructed Looks. See `?fetch` for details on using all data methods.
 #' @inheritSection hud_filename Export_Items
 #' @inheritParams hud_filename
 #' @param look_type \code{(character)} The look type to retrieve. One of:
@@ -177,27 +177,37 @@ fetch <- function(x,
 #' @include hud_export.R
 #' @include hud_extras.R
 #' @export
-hud_export <- R6::R6Class(
-  "hud_export",
+clarity_api <- R6::R6Class(
+  "clarity_api",
   lock_objects = FALSE,
   public = rlang::exec(
     rlang::list2,
     #' @description Pull all Export items with associate Looks
     #' @inheritParams hud_filename
-    get_export = function(path = self$dirs$export) {
+    #' @param skip \code{(character)} of items to skip
+    get_export = function(path = self$dirs$export, skip = c("Assessment",
+                                                            "AssessmentQuestions",
+                                                            "AssessmentResults",
+                                                            "Services",
+                                                            "YouthEducationStatus")) {
       if (!dir.exists(path))
         file_path_create(path)
-      purrr::iwalk(.hud_export, ~ rlang::eval_bare(rlang::expr(self[[!!.y]](
+      to_fetch <- names(.hud_export) %>% {
+        .[!. %in% skip]
+      }
+      purrr::walk(to_fetch, ~ rlang::eval_bare(rlang::expr(self[[!!.x]](
         path = path,
         .write = TRUE
       ))))
     },
     #' @description Run daily update for all HUD Export items on disk
     #' @inheritParams hud_filename
+    #' @param skip \code{(character)} of items to skip
     update_export = function(path = self$dirs$export,
                              skip = c("Assessment",
                                       "AssessmentQuestions",
                                       "AssessmentResults",
+                                      "Services",
                                       "YouthEducationStatus")) {
       to_update <- names(.hud_export) %>% {
         .[!. %in% skip]
