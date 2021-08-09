@@ -20,7 +20,8 @@ call_data <-
            .write = FALSE) {
     .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
     # For extras, spdats, public data entities amend the path based on the function name
-    if (!.data_nm %in% names(.hud_export))
+    .is_export <- .data_nm %in% names(.hud_export)
+    if (!is_export)
       path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0(
         "(?<=\\_)", purrr::map_chr(dirs[-1], basename), "$"
       ), collapse = "|"))]]
@@ -237,12 +238,13 @@ clarity_api <- R6::R6Class(
     },
     #' @description Pull all Extra items with associate Looks
     #' @inheritParams hud_filename
-    get_extras = function(path = self$dirs$extras) {
+    get_extras = function(look_type = "since2019",path = self$dirs$extras, .write = TRUE) {
       if (!dir.exists(path))
         file_path_create(path)
       purrr::iwalk(.hud_extras, ~ rlang::eval_bare(rlang::expr(self[[!!.y]](
+        look_type = look_type,
         path = path,
-        .write = TRUE
+        .write = .write
       ))))
     },
     #' @description Run daily update for all HUD Export items on disk

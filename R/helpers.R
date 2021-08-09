@@ -49,7 +49,10 @@ hud_regex <- function(x) {
 #' @export
 
 hud_filename <- function(x, path = "data") {
-  .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE)
+  if (!file.exists(x))
+    .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE)
+  else
+    .file <- x
   purrr::when(.file,
               rlang::is_empty(.) ~ stop(x, ": file not found. Please retrieve full dataset."),
               length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present"))
@@ -64,7 +67,14 @@ hud_filename <- function(x, path = "data") {
 #' @export
 
 hud_last_updated <- function(x, path = "data") {
-  file.info(hud_filename(x, path))$mtime
+  if (!missing(x))
+    file.info(hud_filename(x, path))$mtime
+  else {
+    list.files(path, full.names = TRUE) |>
+      setNames(list.files(path)) |>
+      purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path)
+  }
+
 }
 
 
@@ -101,21 +111,28 @@ hud_rename_strings <- function(x) {
 
 
 
-hud_rename <- function(x, .nm) {
+hud_rename <- function(x, rm_prefixes, nms) {
   if (is.null(x))
     return(NULL)
-  x %>%
-    dplyr::rename_with(.fn = ~ {
-      # All column names are prefixed with the HUD CSV Export BETA report name from Looker - with spaces between capitalized words. This is removed
-      out <-
-        trimws(stringr::str_remove(.x, stringr::fixed(paste0(.nm, " ")))) %>%
-        hud_rename_strings()
+  if (!missing(rm_prefixes)) {
+    out <- x %>%
+      dplyr::rename_with(.fn = ~ {
+
+        # All column names are prefixed with the HUD CSV Export BETA report name from Looker - with spaces between capitalized words. This is removed
+        out <-
+          trimws(stringr::str_remove(.x, stringr::regex(paste0(paste0("^",rm_prefixes,"\\s"), collapse = "|")))) |>
+          hud_rename_strings()
 
 
-      if (all(is.na(out)))
-        out <- .x
-      out
-    })
+        if (all(is.na(out)))
+          out <- .x
+        out
+      })
+  } else {
+    out <- setNames(x, nms)
+
+  }
+  out
 }
 
 #' @title Write object to the *data* directory as feather file
