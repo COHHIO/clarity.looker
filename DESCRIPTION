@@ -25,5 +25,6 @@ Collate:
     'hud_extras.R'
     'clarity_api_r6.R'
     'knn_c.R'
+    'model_names.R'
     'setup_looker.R'
     'universal_useful.R'

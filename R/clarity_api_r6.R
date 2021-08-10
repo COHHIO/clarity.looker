@@ -17,11 +17,12 @@
 call_data <-
   function(look_type = "disk",
            path = self$dirs$export,
-           .write = FALSE) {
+           .write = FALSE,
+           details = FALSE) {
     .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
     # For extras, spdats, public data entities amend the path based on the function name
     .is_export <- .data_nm %in% names(.hud_export)
-    if (!is_export)
+    if (!.is_export)
       path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0(
         "(?<=\\_)", purrr::map_chr(dirs[-1], basename), "$"
       ), collapse = "|"))]]
@@ -29,6 +30,7 @@ call_data <-
           look_type,
           path,
           .write,
+          details,
           self$.__enclos_env__)
   }
 
@@ -102,10 +104,23 @@ fetch <- function(x,
                   look_type,
                   path,
                   .write = FALSE,
+                  details = FALSE,
                   ee) {
   .y <- x
   .x <- ee$private$item[[x]]
   .nm <- .x$api_nm %||% .y
+
+  if (details) {
+    if (missing(look_type) || look_type == "disk")
+      look_type = "since2019"
+
+    look_type <- purrr::when(look_type,
+                is.character(.) ~ .x$look[look_type],
+                ~ look_type)
+    .data <-
+      ee$self$api$getLook(look_type)
+    return(.data)
+  }
 
   if (look_type == "disk" && !.write) {
     .data <- try(hud_load(x, path), silent = TRUE)

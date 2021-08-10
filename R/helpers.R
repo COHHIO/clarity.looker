@@ -8,7 +8,7 @@ hud_formatted <- function(x) {
 hud_regex <- function(x) {
   purrr::when(stringr::str_detect(x, "\\."),
               isTRUE(.) ~ x,
-              ~ paste0(hud_formatted(x), "\\.")
+              ~ paste0("^",hud_formatted(x), "\\.")
   )
 }
 
@@ -49,13 +49,15 @@ hud_regex <- function(x) {
 #' @export
 
 hud_filename <- function(x, path = "data") {
-  if (!file.exists(x))
-    .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE)
-  else
+  if (!file.exists(x)) {
+    .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE) |> {\(x) {setNames(x, x)}}()
+  } else {
     .file <- x
-  purrr::when(.file,
-              rlang::is_empty(.) ~ stop(x, ": file not found. Please retrieve full dataset."),
-              length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present"))
+    purrr::when(.file,
+                rlang::is_empty(.) ~ stop(x, ": file not found. Please retrieve full dataset."),
+                length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present"))
+  }
+
   .file
 }
 
@@ -67,9 +69,9 @@ hud_filename <- function(x, path = "data") {
 #' @export
 
 hud_last_updated <- function(x, path = "data") {
-  if (!missing(x))
-    file.info(hud_filename(x, path))$mtime
-  else {
+  if (!missing(x)) {
+    file.info(hud_filename(x, path))$mtime |> setNames(hud_filename(x, path))
+  } else {
     list.files(path, full.names = TRUE) |>
       setNames(list.files(path)) |>
       purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path)
