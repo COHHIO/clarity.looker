@@ -106,77 +106,86 @@ fetch <- function(x,
                   .write = FALSE,
                   details = FALSE,
                   ee) {
-  .y <- x
   .x <- ee$private$item[[x]]
-  .nm <- .x$api_nm %||% .y
+  .nm <- .x$api_nm %||% x
 
-  if (details) {
+
+  if (details || stringr::str_detect(x, "extras$")) {
     if (missing(look_type) || look_type == "disk")
-      look_type = "since2019"
+      .look_type = "since2019"
+    else
+      .look_type = look_type
 
-    look_type <- purrr::when(look_type,
+    .look_type <- purrr::when(.look_type,
                 is.character(.) ~ .x$look[look_type],
-                ~ look_type)
-    .data <-
-      ee$self$api$getLook(look_type)
-    return(.data)
-  }
-
-  if (look_type == "disk" && !.write) {
-    .data <- try(hud_load(x, path), silent = TRUE)
+                ~ .look_type)
+    .description <-
+      ee$self$api$getLook(.look_type)
   }
 
 
-  .data_error <-
-    inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
-  if (.data_error || look_type == "daily") {
-    if (.data_error && look_type == "disk")
-      look_type <- "since2019"
-    if (is.null(.x$look[look_type]))
-      return(NULL)
-    message(.y, ": fetching data")
-    # Rename col_types to match the way they appear coming from the API
-    if (!is.null(names(.x$col_types))) {
-      names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
-      if (!.y %in% c("Services", "Client", "Enrollment")) {
-        # Add both versions of ID columns (ID/Id) since it is non uniform
-        .is_id <- .x$col_types %>%
-          {stringr::str_detect(names(.), "[Ii][Dd]$")}
-        .x$col_types <- c(.x$col_types,
-          .x$col_types[.is_id] %>% {setNames(., nm = stringr::str_replace_all(names(.), "(?<!a)[I][D]$", "Id"))})
+  if (!details) {
+    if (look_type == "disk" && !.write) {
+      .data <- try(hud_load(x, path), silent = TRUE)
+    }
+
+
+    .data_error <-
+      inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
+    if (.data_error || look_type == "daily") {
+      if (.data_error && look_type == "disk")
+        look_type <- "since2019"
+      if (is.null(.x$look[look_type]))
+        return(NULL)
+      message(x, ": fetching data")
+      .look_args <- list(.x$look[look_type],
+                         "csv",
+                         as = "parsed")
+      # Rename col_types to match the way they appear coming from the API
+      if (!is.null(names(.x$col_types)) && stringr::str_detect(x, "extras$", negate = TRUE)) {
+        names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
+        if (!x %in% c("Services", "Client", "Enrollment")) {
+          # Add both versions of ID columns (ID/Id) since it is non uniform
+          .is_id <- .x$col_types %>%
+            {stringr::str_detect(names(.), "[Ii][Dd]$")}
+          .x$col_types <- c(.x$col_types,
+                            .x$col_types[.is_id] %>% {setNames(., nm = stringr::str_replace_all(names(.), "(?<!a)[I][D]$", "Id"))})
+        }
+
+      } else if (stringr::str_detect(x, "extras$")) {
+
+        .look_args$col_names <- stringr::str_split(.description$description,  "\\,\\s")[[1]]
       }
 
-
-
-
+      .look_args$col_types <-  .x$col_types
+      .data <-
+        do.call(ee$self$api$runLook, .look_args)
+      if (names(.data)[1] == "message")
+        stop(purrr::imap_chr(.data, ~ paste0(x, ": ", .x, "\n")))
+      message(x, ": data retrieved")
+      if (nrow(.data) %in% c(0, 500, 5000) && look_type != "daily")
+        stop(x,
+             " row count is ",
+             nrow(.data),
+             ". Row limits could be limiting data.")
     }
-    .data <-
-      ee$self$api$runLook(.x$look[look_type],
-                          "csv",
-                          as = "parsed",
-                          col_types = .x$col_types)
-    if (names(.data)[1] == "message")
-      stop(purrr::imap_chr(.data, ~ paste0(.y, ": ", .x, "\n")))
-    message(.y, ": data retrieved")
-    if (nrow(.data) %in% c(0, 500, 5000) && look_type != "daily")
-      stop(.y,
-           " row count is ",
-           nrow(.data),
-           ". Row limits could be limiting data.")
-  }
 
-  if (any(stringr::str_detect(names(.data), paste0("^", .nm, "\\s")))) {
-    .data <- hud_rename(.data, .nm)
-  }
-
-  if (.write && look_type != "disk") {
-    if (stringr::str_detect(path, "feather$", negate = TRUE)) {
-      fp <- file.path(path, paste0(.y, ".feather"))
-    } else {
-      fp <- path
+    if (any(stringr::str_detect(names(.data), paste0("^", .nm, "\\s")))) {
+      .data <- hud_rename(.data, .nm)
     }
-    hud_feather(.data, fp)
+
+    if (.write && look_type != "disk") {
+      if (stringr::str_detect(path, "feather$", negate = TRUE)) {
+        fp <- file.path(path, paste0(x, ".feather"))
+      } else {
+        fp <- path
+      }
+      hud_feather(.data, fp)
+    }
+  } else {
+    .data <- .description
   }
+
 
   return(.data)
 }
@@ -213,7 +222,7 @@ clarity_api <- R6::R6Class(
                                                             "Services",
                                                             "YouthEducationStatus")) {
       if (!dir.exists(path))
-        file_path_create(path)
+        UU::mkpath(path)
       to_fetch <- names(.hud_export) %>% {
         .[!. %in% skip]
       }
@@ -255,7 +264,7 @@ clarity_api <- R6::R6Class(
     #' @inheritParams hud_filename
     get_extras = function(look_type = "since2019",path = self$dirs$extras, .write = TRUE) {
       if (!dir.exists(path))
-        file_path_create(path)
+        UU::mkpath(path)
       purrr::iwalk(.hud_extras, ~ rlang::eval_bare(rlang::expr(self[[!!.y]](
         look_type = look_type,
         path = path,
@@ -335,3 +344,5 @@ clarity_api <- R6::R6Class(
     update_data = update_data
   )
 )
+
+
