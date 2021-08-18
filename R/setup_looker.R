@@ -11,7 +11,7 @@ setup_looker <- function(client_id, client_secret, ini_filepath = "Looker.ini", 
               stringr::str_detect(., "ini$") ~ ini_filepath,
               file.path(ini_filepath, "Looker.ini"))
   if (!dir.exists(dirname(fp)))
-    file_path_create(dirname(fp))
+    UU::mkpath(dirname(fp))
   write(paste0(
     "[Looker]\n",
     "# API version is required\n",

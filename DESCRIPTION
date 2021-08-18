@@ -13,7 +13,10 @@ Imports:
   lookr,
   readr,
   rlang,
-  stringr
+  stringr,
+  UU
+Remotes:
+    yogat3ch/UU
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9001
@@ -27,4 +30,3 @@ Collate:
     'knn_c.R'
     'model_names.R'
     'setup_looker.R'
-    'universal_useful.R'
