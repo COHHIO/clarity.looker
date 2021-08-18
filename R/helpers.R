@@ -90,7 +90,11 @@ hud_last_updated <- function(x, path = "data") {
 
 hud_load <- function(x, path = "data") {
   .file <- hud_filename(x, path)
-  .ext <- .mode(stringr::str_extract(.file, "(?<=\\.)[A-Za-z]+$"))
+  if (length(.file) > 1) {
+    cli::cli_warn(paste0("Two files detected\n: ", paste0(.file, collapse = "\n"), "\n", .file[1], " will be loaded."))
+    .file <- .file[1]
+  }
+  .ext <- UU::ext(.file)
   import_fn <- switch(.ext,
                       csv = readr::read_csv,
                       feather = feather::read_feather)
@@ -153,7 +157,7 @@ hud_feather <- function(.data, path = "data") {
                   list(path, paste0(deparse(rlang::enexpr(.data)), ".feather"))
                 ))
   if (!dir.exists(dirname(fn)))
-    file_path_create(dirname(fn))
+    UU::mkpath(dirname(fn))
   feather::write_feather(.data, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
 }
