@@ -111,13 +111,15 @@ fetch <- function(x,
 
 
   if (details || stringr::str_detect(x, "extras$")) {
-    if (missing(look_type) || look_type == "disk")
+    if (missing(look_type) || look_type == "disk") {
       .look_type = "since2019"
-    else
+    } else {
       .look_type = look_type
+    }
+
 
     .look_type <- purrr::when(.look_type,
-                is.character(.) ~ .x$look[look_type],
+                is.character(.) ~ .x$look[.look_type],
                 ~ .look_type)
     .description <-
       ee$self$api$getLook(.look_type)
@@ -155,6 +157,8 @@ fetch <- function(x,
       } else if (stringr::str_detect(x, "extras$")) {
 
         .look_args$col_names <- stringr::str_split(.description$description,  "\\,\\s")[[1]]
+        .look_args$col_types <- purrr::map_chr(stringr::str_subset(.look_args$col_names, "ID$") |> {\(x) {setNames(x, x)}}(), ~ "c")
+        .look_args$skip <- 1
       }
 
       .look_args$col_types <-  .x$col_types
@@ -216,7 +220,7 @@ clarity_api <- R6::R6Class(
     #' @description Pull all Export items with associate Looks
     #' @inheritParams hud_filename
     #' @param skip \code{(character)} of items to skip
-    get_export = function(path = self$dirs$export, skip = c("Assessment",
+    get_export = function(path = self$dirs$export, .write = TRUE, skip = c("Assessment",
                                                             "AssessmentQuestions",
                                                             "AssessmentResults",
                                                             "Services",
@@ -228,7 +232,7 @@ clarity_api <- R6::R6Class(
       }
       purrr::walk(to_fetch, ~ rlang::eval_bare(rlang::expr(self[[!!.x]](
         path = path,
-        .write = TRUE
+        .write = .write
       ))))
     },
     #' @description Run daily update for all HUD Export items on disk
