@@ -7,5 +7,5 @@
 x \%||\% y
 }
 \description{
-Infix functions from other packages used in hud.exports.
+Infix functions from other packages used in clarity.looker.
 }

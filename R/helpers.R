@@ -106,13 +106,14 @@ hud_load <- function(x, path = "data") {
 }
 
 
-hud_rename_strings <- function(x) {
-  x %>%
-    stringr::str_replace_all("(?<!a)[Ii][Dd]$", "ID") %>%
-    stringr::str_remove("^Enrollment ") %>%
-    stringr::str_replace_all("[Cc][Oo][Cc]", "CoC") %>%
-    stringr::str_replace_all("^[Zz][Ii][Pp]$", "ZIP") %>%
-    stringr::str_replace_all("(?<=rk)p(?=lace)", "P")
+hud_rename_strings <- function(x, rm_prefixes) {
+    trimws(stringr::str_remove(x, stringr::regex(paste0(paste0("^",rm_prefixes,"\\s"), collapse = "|")))) |>
+    stringr::str_replace_all("(?<!a)[Ii][Dd]$", "ID") |>
+    stringr::str_remove("^\\w+(?:\\sCustom)?\\s") |>
+    stringr::str_replace_all("[Cc][Oo][Cc]", "CoC") |>
+    stringr::str_replace_all("^[Zz][Ii][Pp]$", "ZIP") |>
+    stringr::str_replace_all("(?<=rk)p(?=lace)", "P") |>
+    stringr::str_replace_all("\\s", "")
 }
 
 

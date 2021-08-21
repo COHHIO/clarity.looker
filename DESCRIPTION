@@ -16,17 +16,18 @@ Imports:
   stringr,
   UU
 Remotes:
-    yogat3ch/UU
+    yogat3ch/UU,
+    COHHIO/lookr
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9001
 Collate: 
     'aaa_imports.R'
+    'hud_extras.R'
+    'hud_export.R'
+    'clarity_api_r6.R'
     'export_fields.R'
     'helpers.R'
-    'hud_export.R'
-    'hud_extras.R'
-    'clarity_api_r6.R'
     'knn_c.R'
     'model_names.R'
     'setup_looker.R'

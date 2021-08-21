@@ -1,80 +1,6 @@
-
-
-
-#' @title Retrieve data from disk or the API
-#' @description Determines the appropriate location from which to retrieve HUD Export data
-#' @inheritSection hud_filename Export_Items
-#' @inheritParams hud_filename
-#' @param look_type \code{(character)} The look type to retrieve. One of:
-#' \itemize{
-#'   \item{year2}{Two Complete Years}
-#'   \item{since2020}{Since the beginning of 2020}
-#'   \item{daily}{Created or updated in the last complete day}
-#' }
-#' @param write \code{(logical)} Whether to write the raw data from the API and the renamed data to the data/API folder
-#' @return \code{(tibble)} The HUD Export item requested.
-
-call_data <-
-  function(look_type = "disk",
-           path = self$dirs$export,
-           .write = FALSE,
-           details = FALSE) {
-    .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
-    # For extras, spdats, public data entities amend the path based on the function name
-    .is_export <- .data_nm %in% names(.hud_export)
-    if (!.is_export)
-      path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0(
-        "(?<=\\_)", purrr::map_chr(dirs[-1], basename), "$"
-      ), collapse = "|"))]]
-    fetch(.data_nm,
-          look_type,
-          path,
-          .write,
-          details,
-          self$.__enclos_env__)
-  }
-
-
-update_data <-
-  function(x,
-           look_type = "daily",
-           path = self$dirs$export,
-           .write = TRUE) {
-    x <- hud_formatted(deparse(match.call()[[1]][[3]]))
-    last_updated <- hud_last_updated(x, path)
-    old_data <- hud_load(x, path)
-    do_update <- last_updated < Sys.Date()
-    if (do_update) {
-      message(x, " last updated: ", last_updated, ". Updating...")
-      new_data <- fetch(x,
-                        look_type,
-                        path,
-                        .write = FALSE,
-                        self$.__enclos_env__)
-      modifications <-
-        purrr::map2_lgl(new_data$DateCreated,
-                        new_data$DateUpdated,
-                        ~ !identical(.x, .y))
-      if (any(modifications)) {
-        #TODO Merge based on ProjectID, ClientID, EnrollmentID, Etc
-        row_matches <- slider::slide_dbl(new_data[modifications, ], ~ {
-          knn_row(.x, old_data)
-        })
-        old_data[row_matches, ] <- new_data[modifications, ]
-      }
-
-      updated_data <-
-        dplyr::distinct(dplyr::bind_rows(old_data, new_data[!modifications, ]))
-      if (.write && !identical(old_data, updated_data)) {
-        hud_feather(updated_data, file.path(path, paste0(x, ".feather")))
-      }
-    } else {
-      updated_data <- old_data
-    }
-    return(updated_data)
-  }
-
-dirs <- list(
+# dirs ----
+# Fri Aug 20 22:31:44 2021
+dirs = list(
   export = "data/export",
   public = "data/public",
   spm = "data/spm",
@@ -84,147 +10,301 @@ dirs <- list(
 # Use dput on this and copy to the R6 class otherwise utils::getSrcref will bug in roxygen2
 .init <- rlang::new_function(
   body = base::quote({
-    self$api <- lookr::LookerSDK$new(configFile = ifelse(
-      stringr::str_detect(configFile, "ini$"),
-      file.path(configFile),
-      file.path(configFile, "Looker.ini")
-    ))
+
+    self$api <-
+      lookr::LookerSDK$new(configFile = ifelse(
+        stringr::str_detect(configFile,
+                            "ini$"),
+        file.path(configFile),
+        file.path(configFile,
+                  "Looker.ini")
+      ))
+    private$folder_info <- list()
+    if (UU::is_legit(export_folder)) {
+      export_folder <- fetch_folder(export_folder, self)
+      private$folder_info$export <- export_folder
+      rlang::env_bind(self, !!!purrr::map(.hud_export, ~ private$call_data))
+    }
+
+    if (UU::is_legit(daily_folder)) {
+      daily_folder <- fetch_folder(daily_folder, self)
+      private$folder_info$daily_folder <- daily_folder
+    }
+    if (UU::is_legit(look_folders)) {
+      purrr::walk(look_folders, fetch_folder, self = self)
+      # Bind additional folders
+      purrr::iwalk(self$folders[look_folders], ~{
+        looks <- purrr::map_chr(.x$looks, "title") |> rlang::set_names() |> purrr::map(~private$call_data)
+        self[[.y]] <- rlang::list2(!!!looks)
+      })
+    }
+
     self$dirs <- dirs
-    rlang::env_bind(self,!!!purrr::map(.hud_export, ~ private$call_data))
-    rlang::env_bind(self,!!!purrr::map(.hud_extras, ~ private$call_data))
-    self$update = rlang::list2(
-      !!!purrr::map(.hud_export, ~ private$update_data),!!!purrr::map(.hud_extras, ~ private$update_data)
-    )
+
+
+
   }),
-  args = rlang::pairlist2(configFile = , dirs = rlang::expr(!!dirs))
+  args = rlang::pairlist2(configFile = ,
+                          export_folder = "HUD Export",
+                          daily_folder = 9711,
+                          look_folders = c("HUD Extras"),
+                          dirs = rlang::expr(!!dirs))
 )
 
 
-fetch <- function(x,
-                  look_type,
-                  path,
-                  .write = FALSE,
-                  details = FALSE,
-                  ee) {
-  .x <- ee$private$item[[x]]
-  .nm <- .x$api_nm %||% x
+#' @title Retrieve data from disk or the API
+#' @description Determines the appropriate location from which to retrieve HUD Export data
+#' @inheritSection hud_filename Export_Items
+#' @inheritParams hud_filename
+#' @param from_disk \code{(logical)} Attempt to retrieve the data from disk in the folder specified by `path`?
+#' @param .write \code{(logical)} Whether to write a feather file to `path`
+#' @param details \code{(logical)} Return look info. See [getLook](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look)
+#' @param daily_update Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p).
+#' @inheritDotParams readr::read_csv
+#' @return \code{(tibble)} The HUD Export item requested.
 
+call_data <-
+  function(from_disk = TRUE,
+           path = self$dirs$export,
+           .write = FALSE,
+           details = FALSE,
+           daily_update = FALSE,
+           ...) {
+    .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
+    .is_export <- .data_nm %in% names(.hud_export)
 
-  if (details || stringr::str_detect(x, "extras$")) {
-    if (missing(look_type) || look_type == "disk") {
-      .look_type = "since2019"
+    if (.is_export) {
+      .idx <- private$folder_info$export
+    } else if (daily_update) {
+      .idx <- private$folder_info$daily
     } else {
-      .look_type = look_type
+      .idx <- deparse(match.call()[[1]][[2]][[3]])
     }
+    id <- look_id_from_folder(.data_nm, self$folders[[.idx]])
+
+    .arg_path <- deparse(rlang::enexpr(path))
+    # If the file path was entered manually, don't do this
+    if (!stringr::str_detect(.arg_path, stringr::fixed(.Platform$file.sep)))
+      if (!.is_export) {
+        # For extras, spdats, public data entities amend the path based on the function name
+        path = self$dirs[[stringr::str_extract(.data_nm, paste0(paste0(
+          "(?<=\\_)", purrr::map_chr(dirs[-1], basename), "$"
+        ), collapse = "|"))]]
+      }
 
 
-    .look_type <- purrr::when(.look_type,
-                is.character(.) ~ .x$look[.look_type],
-                ~ .look_type)
-    .description <-
-      ee$self$api$getLook(.look_type)
-  }
-
-
-  if (!details) {
-    if (look_type == "disk" && !.write) {
-      .data <- try(hud_load(x, path), silent = TRUE)
+    # Instantiate arguments to runLook
+    .args <- list(id)
+    if (details || stringr::str_detect(.data_nm, "extras$")) {
+      look_info <-
+        self$api$getLook(id)
+      .args$col_names <- col_names_from_look_info(look_info)
+      .args$col_types <- col_types_from_col_names(.args$col_names)
+    } else if (.is_export) {
+      .args$col_names <- names(.hud_export[[.data_nm]]$col_types)
+      .args$col_types <- .hud_export[[.data_nm]]$col_types
     }
+    .args <- rlang::list2(!!!.args,
+                          resultFormat = "csv",
+                          as = "parsed"
+    )
+    .to_runLook <- rlang::dots_list(..., .named = TRUE)
+    .args <- purrr::list_modify(.args, !!!.to_runLook)
 
-
-    .data_error <-
-      inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
-    if (.data_error || look_type == "daily") {
-      if (.data_error && look_type == "disk")
-        look_type <- "since2019"
-      if (is.null(.x$look[look_type]))
-        return(NULL)
-      message(x, ": fetching data")
-      .look_args <- list(.x$look[look_type],
-                         "csv",
-                         as = "parsed")
-      # Rename col_types to match the way they appear coming from the API
-      if (!is.null(names(.x$col_types)) && stringr::str_detect(x, "extras$", negate = TRUE)) {
-        names(.x$col_types) <- paste0(.nm, " ", names(.x$col_types))
-        if (!x %in% c("Services", "Client", "Enrollment")) {
-          # Add both versions of ID columns (ID/Id) since it is non uniform
-          .is_id <- .x$col_types %>%
-            {stringr::str_detect(names(.), "[Ii][Dd]$")}
-          .x$col_types <- c(.x$col_types,
-                            .x$col_types[.is_id] %>% {setNames(., nm = stringr::str_replace_all(names(.), "(?<!a)[I][D]$", "Id"))})
+    if (!daily_update) {
+      if (!details) {
+        # Check if data exists and is loadable
+        if (from_disk && !.write) {
+          .data <- try(hud_load(.data_nm, path), silent = TRUE)
         }
+        .data_error <-
+          inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
+        # if it doesn't load, update look_type to fetch again
+        if (.data_error)
+          from_disk <- FALSE
 
-      } else if (stringr::str_detect(x, "extras$")) {
+        message(.data_nm, ": fetching data")
 
-        .look_args$col_names <- stringr::str_split(.description$description,  "\\,\\s")[[1]]
-        .look_args$col_types <- purrr::map_chr(stringr::str_subset(.look_args$col_names, "ID$") |> {\(x) {setNames(x, x)}}(), ~ "c")
-        .look_args$skip <- 1
-      }
+        # call the API
+        if (!from_disk)
+          .data <-
+            do.call(self$api$runLook, .args)
+        attr(.data, "api_names") <- .data[1,]
+        .data <- .data[-1,]
 
-      .look_args$col_types <-  .x$col_types
-      .data <-
-        do.call(ee$self$api$runLook, .look_args)
-      if (names(.data)[1] == "message")
-        stop(purrr::imap_chr(.data, ~ paste0(x, ": ", .x, "\n")))
-      message(x, ": data retrieved")
-      if (nrow(.data) %in% c(0, 500, 5000) && look_type != "daily")
-        stop(x,
-             " row count is ",
-             nrow(.data),
-             ". Row limits could be limiting data.")
-    }
+        # Error messages
+        check_api_data(.data, .data_nm, daily_update)
+        message(.data_nm, ": data retrieved")
 
-    if (any(stringr::str_detect(names(.data), paste0("^", .nm, "\\s")))) {
-      .data <- hud_rename(.data, .nm)
-    }
-
-    if (.write && look_type != "disk") {
-      if (stringr::str_detect(path, "feather$", negate = TRUE)) {
-        fp <- file.path(path, paste0(x, ".feather"))
+        if (.write) {
+          if (stringr::str_detect(path, "feather$", negate = TRUE)) {
+            fp <- file.path(path, paste0(.data_nm, ".feather"))
+          } else {
+            fp <- path
+          }
+          hud_feather(.data, fp)
+        }
       } else {
-        fp <- path
+        # if just retrieving details
+        .data <- look_info
       }
-      hud_feather(.data, fp)
+    } else {
+      # if daily
+      last_updated <- hud_last_updated(.data_nm, path)
+      old_data <- hud_load(.data_nm, path)
+      do_update <- last_updated < Sys.Date()
+      if (do_update) {
+        message(.data_nm, " last updated: ", last_updated, ". Updating...")
+        new_data <-
+          do.call(self$api$runLook, .args)
+        api_names = new_data[1,]
+        new_data <- rlang::set_attrs(new_data, api_names = api_names)
+        new_data <- new_data[-1,]
+        check_api_data(.data, .data_nm, daily_update)
+        updated_data <- update_data(new_data, old_data)
+        # The bind_rows in updated_data will remove the attributes so they must be re-added
+        new_data <- rlang::set_attrs(new_data, api_names = api_names)
+        if (.write && !identical(old_data, updated_data)) {
+          hud_feather(updated_data, file.path(path, paste0(.data_nm, ".feather")))
+        }
+      } else {
+        updated_data <- old_data
+      }
+      .data <- updated_data
     }
-  } else {
-    .data <- .description
+    .data
   }
 
+update_data <- function(new_data, old_data) {
+  modifications <-
+    purrr::map2_lgl(new_data$DateCreated,
+                    new_data$DateUpdated,
+                    ~ !identical(.x, .y))
+  if (any(modifications)) {
+    #TODO Merge based on ProjectID, ClientID, EnrollmentID, Etc
+    row_matches <- slider::slide_dbl(new_data[modifications, ], ~ {
+      knn_row(.x, old_data)
+    })
+    old_data[row_matches, ] <- new_data[modifications, ]
+  }
 
-  return(.data)
+  updated_data <-
+    dplyr::distinct(dplyr::bind_rows(old_data, new_data[!modifications, ]))
+}
+
+check_api_data <- function(.data, .data_nm, daily_update) {
+  if (names(.data)[1] == "message")
+    stop(purrr::imap_chr(.data, ~ paste0(.data_nm, ": ", .x, "\n")))
+  if (nrow(.data) %in% c(0, 500, 5000) && !daily_update)
+    stop(.data_nm,
+         " row count is ",
+         nrow(.data),
+         ". Row limits could be limiting data.")
+
+  purrr::walk2(attr(.data, "api_names"), names(.data), ~{
+    if (agrepl(.y, hud_rename_strings(.x, .data_nm), max.distance = .2))
+      rlang::warn(paste0("Column ", .x, " may be misnamed ",.y,". Check `attr(data, 'api_names')` for the raw column names from the API to ensure they match the col_names specification."))
+  })
+}
+
+col_names_from_look_info <- function(look_info) {
+  stringr::str_split(look_info$description,  "\\,\\s")[[1]]
+}
+
+col_types_from_col_names <- function(col_names) {
+  rlang::set_names(col_names) |> purrr::imap_chr(~{
+    purrr::when(.x,
+               stringr::str_detect(., "ID$") ~ "c",
+               stringr::str_detect(., "(?:^Date)|(?:Date$)") ~ "D",
+               ~ "?")
+
+  })
+}
+
+fetch_folder <- function(.x, self) {
+  if (is.character(.x)) {
+    folder <- self$api$folders("search", name = .x)[[1]]
+  } else if (is.numeric(.x)) {
+    folder <- self$api$folders("get", .x)
+    .x <- folder$name
+  }
+
+  self$folders[[.x]] <- folder
+  .x
+}
+
+look_id_from_folder <- function(look, folder) {
+  purrr::keep(folder$looks, ~.x$title == look)[[1]]$id
 }
 
 
-
-
-
 #' @title Call HUD Export Items & Extras from the Clarity Looker API
-#' @description Calls the Clarity Looker API HUD CSV Export  (BETA) & LookML models to return to the HUD Export Items & other datasets on various time ranges via pre-constructed Looks. See `?fetch` for details on using all data methods.
+#' @description Calls the Clarity Looker API HUD CSV Export  (BETA) & LookML models to return to the HUD Export Items & other datasets on various time ranges via pre-constructed Looks. See `?call_data` for details on using all data methods.
+#' @details Methods for calling Export items and all looks contained within specified folders are dynamically added on initialization.
 #' @inheritSection hud_filename Export_Items
-#' @inheritParams hud_filename
-#' @param look_type \code{(character)} The look type to retrieve. One of:
-#' \itemize{
-#'   \item{year2}{Two Complete Years}
-#'   \item{since2020}{Since the beginning of 2020}
-#'   \item{daily}{Created or updated in the last complete day}
-#' }
-#' @param write \code{(logical)} Whether to write the raw data from the API and the renamed data to the data/API folder
+#' @param .write \code{(logical)} Whether to write data as feather file to `path`
+#' @param details \code{(logical)} Return look info. See [getLook](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look)
+#' @param daily_update Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p).
+#' @param path \code{(character)} The directory path from which to load stored data
+#' @inheritDotParams readr::read_csv
 #' @include hud_export.R
 #' @include hud_extras.R
 #' @export
 clarity_api <- R6::R6Class(
   "clarity_api",
   lock_objects = FALSE,
+  cloneable = FALSE,
   public = rlang::exec(
     rlang::list2,
+    #' @description initialize the Looker API connection given the path to the ini configuration file.
+    #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
+    #' @param export_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export looks
+    #' @param daily_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)
+    #' @param look_folders \code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks.
+    #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
+    #' \itemize{
+    #'   \item{\code{export}}{ The HUD Export items **Default**: *data/export*}
+    #'   \item{\code{public}}{ The public items **Default**: *data/public*}
+    #'   \item{\code{spm}}{ The SPM items **Default**: *data/spm*}
+    #'   \item{\code{extras}}{ The HUD Extras (custom items) **Default**: *data/extras*}
+    #' }
+    #' This is optional and the path can be provided to individual methods as needed.
+
+    initialize = function (configFile, export_folder = "HUD Export", daily_folder = 9711,
+                           look_folders = "HUD Extras", dirs = list(export = "data/export",
+                                                                    public = "data/public", spm = "data/spm",
+                                                                    extras = "data/extras"))
+    {
+      self$api <- lookr::LookerSDK$new(configFile = ifelse(stringr::str_detect(configFile,
+                                                                               "ini$"), file.path(configFile), file.path(configFile,
+                                                                                                                         "Looker.ini")))
+
+      if (UU::is_legit(export_folder)) {
+        export_folder <- fetch_folder(export_folder, self)
+        private$folder_info$export <- export_folder
+        rlang::env_bind(self, !!!purrr::map(.hud_export, ~private$call_data))
+      }
+      if (UU::is_legit(daily_folder)) {
+        daily_folder <- fetch_folder(daily_folder, self)
+        private$folder_info$daily <- daily_folder
+      }
+      if (UU::is_legit(look_folders)) {
+        purrr::walk(look_folders, fetch_folder, self = self)
+        purrr::iwalk(self$folders[look_folders], ~{
+          looks <- purrr::map(rlang::set_names(purrr::map_chr(.x$looks,
+                                                              "title")), ~private$call_data)
+          self[[.y]] <- rlang::list2(!!!looks)
+        })
+      }
+      self$dirs <- dirs
+    },
     #' @description Pull all Export items with associate Looks
-    #' @inheritParams hud_filename
     #' @param skip \code{(character)} of items to skip
     get_export = function(path = self$dirs$export, .write = TRUE, skip = c("Assessment",
-                                                            "AssessmentQuestions",
-                                                            "AssessmentResults",
-                                                            "Services",
-                                                            "YouthEducationStatus")) {
+                                                                           "AssessmentQuestions",
+                                                                           "AssessmentResults",
+                                                                           "Services",
+                                                                           "YouthEducationStatus")) {
       if (!dir.exists(path))
         UU::mkpath(path)
       to_fetch <- names(.hud_export) %>% {
@@ -235,117 +315,36 @@ clarity_api <- R6::R6Class(
         .write = .write
       ))))
     },
-    #' @description Run daily update for all HUD Export items on disk
-    #' @inheritParams hud_filename
-    #' @param skip \code{(character)} of items to skip
-    update_export = function(path = self$dirs$export,
-                             skip = c("Assessment",
-                                      "AssessmentQuestions",
-                                      "AssessmentResults",
-                                      "Services",
-                                      "YouthEducationStatus")) {
-      to_update <- names(.hud_export) %>% {
-        .[!. %in% skip]
-      }
-      purrr::walk(to_update, ~ rlang::eval_bare(rlang::expr(
-        self$update[[!!.x]](
-          path = path,
-          .write = TRUE,
-          self = self
-        )
-      )))
-
-      all(purrr::map_lgl(
-        c("Client",
-          "Enrollment",
-          "Export",
-          "Services",
-          "Exit"),
-        ~ hud_last_updated(.x, path = path) >= Sys.Date()
-      ))
-    },
-    #' @description Pull all Extra items with associate Looks
-    #' @inheritParams hud_filename
-    get_extras = function(look_type = "since2019",path = self$dirs$extras, .write = TRUE) {
+    #' @description Pull all Looks associated with a folder
+    #' @param folder \code{(folder)} Folder object from `folders` field
+    get_folder_looks = function(folder, details = FALSE, .write = FALSE, path) {
       if (!dir.exists(path))
         UU::mkpath(path)
-      purrr::iwalk(.hud_extras, ~ rlang::eval_bare(rlang::expr(self[[!!.y]](
-        look_type = look_type,
-        path = path,
-        .write = .write
-      ))))
-    },
-    #' @description Run daily update for all HUD Export items on disk
-    #' @inheritParams hud_filename
-    update_extras = function(path = self$dirs$extras,
-                             skip = NULL) {
-      to_update <- names(.hud_extras) %>% {
-        .[!. %in% skip]
-      }
-      purrr::walk(to_update, ~ rlang::eval_bare(rlang::expr(
-        self$update[[!!.x]](
-          path = path,
-          .write = TRUE,
-          self = self
-        )
-      )))
-
-      all(purrr::map_lgl(
-        c(
-          "Client_extras",
-          "Project_extras",
-          "Enrollment_extras",
-          "Services_extras"
-        ),
-        ~ hud_last_updated(.x, path = path) >= Sys.Date()
-      ))
-    },
-
-
-    #' @description initialize the Looker API connection given the path to the ini configuration file.
-    #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
-    #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
-    #' \itemize{
-    #'   \item{\code{export}}{ The HUD Export items **Default**: *data/export*}
-    #'   \item{\code{public}}{ The public items **Default**: *data/public*}
-    #'   \item{\code{spm}}{ The SPM items **Default**: *data/spm*}
-    #'   \item{\code{extras}}{ The HUD Extras (custom items) **Default**: *data/extras*}
-    #' }
-    #' This is optional and the path can be provided to individual methods as needed.
-
-    initialize = function (configFile,
-                           dirs = list(
-                             export = "data/export",
-                             public = "data/public",
-                             spm = "data/spm",
-                             extras = "data/extras"
-                           ))
-    {
-      self$api <-
-        lookr::LookerSDK$new(configFile = ifelse(
-          stringr::str_detect(configFile,
-                              "ini$"),
-          file.path(configFile),
-          file.path(configFile,
-                    "Looker.ini")
-        ))
-      self$dirs <- dirs
-      rlang::env_bind(self,!!!purrr::map(.hud_export, ~ private$call_data))
-      rlang::env_bind(self,!!!purrr::map(.hud_extras, ~ private$call_data))
-      self$update = rlang::list2(
-        !!!purrr::map(.hud_export, ~ private$update_data),!!!purrr::map(.hud_extras, ~
-                                                                          private$update_data)
+      .args <- list(
+        .write = .write,
+        details = details,
+        path = path
       )
+
+      if (folder$name == private$folder_info$export) {
+        fns <- purrr::iwalk(folder$looks, ~rlang::expr(`$`(self, !!.x$title)(!!!.args)))
+      } else {
+        fns <- purrr::iwalk(folder$looks, ~rlang::expr(`$`(`$`(self, !!folder$name), !!.x$title)(!!!.args)))
+      }
+
+      purrr::iwalk(fns, rlang::eval_bare)
     },
+    #' @field folders `{lookr}` folder data stored here
+    folders = list(),
     #' @description Close the Looker API Connection
-    close = function() {
+    finalize = function() {
       self$api$on_connection_closed()
-    }
+    },
+
   ),
   private = rlang::list2(
-    item = rlang::list2(!!!.hud_export,!!!.hud_extras),
     call_data = call_data,
-    update_data = update_data
+    folder_info = list()
   )
 )
 

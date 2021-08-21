@@ -15,6 +15,9 @@ setup_looker(
 
 ## Usage
 The `clarity_api` [R6](https://adv-r.hadley.nz/r6.html) object instantiates a connection to the Looker account associated with the credentials provided by Clarity by passing it the path to the *ini* file created in Setup. 
+  - `export_folder` takes a folder name or Look ID corresponding to the name of the folder setup in Looker containing Looks for each of the Export CSV items. Each Look should be named according to it's corresponding Export item name
+  - `daily_folder` takes a folder name or Look ID corresponding to the name of the folder setup in Looker containing Looks for each of the Export CSV Items filtered for data added or modified in the past 24 hours (12a - 12p)
+  - `look_folders` takes arbitrary folder names or Look IDs for folders for which Look retrieval methods should be dynamically created. These will be made available via the method corresponding to the title of the look nested in a list with the folder name. IE if the folder name is `"Extras"`, and it has a Look entitled `"All"`, this will be called as follows: `[INITIALIZED R6 OBJECT NAME]$Extras$All()`
 When instantiating, default directories for specific file types can be provided with the `dirs` argument. 
 The  recommended directory structure is as follows:
 ```r
@@ -25,29 +28,23 @@ list(export = "data/export", # All HUD CSV Exports
 ```
 This directory structure will be used by **default** unless another is specified.
 
-To instantiate the Looker connection:
+To instantiate the Looker connection with default options:
 
 ```r
 clarity_api = clarity.looker::clarity_api$new([PATH TO LOOKER.INI])
 ```
 
-Individual HUD Export CSVs, and other Looks can be called using the similarly named method which takes the following arguments:
-  - `look_type` `(character)` indicating the type of Look to be called. 
-    - `"disk"` this will return the data already on disk, or it will fetch `"since2019"` from the API if that data does not exist.
-    - `"since2019"` returns data since `2019-01-01` 
-    - `"year2"` returns data for the last two complete years (not available for extras & spms)
-    - `"daily"` returns data that has been added or modified in the last full midnight - midnight period
-    - Additional `look_type`s can be created. More on this to come in future releases.
-  - `path` `(character)` a path can be provided to save the data to a specific directory other than the default.
-  - `.write` `(logical)` indicating whether to write the data to disk **Default** FALSE. **Note** that previous data will be overwritten if it already exists on the path provided.
+Individual HUD Export CSVs can be called via their named method. For details on usage see `?call_data`
 
-  
+For example, to call the `Clients` Export CSV
 ```r
 clarity_api$Clients()
-clarity_api$Client_extras()
 ```
 
-All Export items can be retrieved like so
+All Export items can be retrieved like so:
 ```r
 clarity_api$get_export()
 ```
+_Note_: `.write` defaults to `TRUE` for this method such that all Export CSVs are saved to the default directory specified by `dirs$export`, or any value passed to `path` explicitly.
+
+
