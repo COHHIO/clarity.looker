@@ -205,7 +205,7 @@ initialize the Looker API connection given the path to the ini configuration fil
 \describe{
 \item{\code{configFile}}{\code{(character)} Path to the Looker \emph{.ini} configuration file. Only the directory path is needed if the file is entitled \emph{Looker.ini}}
 
-\item{\code{export_folder}}{\code{(character/numeric)} Name of numeric ID of the folder containing Export looks}
+\item{\code{export_folder}}{\code{(character/numeric)} Name of numeric ID of the folder containing Export looks. \emph{Folder names should only contain letters, numbers, underscores or periods.}}
 
 \item{\code{daily_folder}}{\code{(character/numeric)} Name of numeric ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)}
 
@@ -244,7 +244,7 @@ Pull all Export items with associate Looks
 
 \item{\code{.write}}{\code{(logical)} Whether to write data as feather file to \code{path}}
 
-\item{\code{skip}}{\code{(character)} of items to skip}
+\item{\code{skip}}{\code{(character)} of Look titles to skip}
 }
 \if{html}{\out{</div>}}
 }
@@ -255,7 +255,13 @@ Pull all Export items with associate Looks
 \subsection{Method \code{get_folder_looks()}}{
 Pull all Looks associated with a folder
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{clarity_api$get_folder_looks(folder, details = FALSE, .write = FALSE, path)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{clarity_api$get_folder_looks(
+  folder,
+  details = FALSE,
+  .write = FALSE,
+  path,
+  skip
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -268,6 +274,8 @@ Pull all Looks associated with a folder
 \item{\code{.write}}{\code{(logical)} Whether to write data as feather file to \code{path}}
 
 \item{\code{path}}{\code{(character)} The directory path from which to load stored data}
+
+\item{\code{skip}}{\code{(character)} of Look titles to skip}
 }
 \if{html}{\out{</div>}}
 }

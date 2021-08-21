@@ -2,7 +2,7 @@
 # Mon Jul 19 16:05:32 2021
 
 hud_formatted <- function(x) {
-  x <- stringr::str_extract(x, "[A-Za-z\\_]+")
+  x <- stringr::str_extract(x, "[A-Za-z\\_\\s\\.]+")
 }
 
 hud_regex <- function(x) {
@@ -12,6 +12,27 @@ hud_regex <- function(x) {
   )
 }
 
+#' @title Retrieve all Look IDs from a folder
+#' @description Retrieve the Look IDS from a folder with their corresponding names
+#' @param folder \code{(folder)} folder object
+#' @return \code{(named character)} vector of Look IDs
+#' @export
+folder_looks <- function(folder) {
+  purrr::map_int(folder$looks, "id") |> rlang::set_names(purrr::map_chr(folder$looks, "title"))
+}
+
+#' @title Retrieve Look info from a folder
+#' @description Retrieve Look Info from a folder for a specific look name
+#' @inheritParams folder_looks
+#' @param looks \code{(character)} of the Look names for which to retrieve info for
+#' @return \code{(named list)} of Look Infos
+#' @export
+look_id_from_folder <- function(looks, folder) {
+  out <- purrr::keep(folder$looks, ~.x$title %in% look)[[1]]$id
+  if (length(out) > length(looks))
+    stop("Multiple looks matching a particular name")
+  rlang::set_names(out, purrr::map_chr(out, "title"))
+}
 
 
 #' @title Retrieve the HUD Export item file path on disk

@@ -23,7 +23,7 @@ dirs = list(
     if (UU::is_legit(export_folder)) {
       export_folder <- fetch_folder(export_folder, self)
       private$folder_info$export <- export_folder
-      rlang::env_bind(self, !!!purrr::map(.hud_export, ~ private$call_data))
+      rlang::env_bind(self, !!!purrr::map(folder_looks(self$folders[[export_folder]]), ~ private$call_data))
     }
 
     if (UU::is_legit(daily_folder)) {
@@ -78,7 +78,7 @@ call_data <-
     } else if (daily_update) {
       .idx <- private$folder_info$daily
     } else {
-      .idx <- deparse(match.call()[[1]][[2]][[3]])
+      .idx <- hud_formatted(deparse(match.call()[[1]][[2]][[3]]))
     }
     id <- look_id_from_folder(.data_nm, self$folders[[.idx]])
 
@@ -233,9 +233,6 @@ fetch_folder <- function(.x, self) {
   .x
 }
 
-look_id_from_folder <- function(look, folder) {
-  purrr::keep(folder$looks, ~.x$title == look)[[1]]$id
-}
 
 
 #' @title Call HUD Export Items & Extras from the Clarity Looker API
@@ -246,6 +243,7 @@ look_id_from_folder <- function(look, folder) {
 #' @param details \code{(logical)} Return look info. See [getLook](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look)
 #' @param daily_update Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p).
 #' @param path \code{(character)} The directory path from which to load stored data
+#' @param skip \code{(character)} of Look titles to skip
 #' @inheritDotParams readr::read_csv
 #' @include hud_export.R
 #' @include hud_extras.R
@@ -258,7 +256,7 @@ clarity_api <- R6::R6Class(
     rlang::list2,
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
-    #' @param export_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export looks
+    #' @param export_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export looks. *Folder names should only contain letters, numbers, underscores or periods.*
     #' @param daily_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)
     #' @param look_folders \code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks.
     #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
@@ -278,15 +276,16 @@ clarity_api <- R6::R6Class(
       self$api <- lookr::LookerSDK$new(configFile = ifelse(stringr::str_detect(configFile,
                                                                                "ini$"), file.path(configFile), file.path(configFile,
                                                                                                                          "Looker.ini")))
-
+      private$folder_info <- list()
       if (UU::is_legit(export_folder)) {
         export_folder <- fetch_folder(export_folder, self)
         private$folder_info$export <- export_folder
-        rlang::env_bind(self, !!!purrr::map(.hud_export, ~private$call_data))
+        rlang::env_bind(self, !!!purrr::map(folder_looks(self$folders[[export_folder]]),
+                                            ~private$call_data))
       }
       if (UU::is_legit(daily_folder)) {
         daily_folder <- fetch_folder(daily_folder, self)
-        private$folder_info$daily <- daily_folder
+        private$folder_info$daily_folder <- daily_folder
       }
       if (UU::is_legit(look_folders)) {
         purrr::walk(look_folders, fetch_folder, self = self)
@@ -299,7 +298,6 @@ clarity_api <- R6::R6Class(
       self$dirs <- dirs
     },
     #' @description Pull all Export items with associate Looks
-    #' @param skip \code{(character)} of items to skip
     get_export = function(path = self$dirs$export, .write = TRUE, skip = c("Assessment",
                                                                            "AssessmentQuestions",
                                                                            "AssessmentResults",
@@ -317,7 +315,7 @@ clarity_api <- R6::R6Class(
     },
     #' @description Pull all Looks associated with a folder
     #' @param folder \code{(folder)} Folder object from `folders` field
-    get_folder_looks = function(folder, details = FALSE, .write = FALSE, path) {
+    get_folder_looks = function(folder, details = FALSE, .write = FALSE, path, skip) {
       if (!dir.exists(path))
         UU::mkpath(path)
       .args <- list(
@@ -325,14 +323,21 @@ clarity_api <- R6::R6Class(
         details = details,
         path = path
       )
-
-      if (folder$name == private$folder_info$export) {
-        fns <- purrr::iwalk(folder$looks, ~rlang::expr(`$`(self, !!.x$title)(!!!.args)))
+      if (!missing(skip)) {
+        looks <- purrr::keep(folder$looks, ~!.x$title %in% skip)
       } else {
-        fns <- purrr::iwalk(folder$looks, ~rlang::expr(`$`(`$`(self, !!folder$name), !!.x$title)(!!!.args)))
+        looks <- folder$looks
       }
 
-      purrr::iwalk(fns, rlang::eval_bare)
+      if (folder$name == private$folder_info$export) {
+        fns <- purrr::imap(looks, ~rlang::call2(rlang::expr(`$`(self, !!.x$title)), !!!.args))
+      } else {
+        fns <- purrr::imap(looks, ~ rlang::call2(rlang::expr(`$`(`$`(self, !!folder$name), !!.x$title)), !!!.args)
+        )
+      }
+
+      e <- environment()
+      purrr::map(fns, rlang::eval_bare, env = e)
     },
     #' @field folders `{lookr}` folder data stored here
     folders = list(),
