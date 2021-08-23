@@ -1002,6 +1002,7 @@ list(
       api_nm = "Project CoC",
       parity = "66683"
     ),
+    api_nm = "Project CoC",
     col_types = c(
       ProjectCoCID = "c",
       ProjectID = "c",

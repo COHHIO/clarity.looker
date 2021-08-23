@@ -51,7 +51,14 @@ dirs = list(
                           dirs = rlang::expr(!!dirs))
 )
 
+hud_col_types <- function(col_types, add_prefixes) {
+  .is_id <-  stringr::str_detect(names(col_types), "[Ii][Dd]$")
+  col_types <- col_types[.is_id] |>
+    {\(x) {setNames(x, nm = stringr::str_replace_all(names(x), "(?<!a)[I][D]$", "Id"))}}() |>
+    c(col_types) |>
+    {\(x) {rlang::set_names(x, paste0(add_prefixes, " ", names(x)))}}()
 
+}
 #' @title Retrieve data from disk or the API
 #' @description Determines the appropriate location from which to retrieve HUD Export data
 #' @inheritSection hud_filename Export_Items
@@ -103,8 +110,7 @@ call_data <-
     } else if (.is_export) {
       spec <- .hud_export[[.data_nm]]
       # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
-      .args$col_types <- spec$col_types |>
-        {\(x) {rlang::set_names(x, names(paste0(spec$api_nm %||% .data_nm, " ", hud_rename_strings(names(x)))))}}()
+      .args$col_types <- hud_col_types(spec$col_types, spec$api_nm %||% .data_nm)
 
     }
     .args <- rlang::list2(!!!.args,
