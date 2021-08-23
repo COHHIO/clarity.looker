@@ -24,6 +24,8 @@ RoxygenNote: 7.1.1.9001
 Collate: 
     'aaa_imports.R'
     'hud_extras.R'
+    'hud_export_2021.R'
+    'hud_export_2022.R'
     'hud_export.R'
     'clarity_api_r6.R'
     'export_fields.R'
