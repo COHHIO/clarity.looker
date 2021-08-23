@@ -104,7 +104,8 @@ call_data <-
       spec <- .hud_export[[.data_nm]]
       # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
       .args$col_types <- spec$col_types |>
-        {\(x) {rlang::set_names(x, names(paste0(spec$api_nm %||% .data_nm, " ", x)))}}()
+        {\(x) {rlang::set_names(x, names(paste0(spec$api_nm %||% .data_nm, " ", hud_rename_strings(names(x)))))}}()
+
     }
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
