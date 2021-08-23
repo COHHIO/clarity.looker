@@ -28,10 +28,10 @@ folder_looks <- function(folder) {
 #' @return \code{(named list)} of Look Infos
 #' @export
 look_id_from_folder <- function(looks, folder) {
-  out <- purrr::keep(folder$looks, ~.x$title %in% look)[[1]]$id
+  out <- purrr::keep(folder$looks, ~.x$title %in% looks)
   if (length(out) > length(looks))
     stop("Multiple looks matching a particular name")
-  rlang::set_names(out, purrr::map_chr(out, "title"))
+  rlang::set_names(purrr::map_int(out, "id"), purrr::map_chr(out, "title"))
 }
 
 
