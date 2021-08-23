@@ -128,7 +128,7 @@ hud_load <- function(x, path = "data") {
 
 
 hud_rename_strings <- function(x, rm_prefixes) {
-    trimws(stringr::str_remove(x, stringr::regex(paste0(paste0("^",rm_prefixes,"\\s"), collapse = "|")))) |>
+    trimws(stringr::str_remove(x, stringr::regex(paste0(paste0("(?:^",rm_prefixes,"\\s)"), collapse = "|")))) |>
     stringr::str_replace_all("(?<!a)[Ii][Dd]$", "ID") |>
     stringr::str_remove("^\\w+(?:\\sCustom)?\\s") |>
     stringr::str_replace_all("[Cc][Oo][Cc]", "CoC") |>
@@ -145,12 +145,9 @@ hud_rename <- function(x, rm_prefixes, nms) {
   if (!missing(rm_prefixes)) {
     out <- x %>%
       dplyr::rename_with(.fn = ~ {
-
         # All column names are prefixed with the HUD CSV Export BETA report name from Looker - with spaces between capitalized words. This is removed
-        out <-
-          trimws(stringr::str_remove(.x, stringr::regex(paste0(paste0("^",rm_prefixes,"\\s"), collapse = "|")))) |>
-          hud_rename_strings()
-
+        out <-  .x |>
+          hud_rename_strings(rm_prefixes)
 
         if (all(is.na(out)))
           out <- .x
@@ -158,7 +155,9 @@ hud_rename <- function(x, rm_prefixes, nms) {
       })
   } else {
     out <- setNames(x, nms)
-
+  }
+  if (!missing(nms)) {
+    out <- dplyr::select(out, tidyselect::any_of(nms))
   }
   out
 }

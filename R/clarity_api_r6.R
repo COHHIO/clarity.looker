@@ -101,8 +101,10 @@ call_data <-
       .args$col_names <- col_names_from_look_info(look_info)
       .args$col_types <- col_types_from_col_names(.args$col_names)
     } else if (.is_export) {
-      .args$col_names <- names(.hud_export[[.data_nm]]$col_types)
-      .args$col_types <- .hud_export[[.data_nm]]$col_types
+      spec <- .hud_export[[.data_nm]]
+      # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
+      .args$col_types <- spec$col_types |>
+        {\(x) {rlang::set_names(x, names(paste0(spec$api_nm %||% .data_nm, " ", x)))}}()
     }
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
@@ -129,8 +131,16 @@ call_data <-
         if (!from_disk)
           .data <-
             do.call(self$api$runLook, .args)
-        attr(.data, "api_names") <- .data[1,]
-        .data <- .data[-1,]
+        # Naming
+        if (any(stringr::str_detect(unclass(.data[1,]), .data_nm), na.rm = TRUE)) {
+          attr(.data, "api_names") <- .data[1,]
+          .data <- .data[-1,]
+        } else if (.is_export) {
+        # If col_names not used, use hud_rename
+
+          .data <- hud_rename(.data, spec$api_nm %||% .data_nm, names(spec$col_types))
+        }
+
 
         # Error messages
         check_api_data(.data, .data_nm, daily_update)
@@ -201,10 +211,13 @@ check_api_data <- function(.data, .data_nm, daily_update) {
          nrow(.data),
          ". Row limits could be limiting data.")
 
-  purrr::walk2(attr(.data, "api_names"), names(.data), ~{
-    if (agrepl(.y, hud_rename_strings(.x, .data_nm), max.distance = .2))
-      rlang::warn(paste0("Column ", .x, " may be misnamed ",.y,". Check `attr(data, 'api_names')` for the raw column names from the API to ensure they match the col_names specification."))
-  })
+  if (!is.null(attr(.data, "api_names"))) {
+    purrr::walk2(attr(.data, "api_names"), names(.data), ~{
+      if (agrepl(.y, hud_rename_strings(.x, .data_nm), max.distance = .2))
+        rlang::warn(paste0("Column ", .x, " may be misnamed ",.y,". Check `attr(data, 'api_names')` for the raw column names from the API to ensure they match the col_names specification."))
+    })
+  }
+
 }
 
 col_names_from_look_info <- function(look_info) {
