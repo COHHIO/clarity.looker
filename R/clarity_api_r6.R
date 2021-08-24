@@ -139,12 +139,11 @@ call_data <-
           .data <-
             do.call(self$api$runLook, .args)
         # Naming
-        if (any(stringr::str_detect(unclass(.data[1,]), .data_nm), na.rm = TRUE)) {
+        if (!is.null(.args$col_names)) {
           attr(.data, "api_names") <- .data[1,]
           .data <- .data[-1,]
         } else if (.is_export) {
         # If col_names not used, use hud_rename
-
           .data <- hud_rename(.data, spec$api_nm %||% .data_nm, names(spec$col_types))
         }
 
