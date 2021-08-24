@@ -51,7 +51,7 @@ dirs = list(
                           dirs = rlang::expr(!!dirs))
 )
 
-hud_col_types <- function(col_types, add_prefixes) {
+api_col_types <- function(col_types, add_prefixes) {
   .is_id <-  stringr::str_detect(names(col_types), "[Ii][Dd]$")
   col_types <- col_types[.is_id] |>
     {\(x) {setNames(x, nm = stringr::str_replace_all(names(x), "(?<!a)[I][D]$", "Id"))}}() |>
@@ -110,7 +110,7 @@ call_data <-
     } else if (.is_export) {
       spec <- .hud_export[[.data_nm]]
       # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
-      .args$col_types <- hud_col_types(spec$col_types, spec$api_nm %||% .data_nm)
+      .args$col_types <- api_col_types(spec$col_types, spec$api_nm %||% .data_nm)
 
     }
     .args <- rlang::list2(!!!.args,
@@ -132,25 +132,23 @@ call_data <-
         if (.data_error)
           from_disk <- FALSE
 
-        message(.data_nm, ": fetching data")
-
         # call the API
-        if (!from_disk)
+        if (!from_disk) {
+          message(.data_nm, ": fetching data")
           .data <-
             do.call(self$api$runLook, .args)
-        # Naming
-        if (!is.null(.args$col_names)) {
-          attr(.data, "api_names") <- .data[1,]
-          .data <- .data[-1,]
-        } else if (.is_export) {
-        # If col_names not used, use hud_rename
-          .data <- hud_rename(.data, spec$api_nm %||% .data_nm, names(spec$col_types))
+          # Naming
+          if (!is.null(.args$col_names)) {
+            attr(.data, "api_names") <- .data[1,]
+            .data <- .data[-1,]
+          } else if (.is_export) {
+            # If col_names not used, use hud_rename
+            .data <- hud_rename(.data, spec$api_nm %||% .data_nm, names(spec$col_types))
+          }
+          # Error messages
+          check_api_data(.data, .data_nm, daily_update)
+          message(.data_nm, ": data retrieved")
         }
-
-
-        # Error messages
-        check_api_data(.data, .data_nm, daily_update)
-        message(.data_nm, ": data retrieved")
 
         if (.write) {
           if (stringr::str_detect(path, "feather$", negate = TRUE)) {
@@ -219,8 +217,8 @@ check_api_data <- function(.data, .data_nm, daily_update) {
 
   if (!is.null(attr(.data, "api_names"))) {
     purrr::walk2(attr(.data, "api_names"), names(.data), ~{
-      if (agrepl(.y, hud_rename_strings(.x, .data_nm), max.distance = .2))
-        rlang::warn(paste0("Column ", .x, " may be misnamed ",.y,". Check `attr(data, 'api_names')` for the raw column names from the API to ensure they match the col_names specification."))
+      if (!agrepl(.y, hud_rename_strings(.x, .data_nm), max.distance = .2))
+        rlang::warn(paste0("Possible column mismatch:\n", .x, " = ", .y))
     })
   }
 
@@ -351,12 +349,12 @@ clarity_api <- R6::R6Class(
       if (folder$name == private$folder_info$export) {
         fns <- purrr::imap(looks, ~rlang::call2(rlang::expr(`$`(self, !!.x$title)), !!!.args))
       } else {
-        fns <- purrr::imap(looks, ~ rlang::call2(rlang::expr(`$`(`$`(self, !!folder$name), !!.x$title)), !!!.args)
+        fns <- purrr::imap(looks, ~ rlang::call2(rlang::expr(purrr::safely(`$`(`$`(self, !!folder$name), !!.x$title))), !!!.args)
         )
       }
 
       e <- environment()
-      purrr::map(fns, rlang::eval_bare, env = e)
+      purrr::map(fns, ~rlang::eval_bare(.x, env = e))
     },
     #' @field folders `{lookr}` folder data stored here
     folders = list(),
