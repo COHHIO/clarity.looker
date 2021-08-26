@@ -332,6 +332,11 @@ clarity_api <- R6::R6Class(
     },
     #' @description Pull all Looks associated with a folder
     #' @param folder \code{(folder)} Folder object from `folders` field
+    #' @param details \code{(logical)} Whether to return Look info for the looks in the specified folder
+    #' @param .write \code{(logical)} Whether to write the folder looks to disk
+    #' @param path \code{(character)} If `.write = TRUE`, where to write the files too.
+    #' @param skip \code{(character)} vector of the names of looks in the folder to skip
+    #' @return \code{(list)} of specified looks in folder
     get_folder_looks = function(folder, details = FALSE, .write = FALSE, path, skip) {
       if (!dir.exists(path))
         UU::mkpath(path)

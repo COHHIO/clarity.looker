@@ -269,15 +269,18 @@ Pull all Looks associated with a folder
 \describe{
 \item{\code{folder}}{\code{(folder)} Folder object from \code{folders} field}
 
-\item{\code{details}}{\code{(logical)} Return look info. See \href{https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look}{getLook}}
+\item{\code{details}}{\code{(logical)} Whether to return Look info for the looks in the specified folder}
 
-\item{\code{.write}}{\code{(logical)} Whether to write data as feather file to \code{path}}
+\item{\code{.write}}{\code{(logical)} Whether to write the folder looks to disk}
 
-\item{\code{path}}{\code{(character)} The directory path from which to load stored data}
+\item{\code{path}}{\code{(character)} If \code{.write = TRUE}, where to write the files too.}
 
-\item{\code{skip}}{\code{(character)} of Look titles to skip}
+\item{\code{skip}}{\code{(character)} vector of the names of looks in the folder to skip}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{(list)} of specified looks in folder
 }
 }
 \if{html}{\out{<hr>}}
