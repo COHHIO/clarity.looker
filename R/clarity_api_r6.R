@@ -355,14 +355,18 @@ clarity_api <- R6::R6Class(
       }
 
       if (folder$name == private$folder_info$export) {
-        fns <- purrr::imap(looks, ~rlang::call2(rlang::expr(`$`(self, !!.x$title)), !!!.args))
+        out <- purrr::imap(looks, ~{
+            fn <- rlang::call2(self[[!!.x$title]], !!!.args)
+            rlang::eval_bare(fn)
+          })
       } else {
-        fns <- purrr::imap(looks, ~ rlang::call2(rlang::expr(purrr::safely(`$`(`$`(self, !!folder$name), !!.x$title))), !!!.args)
-        )
+        out <- purrr::imap(looks, ~ {
+          fn <- rlang::call2(rlang::expr(self[[!!folder$name]][[!!.x$title]]), !!!.args)
+          rlang::eval_bare(fn)
+        })
       }
 
-      e <- environment()
-      purrr::map(fns, ~rlang::eval_bare(.x, env = e))
+      out
     },
     #' @field folders `{lookr}` folder data stored here
     folders = list(),
