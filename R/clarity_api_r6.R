@@ -116,6 +116,7 @@ call_data <-
       .args$col_types <- api_col_types(spec$col_types, spec$api_nm %||% .data_nm)
 
     }
+    .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
                           as = "parsed"
@@ -354,6 +355,7 @@ clarity_api <- R6::R6Class(
         looks <- folder$looks
       }
 
+      looks <- rlang::set_names(looks, names(folder_looks(folder)))
       if (folder$name == private$folder_info$export) {
         out <- purrr::imap(looks, ~{
             fn <- rlang::call2(self[[!!.x$title]], !!!.args)
