@@ -1,5 +1,8 @@
 # dirs ----
 # Fri Aug 20 22:31:44 2021
+#' @title Default directory tree for specific data types
+#' @description COHHIO specific directory tree _Recommended_
+#' @export
 dirs = list(
   export = "data/export",
   public = "data/public",
