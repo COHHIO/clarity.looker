@@ -119,7 +119,8 @@ call_data <-
     .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
-                          as = "parsed"
+                          as = "parsed",
+                          queryParams = list(apply_vis = TRUE)
     )
     .to_runLook <- rlang::dots_list(..., .named = TRUE)
     .args <- purrr::list_modify(.args, !!!.to_runLook)
