@@ -108,11 +108,11 @@ call_data <-
     if (details || stringr::str_detect(.data_nm, "extras$")) {
       look_info <-
         self$api$getLook(id)
-      .args$col_types <- col_types_from_col_names(col_names_from_look_info(look_info))
+      .args$col_types <- col_types_from_col_names(col_names_from_look_vis_config(look_info))
     } else if (.is_export) {
       spec <- .hud_export[[.data_nm]]
       # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
-      .args$col_types <- api_col_types(spec$col_types, spec$api_nm %||% .data_nm)
+      .args$col_types <- spec$col_types
 
     }
     .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
@@ -139,8 +139,8 @@ call_data <-
         if (!from_disk) {
           message(.data_nm, ": fetching data")
           .data <-
-            do.call(self$api$runLook,
-                    .args,
+            rlang::exec(self$api$runLook,
+                    !!!.args,
                     queryParams = list(limit = -1,
                                        apply_vis = TRUE))
           # Naming
@@ -230,8 +230,12 @@ check_api_data <- function(.data, .data_nm, daily_update) {
 
 }
 
-col_names_from_look_info <- function(look_info) {
+col_names_from_look_description <- function(look_info) {
   stringr::str_split(look_info$description,  "\\,\\s")[[1]]
+}
+
+col_names_from_look_vis_config <- function(look_info) {
+  look_info[["query"]][["vis_config"]][["series_labels"]][look_info[["query"]][["fields"]]]
 }
 
 col_types_from_col_names <- function(col_names) {
