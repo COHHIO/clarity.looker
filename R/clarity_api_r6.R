@@ -108,8 +108,7 @@ call_data <-
     if (details || stringr::str_detect(.data_nm, "extras$")) {
       look_info <-
         self$api$getLook(id)
-      .args$col_names <- col_names_from_look_info(look_info)
-      .args$col_types <- col_types_from_col_names(.args$col_names)
+      .args$col_types <- col_types_from_col_names(col_names_from_look_info(look_info))
     } else if (.is_export) {
       spec <- .hud_export[[.data_nm]]
       # api_nm must be used because the API name prefix is sometimes formatted differently than the actual Export item name
@@ -119,8 +118,7 @@ call_data <-
     .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
-                          as = "parsed",
-                          queryParams = list(apply_vis = TRUE)
+                          as = "parsed"
     )
     .to_runLook <- rlang::dots_list(..., .named = TRUE)
     .args <- purrr::list_modify(.args, !!!.to_runLook)
@@ -141,7 +139,10 @@ call_data <-
         if (!from_disk) {
           message(.data_nm, ": fetching data")
           .data <-
-            do.call(self$api$runLook, .args)
+            do.call(self$api$runLook,
+                    .args,
+                    queryParams = list(limit = -1,
+                                       apply_vis = TRUE))
           # Naming
           if (!is.null(.args$col_names)) {
             attr(.data, "api_names") <- .data[1,]
@@ -278,9 +279,9 @@ clarity_api <- R6::R6Class(
     rlang::list2,
     #' @description initialize the Looker API connection given the path to the ini configuration file.
     #' @param configFile \code{(character)} Path to the Looker *.ini* configuration file. Only the directory path is needed if the file is entitled *Looker.ini*
-    #' @param export_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export looks. *Folder names should only contain letters, numbers, underscores or periods.*
-    #' @param daily_folder \code{(character/numeric)} Name of numeric ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)
-    #' @param look_folders \code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks.
+    #' @param export_folder \code{(numeric)} ID of the folder containing Export looks.
+    #' @param daily_folder \code{(numeric)} ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)
+    #' @param look_folders \code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks. Numeric IDs are recommended.
     #' @param dirs \code{(named list)} of default directory paths for where to store the feather files for the following data types:
     #' \itemize{
     #'   \item{\code{export}}{ The HUD Export items **Default**: *data/export*}
@@ -290,8 +291,8 @@ clarity_api <- R6::R6Class(
     #' }
     #' This is optional and the path can be provided to individual methods as needed.
 
-    initialize = function (configFile, export_folder = "HUD Export", daily_folder = 9711,
-                           look_folders = "HUD Extras", dirs = list(export = "data/export",
+    initialize = function (configFile, export_folder = 9862, daily_folder = 9711,
+                           look_folders = 9874, dirs = list(export = "data/export",
                                                                     public = "data/public", spm = "data/spm",
                                                                     extras = "data/extras"))
     {
@@ -311,7 +312,8 @@ clarity_api <- R6::R6Class(
       }
       if (UU::is_legit(look_folders)) {
         purrr::walk(look_folders, fetch_folder, self = self)
-        purrr::iwalk(self$folders[look_folders], ~{
+        purrr::iwalk(self$folders[!names(self$folders) %in% unlist(private$folder_info)], ~{
+
           looks <- purrr::map(rlang::set_names(purrr::map_chr(.x$looks,
                                                               "title")), ~private$call_data)
           self[[.y]] <- rlang::list2(!!!looks)
