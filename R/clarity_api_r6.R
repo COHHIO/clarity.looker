@@ -333,10 +333,11 @@ clarity_api <- R6::R6Class(
                                                                            "YouthEducationStatus")) {
       if (!dir.exists(path))
         UU::mkpath(path)
-      to_fetch <- names(.hud_export) %>% {
-        .[!. %in% skip]
-      }
-      purrr::walk(to_fetch, ~ rlang::eval_bare(rlang::expr(self[[!!.x]](
+      to_fetch <- names(folder_looks(self$folders[[private$folder_info$export]])) |>
+        {\(x) {x[!x %in% skip]}}() |>
+          rlang::set_names()
+
+      purrr::map(to_fetch, ~ rlang::eval_bare(rlang::expr(self[[!!.x]](
         path = path,
         .write = .write
       ))))
