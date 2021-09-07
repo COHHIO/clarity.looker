@@ -242,6 +242,8 @@ col_types_from_col_names <- function(col_names) {
   rlang::set_names(col_names) |> purrr::imap_chr(~{
     purrr::when(.x,
                stringr::str_detect(., "ID$") ~ "c",
+               stringr::str_detect(., "^APCounties") ~ "c",
+               stringr::str_detect(., "Type$") ~ "i",
                stringr::str_detect(., "(?:^Date)|(?:Date$)") ~ "D",
                ~ "?")
 
