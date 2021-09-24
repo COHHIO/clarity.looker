@@ -102,10 +102,16 @@ call_data <-
         ), collapse = "|"))]]
       }
 
+    # Check if data exists and is loadable
+    if (from_disk && !.write) {
+      .data <- try(hud_load(.data_nm, path), silent = TRUE)
+    }
+    if (UU::is_legit(.data))
+      return(.data)
 
     # Instantiate arguments to runLook
     .args <- list(id)
-    if (details || (stringr::str_detect(.data_nm, "extras$") && (.write || !from_disk))) {
+    if (details || stringr::str_detect(.data_nm, "extras$")) {
       look_info <-
         self$api$getLook(id)
       .args$col_types <- col_types_from_col_names(col_names_from_look_vis_config(look_info))
@@ -125,10 +131,7 @@ call_data <-
 
     if (!daily_update) {
       if (!details) {
-        # Check if data exists and is loadable
-        if (from_disk && !.write) {
-          .data <- try(hud_load(.data_nm, path), silent = TRUE)
-        }
+
         .data_error <-
           inherits(get0(".data", inherits = FALSE), c("try-error", "NULL"))
         # if it doesn't load, update look_type to fetch again
