@@ -106,7 +106,7 @@ call_data <-
     if (from_disk && !.write) {
       .data <- try(hud_load(.data_nm, path), silent = TRUE)
     }
-    if (UU::is_legit(.data))
+    if (UU::is_legit(.data) && from_disk)
       return(.data)
 
     # Instantiate arguments to runLook
