@@ -105,7 +105,7 @@ call_data <-
 
     # Instantiate arguments to runLook
     .args <- list(id)
-    if (details || stringr::str_detect(.data_nm, "extras$")) {
+    if (details || (stringr::str_detect(.data_nm, "extras$") && (.write || !from_disk))) {
       look_info <-
         self$api$getLook(id)
       .args$col_types <- col_types_from_col_names(col_names_from_look_vis_config(look_info))
