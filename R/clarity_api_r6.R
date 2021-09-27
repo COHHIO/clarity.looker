@@ -80,6 +80,9 @@ call_data <-
            details = FALSE,
            daily_update = FALSE,
            ...) {
+    if (.write)
+      from_disk <- FALSE
+
     .data_nm <- hud_formatted(deparse(match.call()[[1]][[3]]))
     .is_export <- .data_nm %in% names(.hud_export)
 
