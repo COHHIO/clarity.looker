@@ -103,7 +103,7 @@ call_data <-
       }
 
     # Check if data exists and is loadable
-    if (from_disk && !.write) {
+    if (!details) {
       .data <- try(hud_load(.data_nm, path), silent = TRUE)
     }
     if (UU::is_legit(.data) && from_disk)
@@ -114,6 +114,8 @@ call_data <-
     if (details || stringr::str_detect(.data_nm, "extras$")) {
       look_info <-
         self$api$getLook(id)
+      if (details)
+        return(look_info)
       .args$col_types <- col_types_from_col_names(col_names_from_look_vis_config(look_info))
     } else if (.is_export) {
       spec <- .hud_export[[.data_nm]]
@@ -139,7 +141,7 @@ call_data <-
           from_disk <- FALSE
 
         # call the API
-        if (!from_disk) {
+        if (!from_disk || .write) {
           message(.data_nm, ": fetching data")
           .data <-
             rlang::exec(self$api$runLook,
