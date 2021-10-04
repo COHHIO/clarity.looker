@@ -224,7 +224,7 @@ check_api_data <- function(.data, .data_nm, daily_update) {
   if (names(.data)[1] == "message")
     stop(purrr::imap_chr(.data, ~ paste0(.data_nm, ": ", .x, "\n")))
   if (nrow(.data) %in% c(0, 500, 5000) && !daily_update)
-    stop(.data_nm,
+    warning(.data_nm,
          " row count is ",
          nrow(.data),
          ". Row limits could be limiting data.")
