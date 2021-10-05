@@ -192,9 +192,9 @@ initialize the Looker API connection given the path to the ini configuration fil
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{clarity_api$new(
   configFile,
-  export_folder = "HUD Export",
+  export_folder = 9862,
   daily_folder = 9711,
-  look_folders = "HUD Extras",
+  look_folders = 9874,
   dirs = list(export = "data/export", public = "data/public", spm = "data/spm", extras
     = "data/extras")
 )}\if{html}{\out{</div>}}
@@ -205,11 +205,11 @@ initialize the Looker API connection given the path to the ini configuration fil
 \describe{
 \item{\code{configFile}}{\code{(character)} Path to the Looker \emph{.ini} configuration file. Only the directory path is needed if the file is entitled \emph{Looker.ini}}
 
-\item{\code{export_folder}}{\code{(character/numeric)} Name of numeric ID of the folder containing Export looks. \emph{Folder names should only contain letters, numbers, underscores or periods.}}
+\item{\code{export_folder}}{\code{(numeric)} ID of the folder containing Export looks.}
 
-\item{\code{daily_folder}}{\code{(character/numeric)} Name of numeric ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)}
+\item{\code{daily_folder}}{\code{(numeric)} ID of the folder containing Export look data added or modified in the past 24 hours (12a-12p)}
 
-\item{\code{look_folders}}{\code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks.}
+\item{\code{look_folders}}{\code{(character/numeric)} list of names or numeric IDs of the additional folders containing relevant looks. Numeric IDs are recommended.}
 
 \item{\code{dirs}}{\code{(named list)} of default directory paths for where to store the feather files for the following data types:
 \itemize{
