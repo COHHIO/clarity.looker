@@ -6,7 +6,7 @@ hud_formatted <- function(x) {
 }
 
 hud_regex <- function(x) {
-  purrr::when(stringr::str_detect(x, "\\."),
+  purrr::when(stringr::str_detect(x, "\\.[A-Za-z0-9]{1,5}$"),
               isTRUE(.) ~ x,
               ~ paste0("^",hud_formatted(x), "\\.")
   )
@@ -70,14 +70,17 @@ look_id_from_folder <- function(looks, folder) {
 #' @export
 
 hud_filename <- function(x, path = "data") {
+
   if (!file.exists(x)) {
-    .file <- list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE) |> {\(x) {setNames(x, x)}}()
+    .file <- rlang::set_names(list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE))
   } else {
     .file <- x
-    purrr::when(.file,
-                rlang::is_empty(.) ~ stop(x, ": file not found. Please retrieve full dataset."),
-                length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present"))
   }
+
+  purrr::when(.file,
+                !UU::is_legit(.) ~ stop(x, ": file not found."),
+                length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present, or provide a file path directly as `x`."))
+
 
   .file
 }
