@@ -6,7 +6,7 @@ hud_formatted <- function(x) {
 }
 
 hud_regex <- function(x) {
-  purrr::when(stringr::str_detect(x, "\\.[A-Za-z0-9]{1,5}$"),
+  purrr::when(stringr::str_detect(x, "\\.[A-Za-z0-9]{1,10}$"),
               isTRUE(.) ~ x,
               ~ paste0("^",hud_formatted(x), "\\.")
   )
