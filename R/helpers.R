@@ -123,7 +123,7 @@ hud_load <- function(x, path = "data") {
                       csv = readr::read_csv,
                       feather = feather::read_feather)
   .args <- list(.file)
-  if (.ext == "csv")
+  if (.ext == "csv" && stringr::str_remove(basename(.file), "\\.[a-zA-Z]+$") %in% names(.hud_export))
     .args$col_types <- .hud_export[[x]]$col_types
 
   do.call(import_fn, .args)
