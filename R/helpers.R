@@ -77,11 +77,6 @@ hud_filename <- function(x, path = "data") {
     .file <- x
   }
 
-  purrr::when(.file,
-                !UU::is_legit(.) ~ stop(x, ": file not found."),
-                length(.) > 1 ~ stop("Found:\n", paste0(basename(.file), collapse = "\n", "\n"),"Please check ",path," to ensure only a single file with name ",x," is present, or provide a file path directly as `x`."))
-
-
   .file
 }
 
@@ -94,7 +89,9 @@ hud_filename <- function(x, path = "data") {
 
 hud_last_updated <- function(x, path = "data") {
   if (!missing(x)) {
-    file.info(hud_filename(x, path))$mtime |> setNames(hud_filename(x, path))
+    purrr::when(length(x),
+                . == 1 ~ file.info(x)$mtime,
+                . > 1 ~ do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE))
   } else {
     list.files(path, full.names = TRUE) |>
       setNames(list.files(path)) |>
@@ -114,9 +111,12 @@ hud_last_updated <- function(x, path = "data") {
 
 hud_load <- function(x, path = "data") {
   .file <- hud_filename(x, path)
-  if (length(.file) > 1) {
-    cli::cli_warn(paste0("Two files detected\n: ", paste0(.file, collapse = "\n"), "\n", .file[1], " will be loaded."))
-    .file <- .file[1]
+  if (!UU::is_legit(.file)) {
+    stop(x, ": file not found.")
+  } else if (length(.file) > 1) {
+    .updated <- hud_last_updated(.file)
+    rlang::warn(paste0("Found multiple files:\n", paste0(paste0(basename(names(.updated))," ",.updated), collapse = "\n"), "\nMost recent will be returned."))
+    .file <- names(.updated)[1]
   }
   .ext <- UU::ext(.file)
   import_fn <- switch(.ext,

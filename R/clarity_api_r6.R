@@ -107,7 +107,7 @@ call_data <-
 
     # Check if data exists and is loadable
     if (!details) {
-      .data <- try(hud_load(.data_nm, path), silent = TRUE)
+      .data <- rlang::catch_cnd(hud_load(.data_nm, path), "error")
     }
     if (UU::is_legit(.data) && from_disk)
       return(.data)
