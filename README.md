@@ -48,3 +48,9 @@ clarity_api$get_export()
 _Note_: `.write` defaults to `TRUE` for this method such that all Export CSVs are saved to the default directory specified by `dirs$export`, or any value passed to `path` explicitly.
 
 
+### `Client_filter`
+The `Client_filter` function allows for specific PersonalIDs in Clarity to be filtered from all endpoint data. This is useful when particular client profiles on the live Clarity instance are used for training and demonstration purposes. To enable client filtering, use `options` with a character vector of PersonalIDs. These options can be set permanently by adding the call to `.Rprofile`. See `usethis::edit_r_profile`. 
+
+```r
+options(clients_to_filter = c("335","1"))
+```

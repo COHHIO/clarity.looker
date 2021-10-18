@@ -186,4 +186,21 @@ hud_feather <- function(.data, path = "data") {
   cli::cli_alert_success(paste0(fn, " saved"))
 }
 
+#' @title Filter out specific Clients
+#' @description Often used to filter test/training demo clients
+#' @param x \code{(data.frame)} With PersonalID or UniqueID column
+#' @param clients_to_filter \code{(character)} of PersonalIDs to filter with names corresponding their UniqueIDs (Clarity only)
+#' @family Client functions
+#' @return \code{(data.frame)} without `clients_to_filter`
+#' @export
+
+Client_filter <- function(x, clients_to_filter = getOption("clients_to_filter")) {
+  .nms <- names(x)
+  if (!is.null(clients_to_filter) && "PersonalID" %in% .nms) {
+    out <- dplyr::filter(x, !PersonalID %in% clients_to_filter)
+  } else {
+    out <- x
+  }
+  return(out)
+}
 

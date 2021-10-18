@@ -54,16 +54,16 @@ names of the columns, and the first row of the input will be read into
 the first row of the output data frame.
 
 Missing (\code{NA}) column names will generate a warning, and be filled
-in with dummy names \code{X1}, \code{X2} etc. Duplicate column names
+in with dummy names \code{...1}, \code{...2} etc. Duplicate column names
 will generate a warning and be made unique, see \code{name_repair} to control
 how this is done.}
     \item{\code{col_types}}{One of \code{NULL}, a \code{\link[readr:cols]{cols()}} specification, or
 a string. See \code{vignette("readr")} for more details.
 
-If \code{NULL}, all column types will be imputed from the first 1000 rows
-on the input. This is convenient (and fast), but not robust. If the
-imputation fails, you'll need to increase the \code{guess_max} or supply the
-correct types yourself.
+If \code{NULL}, all column types will be imputed from \code{guess_max} rows
+on the input interspersed throughout the file. This is convenient (and
+fast), but not robust. If the imputation fails, you'll need to increase
+the \code{guess_max} or supply the correct types yourself.
 
 Column specifications created by \code{\link[=list]{list()}} or \code{\link[readr:cols]{cols()}} must contain
 one column specification for each column. If you only want to read a
@@ -103,8 +103,8 @@ the default time zone, encoding, decimal mark, big mark, and day/month
 names.}
     \item{\code{na}}{Character vector of strings to interpret as missing values. Set this
 option to \code{character()} to indicate no missing values.}
-    \item{\code{quoted_na}}{Should missing values inside quotes be treated as missing
-values (the default) or strings.}
+    \item{\code{quoted_na}}{\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")} Should missing values inside quotes be treated as missing
+values (the default) or strings. This parameter is soft deprecated as of readr 2.0.0.}
     \item{\code{comment}}{A string used to identify comments. Any text after the
 comment characters will be silently ignored.}
     \item{\code{trim_ws}}{Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
@@ -147,9 +147,9 @@ option is \code{TRUE} then blank rows will not be represented at all.  If it is
     \item{\code{lazy}}{Read values lazily? By default the file is initially only
 indexed and the values are read lazily when accessed. Lazy reading is
 useful interactively, particularly if you are only interested in a subset
-of the full dataset. Note, lazy reading on windows will lock the file
-until all the data has been read from it, if you run into this issue set
-\code{lazy = FALSE}.}
+of the full dataset. \emph{Note}, if you later write to the same file you read
+from you need to set \code{lazy = FALSE}. On Windows the file will be locked
+and on other systems the memory map will become invalid.}
   }}
 }
 \value{

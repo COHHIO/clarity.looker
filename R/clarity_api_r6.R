@@ -113,7 +113,7 @@ call_data <-
         warning = rlang::as_function(~{.x}))
     }
     if (UU::is_legit(.data) && from_disk)
-      return(.data)
+      return(Client_filter(.data))
 
     # Instantiate arguments to runLook
     .args <- list(id)
@@ -203,7 +203,7 @@ call_data <-
       }
       .data <- updated_data
     }
-    .data
+    Client_filter(.data)
   }
 
 update_data <- function(new_data, old_data) {
