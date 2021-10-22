@@ -107,10 +107,7 @@ call_data <-
 
     # Check if data exists and is loadable
     if (!details) {
-      .data <- withCallingHandlers({
-        .data <- hud_load(.data_nm, path)
-        }, error = rlang::as_function(~{structure(paste0(.x), class = "try-error")}),
-        warning = rlang::as_function(~{.x}))
+      .data <- try(hud_load(.data_nm, path), silent = TRUE)
     }
     if (UU::is_legit(.data) && from_disk)
       return(Client_filter(.data))
