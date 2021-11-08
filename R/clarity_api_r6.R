@@ -126,13 +126,13 @@ call_data <-
       .args$col_types <- spec$col_types
 
     }
-    .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
     .args <- rlang::list2(!!!.args,
                           resultFormat = "csv",
                           as = "parsed"
     )
     .to_runLook <- rlang::dots_list(..., .named = TRUE)
     .args <- purrr::list_modify(.args, !!!.to_runLook)
+    .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
 
     if (!daily_update) {
       if (!details) {
@@ -247,11 +247,11 @@ col_names_from_look_vis_config <- function(look_info) {
 }
 
 col_types_from_col_names <- function(col_names) {
-  rlang::set_names(col_names) |> purrr::imap_chr(~{
+  rlang::set_names(col_names) |> purrr::imap(~{
     purrr::when(.x,
                stringr::str_detect(., "ID$") ~ "c",
                stringr::str_detect(., "^APCounties") ~ "c",
-               stringr::str_detect(., "Type$") ~ "i",
+               stringr::str_detect(., "Type$") ~ "?",
                stringr::str_detect(., "(?:^Date)|(?:Date$)") ~ "D",
                ~ "?")
 
