@@ -108,9 +108,10 @@ call_data <-
     # Check if data exists and is loadable
     if (!details) {
       .data <- try(hud_load(.data_nm, path), silent = TRUE)
+      if (UU::is_legit(.data) && from_disk)
+        return(Client_filter(.data))
     }
-    if (UU::is_legit(.data) && from_disk)
-      return(Client_filter(.data))
+
 
     # Instantiate arguments to runLook
     .args <- list(id)
