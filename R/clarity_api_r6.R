@@ -132,7 +132,7 @@ call_data <-
     )
     .to_runLook <- rlang::dots_list(..., .named = TRUE)
     .args <- purrr::list_modify(.args, !!!.to_runLook)
-    .args$col_types <- rlang::exec(readr::cols, !!!as.list(.args$col_types))
+    .args$col_types <- rlang::exec(readr::cols, !!!.args$col_types)
 
     if (!daily_update) {
       if (!details) {
