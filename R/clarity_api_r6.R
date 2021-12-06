@@ -151,7 +151,8 @@ call_data <-
             rlang::exec(self$api$runLook,
                     !!!.args,
                     queryParams = list(limit = -1,
-                                       apply_vis = TRUE))
+                                       apply_vis = TRUE,
+                                       cache = FALSE))
           # Naming
           if (!is.null(.args$col_names)) {
             attr(.data, "api_names") <- .data[1,]
@@ -254,6 +255,7 @@ col_types_from_col_names <- function(col_names) {
                stringr::str_detect(., "^APCounties") ~ "c",
                stringr::str_detect(., "Type$") ~ "?",
                stringr::str_detect(., "(?:^Date)|(?:Date$)") ~ "D",
+               stringr::str_detect(., "(?:^Time)|(?:Time$)") ~ "T",
                ~ "?")
 
   })
