@@ -66,10 +66,11 @@ api_col_types <- function(col_types, add_prefixes) {
 #' @description Determines the appropriate location from which to retrieve HUD Export data
 #' @inheritSection hud_filename Export_Items
 #' @inheritParams hud_filename
-#' @param from_disk \code{(logical)} Attempt to retrieve the data from disk in the folder specified by `path`?
-#' @param .write \code{(logical)} Whether to write a feather file to `path`
-#' @param details \code{(logical)} Return look info. See [getLook](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look)
-#' @param daily_update Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p).
+#' @param from_disk \code{(logical)} Attempt to retrieve the data from disk in the folder specified by `path`? **Default: TRUE**
+#' @param .write \code{(logical)} Whether to write a feather file to `path` **Default: FALSE**
+#' @param details \code{(logical)} Return look info. See [getLook](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look) **Default: FALSE**
+#' @param daily_update \code{(logical)} Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p). **Default: FALSE**
+#' @param deleted \code{(logical)} Include deleted data if calling a HUD export item? **Default: FALSE**
 #' @inheritDotParams readr::read_csv
 #' @return \code{(tibble)} The HUD Export item requested.
 
@@ -79,6 +80,7 @@ call_data <-
            .write = FALSE,
            details = FALSE,
            daily_update = FALSE,
+           deleted = FALSE,
            ...) {
     if (.write)
       from_disk <- FALSE
@@ -202,6 +204,8 @@ call_data <-
       }
       .data <- updated_data
     }
+    if (.is_export && deleted)
+      .data <- dplyr::filter(.data, is.na(DateDeleted))
     Client_filter(.data)
   }
 

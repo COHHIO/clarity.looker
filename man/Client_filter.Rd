@@ -4,7 +4,7 @@
 \alias{Client_filter}
 \title{Filter out specific Clients}
 \usage{
-Client_filter(x, clients_to_filter = c(`1E2025A5D` = "335", `08EF0EF09` = "1"))
+Client_filter(x, clients_to_filter = getOption("clients_to_filter"))
 }
 \arguments{
 \item{x}{\code{(data.frame)} With PersonalID or UniqueID column}

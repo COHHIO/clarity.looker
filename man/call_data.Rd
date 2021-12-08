@@ -10,19 +10,22 @@ call_data(
   .write = FALSE,
   details = FALSE,
   daily_update = FALSE,
+  deleted = FALSE,
   ...
 )
 }
 \arguments{
-\item{from_disk}{\code{(logical)} Attempt to retrieve the data from disk in the folder specified by \code{path}?}
+\item{from_disk}{\code{(logical)} Attempt to retrieve the data from disk in the folder specified by \code{path}? \strong{Default: TRUE}}
 
 \item{path}{\code{(character)} The directory path in which to search}
 
-\item{.write}{\code{(logical)} Whether to write a feather file to \code{path}}
+\item{.write}{\code{(logical)} Whether to write a feather file to \code{path} \strong{Default: FALSE}}
 
-\item{details}{\code{(logical)} Return look info. See \href{https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look}{getLook}}
+\item{details}{\code{(logical)} Return look info. See \href{https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/look#get_look}{getLook} \strong{Default: FALSE}}
 
-\item{daily_update}{Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p).}
+\item{daily_update}{\code{(logical)} Update the Export with the data that has been added or modified over the last 24 hour period (12a - 12p). \strong{Default: FALSE}}
+
+\item{deleted}{\code{(logical)} Include deleted data if calling a HUD export item? \strong{Default: FALSE}}
 
 \item{...}{
   Arguments passed on to \code{\link[readr:read_delim]{readr::read_csv}}
@@ -36,9 +39,10 @@ be automatically uncompressed. Files starting with \verb{http://},
 downloaded. Remote gz files can also be automatically downloaded and
 decompressed.
 
-Literal data is most useful for examples and tests. To be recognised as a
-path, it must be wrapped with \code{I()}, be a string containing at least one
-new line, or be a vector containing at least one string with a new line.
+Literal data is most useful for examples and tests. To be recognised as
+literal data, the input must be either wrapped with \code{I()}, be a string
+containing at least one new line, or be a vector containing at least one
+string with a new line.
 
 Using a value of \code{\link[readr:clipboard]{clipboard()}} will read from the system clipboard.}
     \item{\code{quote}}{Single character used to quote strings.}
