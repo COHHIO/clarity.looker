@@ -275,8 +275,7 @@ make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
       out$PersonalID <- stringr::str_extract(.col, "(?<=client\\/)\\d+")
     if (!missing(new_ID))
       ID <- rlang::enexpr(new_ID)
-    if (!as.character(ID) %in% names(.data))
-      out[[ID]] <- stringr::str_extract(.col, switch(.type,
+    out[[ID]] <- stringr::str_extract(.col, switch(.type,
                                                      profile = "(?<=\\>)[:alnum:]+(?=\\<)",
                                                      enroll = "\\d+(?=\\/enroll)"))
   } else {
