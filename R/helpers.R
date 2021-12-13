@@ -204,3 +204,85 @@ Client_filter <- function(x, clients_to_filter = getOption("clients_to_filter"))
   return(out)
 }
 
+
+#' @title Make a Clarity link using the `PersonalID` and `UniqueID/EnrollmentID`
+#' @description If used in a \link[DT]{datatable}, set `escape = FALSE`
+#' @param PersonalID \code{(character)} The `PersonalID` column
+#' @param ID \code{(character)} The `UniqueID/EnrollmentID` column
+#' @param chr \code{(logical)} Whether to output a character or a `shiny.tag` if `FALSE`. **Default** TRUE
+#'
+#' @return \code{(character/shiny.tag)} If `PersonalID` is a character vector (IE nested in a mutate), and `chr = TRUE` a character vector, if `chr = FALSE` a `shiny.tag`. The `ID` column will be replaced with the link.
+#' @export
+#'
+#' @examples
+#' data.frame(a = letters, b = seq_along(letters)) |>  dplyr::mutate(a = make_link(a, b))
+
+
+make_link <- function(PersonalID, ID, chr = TRUE) {
+  href <- getOption("HMIS")$Clarity_URL %||% "https://cohhio.clarityhs.com"
+  .type <- ifelse(any(stringr::str_detect(ID, "[A-F]"), na.rm = TRUE), "profile", "enroll")
+  sf_args <- switch(.type,
+                    profile = list("<a href=\"%s/client/%s/profile\" target=\"_blank\">%s</a>", href, PersonalID, ID),
+                    enroll = list("<a href=\"%s/clients/%s/program/%s/enroll\" target=\"_blank\">%s</a>", href, PersonalID, ID, ID))
+  if (chr) {
+    out <- do.call(sprintf, sf_args)
+  } else {
+    href <- httr::parse_url(href)
+    if (!identical(length(PersonalID), length(ID))) {
+      l <- list(PersonalID = PersonalID, ID = ID)
+      big <- which.max(purrr::map_int(l, length))
+      i <- seq_along(l)
+      small <- subset(i, subset = i != big)
+      assign(names(l)[small], rep(l[[small]], length(l[[big]])))
+    }
+    out <- purrr::map2(PersonalID, ID, ~{
+      href$path <- switch(.type,
+                          profile = c("client",.x, "profile"),
+                          enroll = c("clients",.x, "program", .y, "enroll"))
+      htmltools::tags$a(href = httr::build_url(href), .y, target = "_blank")
+    })
+  }
+  out
+}
+
+#' @title Make UniqueID or EnrollmentID into a Clarity hyperlink
+#' @param .data \code{(data.frame)} The following columns are required for the specified link type:
+#' \itemize{
+#'   \item{\code{PersonalID & UniqueID}}{ for Profile link}
+#'   \item{\code{PersonalID & EnrollmentID}}{ for Enrollment link}
+#' }
+#' @param ID \code{(name)} unquoted of the column to unlink.
+#' @param unlink \code{(logical)} Whether to turn the link back into the respective columns from which it was made.
+#' @param new_ID \code{(name)} unquoted of the column to be created with the data from the linked column. (`PersonalID` will be recreated automatically if it doesn't exist).
+#' @inheritParams make_link
+#' @return \code{(data.frame)} With `UniqueID` or `EnrollmentID` as a link
+#' data.frame(a = letters, b = seq_along(letters)) |>  dplyr::mutate(a = make_link(a, b)) |> make_linked_df(a, unlink = TRUE)
+#' @export
+make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
+  out <- .data
+  ID <- rlang::enexpr(ID)
+  .col <- .data[[ID]]
+  if (is.null(.col))
+    rlang::abort(glue::glue("{as.character(ID)} not found in `.data`"), trace = rlang::trace_back())
+
+  .type <- ifelse(any(stringr::str_detect(.col, ifelse(unlink, "profile", "[A-F0-9]{9}")), na.rm = TRUE), "profile", "enroll")
+
+  if (unlink) {
+    # TODO handle shiny.tag
+    if (!any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE))
+      rlang::abort(glue::glue("{as.character(ID)} is not a link"))
+    if (!"PersonalID" %in% names(.data))
+      out$PersonalID <- stringr::str_extract(.col, "(?<=client\\/)\\d+")
+    if (!missing(new_ID))
+      ID <- rlang::enexpr(new_ID)
+    if (!as.character(ID) %in% names(.data))
+      out[[ID]] <- stringr::str_extract(.col, switch(.type,
+                                                     profile = "(?<=\\>)[:alnum:]+(?=\\<)",
+                                                     enroll = "\\d+(?=\\/enroll)"))
+  } else {
+    out <- .data |>
+      dplyr::mutate(!!ID := make_link(PersonalID, !!ID, chr = chr))
+  }
+
+  out
+}

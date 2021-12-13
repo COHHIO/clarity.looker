@@ -182,7 +182,6 @@ Available HUD Export Items are
 \item \href{#method-new}{\code{clarity_api$new()}}
 \item \href{#method-get_export}{\code{clarity_api$get_export()}}
 \item \href{#method-get_folder_looks}{\code{clarity_api$get_folder_looks()}}
-\item \href{#method-finalize}{\code{clarity_api$finalize()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -283,15 +282,5 @@ Pull all Looks associated with a folder
 \subsection{Returns}{
 \code{(list)} of specified looks in folder
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Close the Looker API Connection
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{clarity_api$finalize()}\if{html}{\out{</div>}}
-}
-
 }
 }
