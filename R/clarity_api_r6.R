@@ -204,7 +204,7 @@ call_data <-
       }
       .data <- updated_data
     }
-    if (.is_export && deleted)
+    if (.is_export && !deleted)
       .data <- dplyr::filter(.data, is.na(DateDeleted))
     Client_filter(.data)
   }
@@ -396,14 +396,12 @@ clarity_api <- R6::R6Class(
       out
     },
     #' @field folders `{lookr}` folder data stored here
-    folders = list(),
-    #' @description Close the Looker API Connection
+    folders = list()
+  ),
+  private = rlang::list2(
     finalize = function() {
       self$api$on_connection_closed()
     },
-
-  ),
-  private = rlang::list2(
     call_data = call_data,
     folder_info = list()
   )
