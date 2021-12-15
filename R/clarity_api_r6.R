@@ -108,9 +108,9 @@ call_data <-
       }
 
     # Check if data exists and is loadable
-    if (!details) {
+    if (!details && from_disk) {
       .data <- try(hud_load(.data_nm, path), silent = TRUE)
-      if (UU::is_legit(.data) && from_disk)
+      if (UU::is_legit(.data))
         return(Client_filter(.data))
     }
 
