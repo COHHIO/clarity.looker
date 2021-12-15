@@ -93,7 +93,7 @@ hud_last_updated <- function(x, path = "data") {
                 . == 1 ~ file.info(x)$mtime,
                 . > 1 ~ do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE))
   } else {
-    UU::list.files2() |>
+    UU::list.files2(path) |>
       purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path)
   }
 
