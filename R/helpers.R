@@ -260,6 +260,7 @@ make_link <- function(PersonalID, ID, chr = TRUE) {
 #' @export
 make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
   out <- .data
+  .data_nm <- rlang::enexpr(.data)
   ID <- rlang::enexpr(ID)
   .col <- .data[[ID]]
   if (is.null(.col))
@@ -270,7 +271,7 @@ make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
   if (unlink) {
     # TODO handle shiny.tag
     if (!is_link(.col))
-      rlang::abort(glue::glue("{as.character(ID)} is not a link"))
+      rlang::abort(glue::glue("{.data_nm}: `{as.character(ID)}` is not a link"))
     if (!"PersonalID" %in% names(.data))
       out$PersonalID <- stringr::str_extract(.col, "(?<=client\\/)\\d+")
     if (!missing(new_ID))
@@ -280,7 +281,8 @@ make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
                                                      enroll = "\\d+(?=\\/enroll)"))
   } else {
     if (is_link(.col)) {
-      rlang::inform(glue::glue("`{as.character(ID)}` is already a link."))
+
+      rlang::inform(glue::glue("{.data_nm}: `{as.character(ID)}` is already a link."))
     } else {
       out <- .data |>
         dplyr::mutate(!!ID := make_link(PersonalID, !!ID, chr = chr))
