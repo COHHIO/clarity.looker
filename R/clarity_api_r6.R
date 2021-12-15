@@ -204,7 +204,7 @@ call_data <-
       }
       .data <- updated_data
     }
-    if (.is_export && !deleted)
+    if (.is_export && !deleted && "DateDeleted" %in% names(.data))
       .data <- dplyr::filter(.data, is.na(DateDeleted))
     Client_filter(.data)
   }
