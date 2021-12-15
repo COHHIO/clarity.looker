@@ -93,8 +93,7 @@ hud_last_updated <- function(x, path = "data") {
                 . == 1 ~ file.info(x)$mtime,
                 . > 1 ~ do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE))
   } else {
-    list.files(path, full.names = TRUE) |>
-      setNames(list.files(path)) |>
+    UU::list.files2() |>
       purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path)
   }
 
@@ -118,12 +117,10 @@ hud_load <- function(x, path = "data") {
     rlang::warn(paste0("Found multiple files:\n", paste0(paste0(basename(names(.updated))," ",.updated), collapse = "\n"), "\nMost recent will be returned."))
     .file <- names(.updated)[1]
   }
-  .ext <- UU::ext(.file)
-  import_fn <- switch(.ext,
-                      csv = readr::read_csv,
-                      feather = feather::read_feather)
+
+  import_fn <- UU::file_fn(.file)
   .args <- list(.file)
-  if (.ext == "csv" && stringr::str_remove(basename(.file), "\\.[a-zA-Z]+$") %in% names(.hud_export))
+  if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export))
     .args$col_types <- .hud_export[[x]]$col_types
 
   do.call(import_fn, .args)
@@ -204,6 +201,9 @@ Client_filter <- function(x, clients_to_filter = getOption("clients_to_filter"))
   return(out)
 }
 
+is_link <- function(.col) {
+  any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE) || inherits(.col[[1]], "shiny.tag")
+}
 
 #' @title Make a Clarity link using the `PersonalID` and `UniqueID/EnrollmentID`
 #' @description If used in a \link[DT]{datatable}, set `escape = FALSE`
@@ -269,7 +269,7 @@ make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
 
   if (unlink) {
     # TODO handle shiny.tag
-    if (!any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE))
+    if (!is_link(.col))
       rlang::abort(glue::glue("{as.character(ID)} is not a link"))
     if (!"PersonalID" %in% names(.data))
       out$PersonalID <- stringr::str_extract(.col, "(?<=client\\/)\\d+")
@@ -279,8 +279,14 @@ make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
                                                      profile = "(?<=\\>)[:alnum:]+(?=\\<)",
                                                      enroll = "\\d+(?=\\/enroll)"))
   } else {
-    out <- .data |>
-      dplyr::mutate(!!ID := make_link(PersonalID, !!ID, chr = chr))
+    if (is_link(.col)) {
+      rlang::inform(glue::glue("`{as.character(ID)}` is already a link."))
+    } else {
+      out <- .data |>
+        dplyr::mutate(!!ID := make_link(PersonalID, !!ID, chr = chr))
+    }
+
+
   }
 
   out
