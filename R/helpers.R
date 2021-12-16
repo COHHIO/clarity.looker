@@ -260,7 +260,7 @@ make_link <- function(PersonalID, ID, chr = TRUE) {
 #' @export
 make_linked_df <- function(.data, ID, unlink = FALSE, new_ID, chr = TRUE) {
   out <- .data
-  .data_nm <- rlang::enexpr(.data)
+  .data_nm <- rlang::expr_deparse(rlang::call_args(match.call())$.data)
   ID <- rlang::enexpr(ID)
   .col <- .data[[ID]]
   if (is.null(.col))
