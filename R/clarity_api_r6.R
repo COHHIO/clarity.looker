@@ -346,7 +346,6 @@ clarity_api <- R6::R6Class(
     get_export = function(path = self$dirs$export, .write = TRUE, skip = c("Assessment",
                                                                            "AssessmentQuestions",
                                                                            "AssessmentResults",
-                                                                           "Services",
                                                                            "YouthEducationStatus")) {
       if (!dir.exists(path))
         UU::mkpath(path)
