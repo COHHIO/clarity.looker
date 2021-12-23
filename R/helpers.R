@@ -94,11 +94,56 @@ hud_last_updated <- function(x, path = "data") {
                 . > 1 ~ do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE))
   } else {
     UU::list.files2(path) |>
-      purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path)
+      purrr::map(purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path) |>
+      purrr::flatten()
   }
 
 }
 
+
+#' @title Extract a previously downloaded HUD Export archive
+#'
+#' @param browser_dl_folder \code{(character)} path to the browser's download folder or the file to extract
+#' @param extract_path \code{(character)} path to the folder where the archive is to be extracted
+#' @param delete_archive \code{(logical)} Delete the archive after extracting?
+#' @param moment \code{(POSIXct/Date)} The time point which the archive creation time should be greater than to ensure it's recent.
+#' @param wait \code{(Duration)} to wait for the file to appear in the download directory. Relevant when using browser automation.
+#' @return \code{(logical)} as to whether the extraction was successful
+#' @export
+
+hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_path = file.path("data", "export"), delete_archive = TRUE, moment = Sys.Date(), wait = lubridate::minutes(2)) {
+  downloads <- path.expand(browser_dl_folder)
+  extract_path <- path.expand(extract_path)
+  if (!file.exists(downloads)) {
+    dls <- list.files(downloads, full.names = TRUE, pattern = "^hudx")
+    dl_times <- do.call(c, purrr::map(dls, ~file.info(.x)$mtime))
+    if (!UU::is_legit(dl_times))
+      cli::cli_alert(paste0("No HUD Export found in ", path.expand(downloads), " waiting ", wait))
+    wait = lubridate::now() + wait
+    .recent <- dl_times > moment
+    while (!any(.recent) && Sys.time() < wait) {
+      Sys.sleep(5)
+      dls <- list.files(downloads, full.names = TRUE, pattern = "^hudx")
+      dl_times <- do.call(c, purrr::map(dls, ~file.info(.x)$mtime))
+      .recent <- dl_times > moment
+    }
+  } else {
+    f <- downloads
+  }
+
+  if (any(get0(".recent", inherits = FALSE)))
+    f <- dls[.recent]
+
+
+  if (UU::is_legit(f)) {
+    UU::mkpath(extract_path)
+    archive::archive_extract(f, extract_path)
+  } else
+    cli::cli_alert("No HUD Export found in {.path {downloads}} with creation time greater than ", moment)
+
+  if (delete_archive)
+    file.remove(f)
+}
 
 
 #' @title Load a HUD Export item from disk

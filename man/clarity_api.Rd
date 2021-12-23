@@ -232,7 +232,7 @@ Pull all Export items with associate Looks
 \if{html}{\out{<div class="r">}}\preformatted{clarity_api$get_export(
   path = self$dirs$export,
   .write = TRUE,
-  skip = c("Assessment", "AssessmentQuestions", "AssessmentResults", "Services",
+  skip = c("Assessment", "AssessmentQuestions", "AssessmentResults",
     "YouthEducationStatus")
 )}\if{html}{\out{</div>}}
 }
