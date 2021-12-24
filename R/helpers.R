@@ -138,7 +138,7 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
   if (UU::is_legit(f)) {
     UU::mkpath(extract_path)
     .last_update <- mean(hud_last_updated(extract_path), na.rm = TRUE)
-    if (UU::is_legit(.last_update) && .last_update < file.info(f)$mtime)
+    if (UU::is_legit(.last_update) && .last_update < mean(archive::archive(f)$date, na.rm = TRUE))
       archive::archive_extract(f, extract_path)
     else
       cli::cli_inform("Current export is already up to date. No extraction performed.")
