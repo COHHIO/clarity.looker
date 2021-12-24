@@ -149,6 +149,14 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
     file.remove(f)
 }
 
+#' @title Is the package running in dev mode
+#'
+#' @return \code{(logical)}
+#' @export
+
+is_dev <- function() {
+  basename(dirname(getwd())) == "COHHIO"
+}
 
 #' @title Load a HUD Export item from disk
 #' @description Load the named HUD Export item from the `path` provided
@@ -159,6 +167,8 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
 
 hud_load <- function(x, path = "data") {
   .file <- hud_filename(x, path)
+  if (basename(path == "public") && !is_dev)
+
   if (!UU::is_legit(.file)) {
     stop(x, ": file not found.")
   } else if (length(.file) > 1) {

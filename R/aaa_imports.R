@@ -1,5 +1,4 @@
-
-#' @title Reimports from other packages
+#' @title Reimports
 #' @description Infix functions from other packages used in clarity.looker.
 #' @importFrom rlang `%||%`
 #' @importFrom dplyr `%>%`
