@@ -166,23 +166,33 @@ is_dev <- function() {
 #' @export
 
 hud_load <- function(x, path = "data") {
-  .file <- hud_filename(x, path)
-  if (basename(path == "public") && !is_dev)
+  p <- system.file(package = "RmData", "data")
+  if (basename(path == "public") && !is_dev() && dir.exists(p)) {
+    .data <- purrr::flatten_chr(readRDS(UU::list.files2(system.file(package = "RmData", "data"), pattern = "rds$"))) |>
+      stringr::str_subset(UU::ext(x, strip = TRUE))
+    e <- new.env()
+    data(list = .data, envir = e)
+    out <- e[[.data]]
+  } else {
+    .file <- hud_filename(x, path)
 
-  if (!UU::is_legit(.file)) {
-    stop(x, ": file not found.")
-  } else if (length(.file) > 1) {
-    .updated <- hud_last_updated(.file)
-    rlang::warn(paste0("Found multiple files:\n", paste0(paste0(basename(names(.updated))," ",.updated), collapse = "\n"), "\nMost recent will be returned."))
-    .file <- names(.updated)[1]
+
+    if (!UU::is_legit(.file)) {
+      stop(x, ": file not found.")
+    } else if (length(.file) > 1) {
+      .updated <- hud_last_updated(.file)
+      rlang::warn(paste0("Found multiple files:\n", paste0(paste0(basename(names(.updated))," ",.updated), collapse = "\n"), "\nMost recent will be returned."))
+      .file <- names(.updated)[1]
+    }
+
+    import_fn <- UU::file_fn(.file)
+    .args <- list(.file)
+    if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export))
+      .args$col_types <- .hud_export[[x]]$col_types
+
+    out <- do.call(import_fn, .args)
   }
-
-  import_fn <- UU::file_fn(.file)
-  .args <- list(.file)
-  if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export))
-    .args$col_types <- .hud_export[[x]]$col_types
-
-  do.call(import_fn, .args)
+  out
 }
 
 
