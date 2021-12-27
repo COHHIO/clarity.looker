@@ -40,7 +40,7 @@ setup_looker <- function(client_id, client_secret, ini_filepath = "Looker.ini", 
 }
 
 #' @title Extract Looks and their names from the folder browse table in Looker
-#' @description Takes file with the "outerHTML" from chrome > inspect of the table of all the looks in Looker folder browse view and parse it to extract the look id numbers and their names provided that the format of the look name is HUD_Export.[ExportItemName]
+#' @description Takes file with the "outerHTML" from chrome > inspect of the table of all the looks in Looker folder browse view and parse it to extract the look id numbers and their names provided that the format of the look name is HUD_Export.(`ExportItemName`)
 #' @param htm \code{(character)} Path to html file with outerHTML copy/pasted into it
 #' @return \code{(numeric)} vector of look ids and their respective names
 
