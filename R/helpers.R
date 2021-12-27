@@ -112,7 +112,7 @@ hud_last_updated <- function(x, path = "data") {
 hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_path = file.path("data", "export"), delete_archive = TRUE, moment = Sys.Date(), wait = lubridate::minutes(2)) {
   downloads <- path.expand(browser_dl_folder)
   extract_path <- path.expand(extract_path)
-  if (!file.exists(downloads)) {
+  if (!(stringr::str_detect(downloads, "(?:7z$)|(?:zip$)") && file.exists(downloads))) {
     dls <- list.files(downloads, full.names = TRUE, pattern = "^hudx")
     dl_times <- do.call(c, purrr::map(dls, ~file.info(.x)$mtime))
     if (!UU::is_legit(dl_times))
