@@ -165,7 +165,7 @@ is_dev <- function() {
 
 hud_load <- function(x, path = "data") {
   p <- system.file(package = "RmData", "data")
-  if (basename(path == "public") && !is_dev() && dir.exists(p)) {
+  if (!is_dev() && basename(path) == "public" && dir.exists(p)) {
     .data <- purrr::flatten_chr(readRDS(UU::list.files2(system.file(package = "RmData", "data"), pattern = "rds$"))) |>
       stringr::str_subset(UU::ext(x, strip = TRUE))
     e <- new.env()
