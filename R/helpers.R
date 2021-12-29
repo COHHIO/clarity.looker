@@ -165,7 +165,7 @@ is_dev <- function() {
 
 hud_load <- function(x, path = "data") {
   p <- system.file(package = "RmData", "data")
-  if (basename(path) == "public" && dir.exists(p)) {
+  if (basename(path) == "public" && dir.exists(p) && all(c("rdb", "rdx", "rda") %in% UU::ext(UU::list.files2(p)))) {
     fn <- UU::ext(x, strip = TRUE)
     e <- new.env()
     data(list = fn, envir = e)
