@@ -72,7 +72,7 @@ look_id_from_folder <- function(looks, folder) {
 hud_filename <- function(x, path = "data") {
 
   if (!file.exists(x)) {
-    .file <- rlang::set_names(list.files(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE))
+    .file <- UU::list.files2(path, pattern = hud_regex(x), full.names = TRUE, recursive = FALSE)
   } else {
     .file <- x
   }
