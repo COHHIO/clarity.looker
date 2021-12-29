@@ -235,13 +235,15 @@ hud_rename <- function(x, rm_prefixes, nms) {
 #' @return A success message at the console
 #' @export
 
-hud_feather <- function(.data, path = "data") {
+hud_feather <- function(.data, path = "data", nm) {
+  if (missing(nm))
+    nm <- deparse(rlang::enexpr(.data))
   fn <-
     rlang::exec(file.path,
                 !!!purrr::when(
                   stringr::str_detect(path, "feather$"),
                   isTRUE(.) ~ path,
-                  list(path, paste0(deparse(rlang::enexpr(.data)), ".feather"))
+                  list(path, paste0(nm, ".feather"))
                 ))
   if (!dir.exists(dirname(fn)))
     UU::mkpath(dirname(fn))
