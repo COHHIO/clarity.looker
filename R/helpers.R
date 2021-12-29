@@ -2,13 +2,13 @@
 # Mon Jul 19 16:05:32 2021
 
 hud_formatted <- function(x) {
-  x <- stringr::str_extract(x, "[A-Za-z\\_\\s\\.]+")
+  x <- stringr::str_extract(x, "[A-Za-z\\_\\s\\.\\-]+")
 }
 
 hud_regex <- function(x) {
   purrr::when(stringr::str_detect(x, "\\.[A-Za-z0-9]{1,10}$"),
               isTRUE(.) ~ x,
-              ~ paste0("^",hud_formatted(x), "\\.")
+              ~ paste0("^",UU::ext(x, strip = TRUE))
   )
 }
 
