@@ -177,9 +177,14 @@ hud_load <- function(x, path = "data") {
     if (!UU::is_legit(.file)) {
       stop(x, ": file not found.")
     } else if (length(.file) > 1) {
+      .matches <- names(.file) %in% x
+      if (any(.matches))
+        .file <- .file[.matches]
       .updated <- hud_last_updated(.file)
-      rlang::warn(paste0("Found multiple files:\n", paste0(paste0(basename(names(.updated))," ",.updated), collapse = "\n"), "\nMost recent will be returned."))
       .file <- names(.updated)[1]
+      cli::cli_warn(c("Found multiple files:", paste0(basename(names(.updated)),' ',.updated), "Returning: {.path {.file}} @ {cli::col_br_blue(.updated[1])}"))
+
+
     }
 
     import_fn <- UU::file_fn(.file)
