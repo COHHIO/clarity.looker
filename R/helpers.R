@@ -285,7 +285,7 @@ Client_filter <- function(x, clients = getOption("HMIS")$clients_to_filter) {
 #' @return \code{(data.frame)} filtered for clients
 #' @export
 
-find_client <- function(x, clients) {
+find_clients <- function(x, clients) {
   if (nchar(clients[1]) == 9 && "UniqueID" %in% names(x))
     x <- dplyr::filter(x, UniqueID %in% clients)
   else if ("PersonalID" %in% names(x))
