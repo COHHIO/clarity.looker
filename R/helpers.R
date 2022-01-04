@@ -277,6 +277,20 @@ Client_filter <- function(x, clients = getOption("HMIS")$clients_to_filter) {
   x
 }
 
+#' @title Filter for specific clients
+#'
+#' @param x \code{(data.frame)} with either UniqueID or PersonalID
+#' @param clients \code{(character)} of either UniqueID's or PersonalID's. The corresponding column must be present in the data to filter
+#'
+#' @return \code{(data.frame)} filtered for clients
+#' @export
+
+find_client <- function(x, clients) {
+  if (nchar(clients[1]) == 9 && "UniqueID" %in% names(x))
+    x <- dplyr::filter(x, UniqueID %in% clients)
+  else if ("PersonalID" %in% names(x))
+    x <- dplyr::filter(x, PersonalID %in% clients)
+}
 
 is_link <- function(.col) {
   any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE) || inherits(.col[[1]], "shiny.tag")
