@@ -164,7 +164,7 @@ is_dev <- function() {
 #' @export
 
 hud_load <- function(x, path = "data") {
-  p <- system.file(package = "RmData", "data")
+  p <- system.file(package = "RmData", "data", lib.loc = .libPaths())
   if (basename(path) == "public" && dir.exists(p) && all(c("rdb", "rdx", "rda") %in% UU::ext(UU::list.files2(p)))) {
     fn <- UU::ext(x, strip = TRUE)
     e <- new.env()
