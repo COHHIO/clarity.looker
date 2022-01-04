@@ -170,8 +170,7 @@ hud_load <- function(x, path = "data") {
     e <- new.env()
     data(list = fn, envir = e)
     out <- e[[fn]]
-  }
-  if (!exists("out", inherits = FALSE) || !is.data.frame(out)) {
+  } else {
     .file <- hud_filename(x, path)
 
 
