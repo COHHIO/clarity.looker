@@ -259,20 +259,24 @@ hud_feather <- function(.data, path = "data", nm) {
 #' @title Filter out specific Clients
 #' @description Often used to filter test/training demo clients
 #' @param x \code{(data.frame)} With PersonalID or UniqueID column
-#' @param clients_to_filter \code{(character)} of PersonalIDs to filter with names corresponding their UniqueIDs (Clarity only)
+#' @param clients \code{(character)} of PersonalIDs to filter with names corresponding their UniqueIDs (Clarity only)
 #' @family Client functions
 #' @return \code{(data.frame)} without `clients_to_filter`
 #' @export
 
-Client_filter <- function(x, clients_to_filter = getOption("clients_to_filter")) {
-  .nms <- names(x)
-  if (!is.null(clients_to_filter) && "PersonalID" %in% .nms) {
-    out <- dplyr::filter(x, !PersonalID %in% clients_to_filter)
-  } else {
-    out <- x
+Client_filter <- function(x, clients = getOption("HMIS")$clients_to_filter) {
+
+  if (is.data.frame(x) && UU::is_legit(clients)) {
+    nms <- na.omit(stringr::str_extract(colnames(x), UU::regex_or(c("PersonalID", "UniqueID"))))
+    if (UU::is_legit(nms))
+      for (nm in nms) {
+        x <- dplyr::filter(x, !(!!rlang::sym(nm)) %in% !!purrr::when(nm, . == "PersonalID" ~ clients, ~ names(clients)))
+      }
   }
-  return(out)
+
+  x
 }
+
 
 is_link <- function(.col) {
   any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE) || inherits(.col[[1]], "shiny.tag")
