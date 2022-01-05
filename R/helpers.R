@@ -290,6 +290,7 @@ find_clients <- function(x, clients) {
     x <- dplyr::filter(x, UniqueID %in% clients)
   else if ("PersonalID" %in% names(x))
     x <- dplyr::filter(x, PersonalID %in% clients)
+  x
 }
 
 is_link <- function(.col) {
