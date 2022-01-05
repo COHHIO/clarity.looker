@@ -4,12 +4,12 @@
 \alias{Client_filter}
 \title{Filter out specific Clients}
 \usage{
-Client_filter(x, clients_to_filter = getOption("clients_to_filter"))
+Client_filter(x, clients = getOption("HMIS")$clients_to_filter)
 }
 \arguments{
 \item{x}{\code{(data.frame)} With PersonalID or UniqueID column}
 
-\item{clients_to_filter}{\code{(character)} of PersonalIDs to filter with names corresponding their UniqueIDs (Clarity only)}
+\item{clients}{\code{(character)} of PersonalIDs to filter with names corresponding their UniqueIDs (Clarity only)}
 }
 \value{
 \code{(data.frame)} without \code{clients_to_filter}

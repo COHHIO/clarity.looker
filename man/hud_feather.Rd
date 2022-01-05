@@ -4,7 +4,7 @@
 \alias{hud_feather}
 \title{Write object to the \emph{data} directory as feather file}
 \usage{
-hud_feather(.data, path = "data")
+hud_feather(.data, path = "data", nm)
 }
 \arguments{
 \item{.data}{\code{(tibble/data.frame)} The object to write to feather}

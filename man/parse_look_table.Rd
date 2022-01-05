@@ -13,5 +13,5 @@ parse_look_table(htm)
 \code{(numeric)} vector of look ids and their respective names
 }
 \description{
-Takes file with the "outerHTML" from chrome > inspect of the table of all the looks in Looker folder browse view and parse it to extract the look id numbers and their names provided that the format of the look name is HUD_Export.\link{ExportItemName}
+Takes file with the "outerHTML" from chrome > inspect of the table of all the looks in Looker folder browse view and parse it to extract the look id numbers and their names provided that the format of the look name is HUD_Export.(\code{ExportItemName})
 }
