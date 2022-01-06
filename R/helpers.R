@@ -187,8 +187,11 @@ hud_load <- function(x, path = "data") {
 
     import_fn <- UU::file_fn(.file)
     .args <- list(.file)
-    if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export))
+    if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export)) {
       .args$col_types <- .hud_export[[x]]$col_types
+      .args$lazy = FALSE
+    }
+
 
     out <- do.call(import_fn, .args)
   }
