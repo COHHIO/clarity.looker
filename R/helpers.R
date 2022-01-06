@@ -91,7 +91,7 @@ hud_last_updated <- function(x, path = "data") {
   if (!missing(x)) {
     do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE)
   } else {
-    do.call(c, purrr::map(UU::list.files2(path), purrr::possibly(hud_last_updated, lubridate::NA_POSIXct_), path = path))
+    do.call(c, purrr::map(rlang::set_names(UU::list.files2(path)), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_), path = path))
   }
 
 }
