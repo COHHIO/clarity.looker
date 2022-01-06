@@ -248,8 +248,8 @@ hud_feather <- function(.data, path = "data", nm) {
                   isTRUE(.) ~ path,
                   list(path, paste0(nm, ".feather"))
                 ))
-  if (!dir.exists(dirname(fn)))
-    UU::mkpath(dirname(fn))
+
+  UU::mkpath(dirname(fn))
   arrow::write_feather(.data, fn)
   cli::cli_alert_success(paste0(fn, " saved"))
 }
