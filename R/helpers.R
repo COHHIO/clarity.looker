@@ -190,7 +190,8 @@ hud_load <- function(x, path = "data") {
     if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export)) {
       .args$col_types <- .hud_export[[x]]$col_types
       .args$lazy = FALSE
-    }
+    } else if (UU::ext(.file) == "feather")
+      .args$mmap <- FALSE
 
 
     out <- do.call(import_fn, .args)
