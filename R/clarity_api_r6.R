@@ -352,11 +352,15 @@ clarity_api <- R6::R6Class(
       to_fetch <- names(folder_looks(self$folders[[private$folder_info$export]])) |>
         {\(x) {x[!x %in% skip]}}() |>
           rlang::set_names()
-
-      purrr::map(to_fetch, ~ rlang::eval_bare(rlang::expr(self[[!!.x]](
-        path = path,
-        .write = .write
-      ))))
+      .pid <- cli::cli_progress_bar(name = "get_export",
+                                    status = "Export item: ",
+                                    format = "{cli::pb_name}: {.path {cli::pb_status}} {cli::pb_current}/{cli::pb_total} [{cli::col_br_blue(cli::pb_elapsed)}]",
+                                    total = length(to_fetch))
+      purrr::imap(to_fetch, ~ {
+        cli::cli_progress_update(id = .pid, status = .y)
+        suppressMessages(rlang::eval_bare(rlang::expr(self[[!!.x]](path = path,
+                                                  .write = .write))))
+      })
     },
     #' @description Pull all Looks associated with a folder
     #' @param folder \code{(folder)} Folder object from `folders` field
@@ -380,19 +384,24 @@ clarity_api <- R6::R6Class(
       }
 
       looks <- rlang::set_names(looks, names(folder_looks(folder)))
-      if (folder$name == private$folder_info$export) {
-        out <- purrr::imap(looks, ~{
-            fn <- rlang::call2(self[[!!.x$title]], !!!.args)
-            rlang::eval_bare(fn)
-          })
-      } else {
-        out <- purrr::imap(looks, ~ {
-          fn <- rlang::call2(rlang::expr(self[[!!folder$name]][[!!.x$title]]), !!!.args)
-          rlang::eval_bare(fn)
-        })
-      }
+      .is_export <- folder$name == private$folder_info$export
+      fns <- purrr::map(looks, ~{
+        if (.is_export)
+          rlang::expr(self[[!!.x$title]])
+        else
+          rlang::expr(self[[!!folder$name]][[!!.x$title]])
+      })
+      .pid <- cli::cli_progress_bar(name = "get_folder_looks",
+                                    status = "Fetch look: ",
+                                    format = "{cli::pb_name}: {.path {cli::pb_status}} {cli::pb_current}/{cli::pb_total} [{cli::col_br_blue(cli::pb_elapsed)}]",
+                                    total = length(fns))
 
-      out
+      purrr::imap(fns, ~{
+        cli::cli_progress_update(id = .pid, status = .y)
+        fn <- rlang::call2(.x, !!!.args)
+        suppressMessages(rlang::eval_bare(fn))
+      })
+
     },
     #' @field folders `{lookr}` folder data stored here
     folders = list()
