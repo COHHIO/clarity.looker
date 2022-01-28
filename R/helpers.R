@@ -296,7 +296,7 @@ find_clients <- function(x, clients) {
 }
 
 is_link <- function(.col) {
-  any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE) || inherits(.col[[1]], "shiny.tag")
+  any(stringr::str_detect(.col, "^\\<a"), na.rm = TRUE) || isTRUE(try(inherits(.col[[1]], "shiny.tag"), silent = TRUE))
 }
 
 #' @title Make a Clarity link using the `PersonalID` and `UniqueID/EnrollmentID`
