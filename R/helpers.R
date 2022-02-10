@@ -288,10 +288,34 @@ Client_filter <- function(x, clients = getOption("HMIS")$clients_to_filter) {
 #' @export
 
 find_clients <- function(x, clients) {
-  if (nchar(clients[1]) == 9 && "UniqueID" %in% names(x))
+  if (nchar(clients[1]) == 9) {
+    stopifnot("UniqueID" %in% names(x))
     x <- dplyr::filter(x, UniqueID %in% clients)
-  else if ("PersonalID" %in% names(x))
+  } else {
+    stopifnot("PersonalID" %in% names(x))
     x <- dplyr::filter(x, PersonalID %in% clients)
+  }
+  x
+}
+
+#' @title Filter for specific projects
+#'
+#' @param x \code{(data.frame)} with either ProjectID or ProjectName
+#' @param clients \code{(character)} of either ProjectID's or ProjectName's. The corresponding column must be present in the data to filter
+#'
+#' @return \code{(data.frame)} filtered for clients
+#' @export
+
+find_projects <- function(x, projects) {
+
+  if (stringr::str_detect(projects[1], "^\\d{1,5}$")) {
+    stopifnot("ProjectID" %in% names(x))
+    x <- dplyr::filter(x, ProjectID %in% projects)
+
+  } else {
+    stopifnot("ProjectName" %in% names(x))
+    x <- dplyr::filter(x, PersonalID %in% projects)
+  }
   x
 }
 
