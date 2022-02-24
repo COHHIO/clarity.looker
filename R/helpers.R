@@ -109,7 +109,6 @@ hud_last_updated <- function(x, path = "data") {
 
 hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_path = file.path("data", "export"), delete_archive = TRUE, moment = Sys.Date(), wait = lubridate::minutes(2)) {
   downloads <- path.expand(browser_dl_folder)
-  extract_path <- path.expand(extract_path)
   if (!(stringr::str_detect(downloads, "(?:7z$)|(?:zip$)") && file.exists(downloads))) {
     dls <- list.files(downloads, full.names = TRUE, pattern = "^hudx")
     dl_times <- do.call(c, purrr::map(dls, ~file.info(.x)$mtime))
@@ -134,8 +133,8 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
   if (UU::is_legit(f)) {
     UU::mkpath(extract_path)
     .last_update <- mean(hud_last_updated(extract_path), na.rm = TRUE)
-    if (UU::is_legit(.last_update) && .last_update < mean(archive::archive(f)$date, na.rm = TRUE))
-      archive::archive_extract(f, extract_path)
+    if (UU::is_legit(.last_update) && .last_update < mean(unzip(f)$Date, na.rm = TRUE))
+      utils::unzip(f, exdir = extract_path)
     else
       cli::cli_inform("Current export is already up to date. No extraction performed.")
     if (delete_archive)
