@@ -2,19 +2,33 @@
 % Please edit documentation in R/helpers.R
 \name{make_link}
 \alias{make_link}
-\title{Make a Clarity link using the \code{PersonalID} and \code{UniqueID/EnrollmentID}}
+\title{Make a Clarity link using an \code{ID} column}
 \usage{
-make_link(PersonalID, ID, chr = TRUE)
+make_link(ID, link_text, type = NULL, chr = TRUE)
 }
 \arguments{
-\item{PersonalID}{\code{(character)} The \code{PersonalID} column}
+\item{ID}{\code{(character)} The \code{ID} column. See the list below for the appropriate matching \code{ID}. If \code{link_text} is:
+\itemize{
+\item{\code{UniqueID}}{ \code{PersonalID}}
+\item{\code{EnrollmentID}}{ \code{PersonalID}}
+\item{\code{ProjectName}}{ \code{ProjectID}}
+\item{\code{AgencyName}}{ \code{AgencyID}}
+}}
 
-\item{ID}{\code{(character)} The \code{UniqueID/EnrollmentID} column}
+\item{link_text}{\code{(character)} The link text. Typically \code{UniqueID/EnrollmentID/AgencyName/ProjectName} column}
+
+\item{type}{\code{(character)} the type of link to create based on \code{link_text}. One of:
+\itemize{
+\item{\code{"profile"}}{ When \code{link_text} is \code{UniqueID}}
+\item{\code{"enrollment"}}{ When \code{link_text} is \code{EnrollmentID}}
+\item{\code{"agency_switch"}}{ When \code{link_text} is \code{AgencyName}}
+\item{\code{"program_edit"}}{ When \code{link_text} is \code{ProgramName}}
+}}
 
 \item{chr}{\code{(logical)} Whether to output a character or a \code{shiny.tag} if \code{FALSE}. \strong{Default} TRUE}
 }
 \value{
-\code{(character/shiny.tag)} If \code{PersonalID} is a character vector (IE nested in a mutate), and \code{chr = TRUE} a character vector, if \code{chr = FALSE} a \code{shiny.tag}. The \code{ID} column will be replaced with the link.
+\code{(character/shiny.tag)} If \code{chr = TRUE} a character vector, if \code{chr = FALSE} a \code{shiny.tag}.
 }
 \description{
 If used in a \link[DT]{datatable}, set \code{escape = FALSE}

@@ -4,20 +4,36 @@
 \alias{make_linked_df}
 \title{Make UniqueID or EnrollmentID into a Clarity hyperlink}
 \usage{
-make_linked_df(.data, ID, unlink = FALSE, new_ID, chr = TRUE)
+make_linked_df(
+  .data,
+  link_text,
+  unlink = FALSE,
+  new_ID,
+  type = NULL,
+  chr = TRUE
+)
 }
 \arguments{
 \item{.data}{\code{(data.frame)} The following columns are required for the specified link type:
 \itemize{
 \item{\code{PersonalID & UniqueID}}{ for Profile link}
 \item{\code{PersonalID & EnrollmentID}}{ for Enrollment link}
+\item{\code{PersonalID & EnrollmentID}}{ for Enrollment link}
 }}
 
-\item{ID}{\code{(name)} unquoted of the column to unlink.}
+\item{link_text}{\code{(name)} unquoted of the column to unlink.}
 
 \item{unlink}{\code{(logical)} Whether to turn the link back into the respective columns from which it was made.}
 
 \item{new_ID}{\code{(name)} unquoted of the column to be created with the data from the linked column. (\code{PersonalID} will be recreated automatically if it doesn't exist).}
+
+\item{type}{\code{(character)} the type of link to create based on \code{link_text}. One of:
+\itemize{
+\item{\code{"profile"}}{ When \code{link_text} is \code{UniqueID}}
+\item{\code{"enrollment"}}{ When \code{link_text} is \code{EnrollmentID}}
+\item{\code{"agency_switch"}}{ When \code{link_text} is \code{AgencyName}}
+\item{\code{"program_edit"}}{ When \code{link_text} is \code{ProgramName}}
+}}
 
 \item{chr}{\code{(logical)} Whether to output a character or a \code{shiny.tag} if \code{FALSE}. \strong{Default} TRUE}
 }
