@@ -127,7 +127,7 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
     f <- downloads
   }
 
-  if (any(get0(".recent", inherits = FALSE)))
+  if (any(get0(".recent", inherits = FALSE, ifnotfound = FALSE)))
     f <- dls[.recent]
 
 
@@ -138,11 +138,12 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
       archive::archive_extract(f, extract_path)
     else
       cli::cli_inform("Current export is already up to date. No extraction performed.")
+    if (delete_archive)
+      file.remove(f)
   } else
     cli::cli_alert("No HUD Export found in {.path {downloads}} with creation time greater than ", moment)
 
-  if (delete_archive)
-    file.remove(f)
+
 }
 
 #' @title Is the package running in dev mode
