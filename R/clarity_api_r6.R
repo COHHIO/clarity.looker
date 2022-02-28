@@ -7,7 +7,8 @@ dirs = list(
   export = "data/export",
   public = "data/public",
   spm = "data/spm",
-  extras = "data/extras"
+  extras = "data/extras",
+  random = "data/random"
 )
 
 # Use dput on this and copy to the R6 class otherwise utils::getSrcref will bug in roxygen2
