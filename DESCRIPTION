@@ -6,13 +6,13 @@ Authors@R: c(person("Stephen","Holsenbeck", email = "sholsen@alumni.emory.edu", 
     person("Genelle", "Denzin", email = "", role = c("aut")))
 License: AGPL (>= 3)
 Encoding: UTF-8
-Imports: 
+Imports:
   arrow,
   cli,
   dplyr,
   lookr,
   readr,
-  rlang,
+  rlang >= 1.0.0,
   stringr,
   UU
 Remotes:
