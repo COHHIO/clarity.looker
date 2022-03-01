@@ -131,8 +131,8 @@ hud_export_extract <- function(browser_dl_folder = "~/../Downloads", extract_pat
 
 
   if (UU::is_legit(f)) {
-    UU::mkpath(extract_path)
-    .last_update <- mean(hud_last_updated(extract_path), na.rm = TRUE)
+    UU::mkpath(extract_path, mkdir = TRUE)
+    .last_update <- mean(UU::last_updated(path = extract_path), na.rm = TRUE)
     if (UU::is_legit(.last_update) && .last_update < mean(unzip(f, list = TRUE)$Date, na.rm = TRUE))
       utils::unzip(f, exdir = extract_path)
     else
