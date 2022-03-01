@@ -12,7 +12,7 @@ Imports:
   dplyr,
   lookr,
   readr,
-  rlang >= 1.0.0,
+  rlang (>= 1.0.0),
   stringr,
   UU
 Remotes:
