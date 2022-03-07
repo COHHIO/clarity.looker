@@ -42,3 +42,5 @@ inst/*
 
 Looker.ini
 testing.R
+
+.DS_Store

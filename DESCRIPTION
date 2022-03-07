@@ -10,6 +10,8 @@ Imports:
   arrow,
   cli,
   dplyr,
+  httpuv,
+  httr,
   lookr,
   readr,
   rlang (>= 1.0.0),
