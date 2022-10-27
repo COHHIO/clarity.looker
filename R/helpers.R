@@ -175,28 +175,28 @@ hud_load <- function(x, path = "data") {
     data(list = fn, envir = e)
     out <- e[[fn]]
   } else {
-    .file <- hud_filename(x, path)
+    file <- hud_filename(x, path)
 
 
-    if (!UU::is_legit(.file)) {
+    if (!UU::is_legit(file)) {
       stop(x, ": file not found.")
-    } else if (length(.file) > 1) {
-      .matches <- names(.file) %in% x
+    } else if (length(file) > 1) {
+      .matches <- names(file) %in% x
       if (any(.matches))
-        .file <- .file[.matches]
-      .updated <- hud_last_updated(.file)
-      .file <- names(.updated)[1]
-      cli::cli_warn(c("Found multiple files:", paste0(basename(names(.updated)),' ',.updated), "Returning: {.path {.file}} @ {cli::col_br_blue(.updated[1])}"))
+        file <- file[.matches]
+      .updated <- hud_last_updated(file)
+      file <- names(.updated)[1]
+      cli::cli_warn(c("Found multiple files:", paste0(basename(names(.updated)),' ',.updated), "Returning: {.path {file}} @ {cli::col_br_blue(.updated[1])}"))
 
 
     }
 
-    import_fn <- UU::file_fn(.file)
-    .args <- list(.file)
-    if (UU::ext(.file) == "csv" && UU::ext(basename(.file), strip = TRUE) %in% names(.hud_export)) {
+    import_fn <- UU::file_fn(file)
+    .args <- list(file)
+    if (UU::ext(file) == "csv" && UU::ext(basename(file), strip = TRUE) %in% names(.hud_export)) {
       .args$col_types <- .hud_export[[x]]$col_types
       .args$lazy = FALSE
-    } else if (UU::ext(.file) == "feather")
+    } else if (UU::ext(file) == "feather")
       .args$mmap <- FALSE
 
 
