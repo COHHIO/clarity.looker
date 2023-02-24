@@ -374,11 +374,21 @@ make_link <- function(ID, link_text, type = NULL, chr = TRUE) {
     ),
     agency_switch = list(
       "<a href=\"%s/manage/agency/switch/%s\" target=\"_blank\">%s</a>",
-    href,
-    ID,
-    link_text
+      href,
+      ID,
+      link_text
     ),
-    program_edit = list("<a href=\"%s/manage/program/edit/%s\" target=\"_blank\">%s</a>", href, ID, link_text)
+    admin = list(
+      "<a href=\"%s/manage/staff/edit/%s\" target=\"_blank\">%s</a>",
+      href,
+      ID,
+      link_text
+    ),
+    program_edit = list(
+      "<a href=\"%s/manage/program/edit/%s\" target=\"_blank\">%s</a>",
+      href,
+      ID,
+      link_text)
   )
 
   if (chr) {
@@ -397,7 +407,8 @@ make_link <- function(ID, link_text, type = NULL, chr = TRUE) {
                           profile = c("client",.x, "profile"),
                           enrollment = c("clients",.x, "program", .y, "enroll"),
                           agency_switch = c("manage","agency", "switch", .x),
-                          program_edit = c("manage","program", "edit", .x)
+                          program_edit = c("manage","program", "edit", .x),
+                          admin = c("manage", "staff", "edit", .x)
                           )
       htmltools::tags$a(href = httr::build_url(href), .y, target = "_blank")
     })
@@ -411,14 +422,16 @@ link_type <- function(x, link_text, link_chr, new_ID) {
                          EnrollmentID = "enrollment",
                          ProjectName = "program_edit",
                          ProgramName = "program_edit",
-                         AgencyName = "agency_switch") %||% switch(rlang::expr_deparse(new_ID),
+                         AgencyName = "agency_switch",
+                         AgencyAdministrator = "admin") %||% switch(rlang::expr_deparse(new_ID),
                                                                    UniqueID = "profile",
                                                                    EnrollmentID = "enrollment",
                                                                    ProjectName = "program_edit",
                                                                    ProgramName = "program_edit",
-                                                                   AgencyName = "agency_switch") %||%
+                                                                   AgencyName = "agency_switch",
+                                                                   AgencyAdministrator = "admin") %||%
     ifelse(any(stringr::str_detect(link_text, "[A-F]"), na.rm = TRUE), "profile", "enrollment")
-  UU::match_letters(.type, "profile", "enrollment", "program_edit", "agency_switch", n = 4)
+  UU::match_letters(.type, "profile", "enrollment", "program_edit", "agency_switch", "admin", n = 5)
 }
 
 #' @title Make UniqueID or EnrollmentID into a Clarity hyperlink
@@ -453,12 +466,14 @@ make_linked_df <- function(.data, link_text, unlink = FALSE, new_ID, type = NULL
          EnrollmentID = "PersonalID",
          ProjectName = "ProjectID",
          ProgramName = "ProgramID",
-         AgencyName = "AgencyID") %||% switch(rlang::expr_deparse(new_ID),
+         AgencyName = "AgencyID",
+         AgencyAdministrator = "AgencyAdministrator") %||% switch(rlang::expr_deparse(new_ID),
                                               UniqueID = "PersonalID",
                                               EnrollmentID = "PersonalID",
                                               ProjectName = "ProjectID",
                                               ProgramName = "ProgramID",
-                                              AgencyName = "AgencyID")
+                                              AgencyName = "AgencyID",
+                                              AgencyAdministrator = "AgencyAdministrator")
   .col <- .data[[link_text]]
   if (is.null(.col))
     rlang::abort(glue::glue("{link_chr} not found in `.data`"), trace = rlang::trace_back())
@@ -471,13 +486,15 @@ make_linked_df <- function(.data, link_text, unlink = FALSE, new_ID, type = NULL
                                                        enrollment = ,
                                                        profile = "(?<=clients?\\/)\\d+",
                                                        program_edit = "(?<=edit\\/)\\d+",
-                                                       agency_switch = "(?<=switch\\/)\\d+"))
+                                                       agency_switch = "(?<=switch\\/)\\d+"),
+                                                       admin = "(?<=edit\\/)\\d+")
 
       if (has_new_ID)
         link_text <- new_ID
       out[[link_text]] <- stringr::str_extract(.col, switch(.type,
                                                             agency_switch = ,
                                                             program_edit = ,
+                                                            admin = ,
                                                      profile = "(?<=\\>)[:alnum:]+(?=\\<)",
                                                      enrollment = "\\d+(?=\\/enroll)"))
     } else
