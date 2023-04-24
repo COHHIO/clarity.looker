@@ -7,7 +7,6 @@ Authors@R: c(person("Stephen","Holsenbeck", email = "sholsen@alumni.emory.edu", 
 License: AGPL (>= 3)
 Encoding: UTF-8
 Imports:
-  arrow,
   cli,
   dplyr,
   httpuv,
@@ -17,6 +16,8 @@ Imports:
   rlang (>= 1.0.0),
   stringr,
   UU
+Suggests:
+  arrow
 Remotes:
     yogat3ch/UU,
     COHHIO/lookr
