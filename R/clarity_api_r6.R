@@ -274,7 +274,12 @@ fetch_folder <- function(.x, self) {
     .x <- folder$name
   }
 
-  self$folders[[.x]] <- folder
+  if (!is.null(.x)) {
+    self$folders[[.x]] <- folder
+  } else {
+    stop("Invalid index for folder assignment")
+  }
+
   .x
 }
 
