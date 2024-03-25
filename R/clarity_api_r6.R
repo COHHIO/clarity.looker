@@ -24,23 +24,29 @@ dirs = list(
                   "Looker.ini")
       ))
     private$folder_info <- list()
+
     if (UU::is_legit(export_folder)) {
       export_folder <- fetch_folder(export_folder, self)
       private$folder_info$export <- export_folder
-      rlang::env_bind(self, !!!purrr::map(folder_looks(self$folders[[export_folder]]), ~ private$call_data))
+      rlang::env_bind(self, !!!purrr::map(self$folders, ~ private$call_data))
     }
 
     if (UU::is_legit(daily_folder)) {
       daily_folder <- fetch_folder(daily_folder, self)
       private$folder_info$daily_folder <- daily_folder
     }
+
     if (UU::is_legit(look_folders)) {
-      purrr::walk(look_folders, fetch_folder, self = self)
-      # Bind additional folders
-      purrr::iwalk(self$folders[look_folders], ~{
-        looks <- purrr::map_chr(.x$looks, "title") |> rlang::set_names() |> purrr::map(~private$call_data)
-        self[[.y]] <- rlang::list2(!!!looks)
-      })
+      # purrr::walk(look_folders, fetch_folder, self = self)
+      # # Bind additional folders
+      # purrr::iwalk(self$folders[look_folders], ~{
+      #   looks <- purrr::map_chr(.x$looks, "title") |> rlang::set_names() |> purrr::map(~private$call_data)
+      #   self[[.y]] <- rlang::list2(!!!looks)
+      look_folder_names <- fetch_folder(look_folders, self)
+      private$folder_info$look_folder <- look_folder_names
+      look_folder_info <- fetch_folder_info(look_folders, self)
+      private$folder_info$look_info <- look_folder_info
+      # })
     }
 
     self$dirs <- dirs
@@ -54,6 +60,8 @@ dirs = list(
                           look_folders = c("HUD Extras"),
                           dirs = rlang::expr(!!dirs))
 )
+
+
 
 api_col_types <- function(col_types, add_prefixes) {
   .is_id <-  stringr::str_detect(names(col_types), "[Ii][Dd]$")
@@ -94,9 +102,16 @@ call_data <-
     } else if (daily_update) {
       .idx <- private$folder_info$daily
     } else {
-      .idx <- hud_formatted(deparse(match.call()[[1]][[2]][[3]]))
+      .idx <- private$folder_info$look_folder
     }
-    id <- look_id_from_folder(.data_nm, self$folders[[.idx]])
+
+    if (.is_export) {
+      id <- private$folder_info$export_info$id[private$folder_info$export_info$title == .data_nm]
+    } else if (daily_update) {
+      .idx <- private$folder_info$daily_info$id[private$daily_info$export_info$title == .data_nm]
+    } else {
+      .idx <- private$folder_info$looker_folder_info$id[private$looker_folder_info$export_info$title == .data_nm]
+    }
 
     .arg_path <- deparse(rlang::enexpr(path))
     # If the file path was entered manually, don't do this
@@ -267,15 +282,24 @@ col_types_from_col_names <- function(col_names) {
 }
 
 fetch_folder <- function(.x, self) {
-  if (is.character(.x)) {
-    folder <- self$api$folders("search", name = .x)[[1]]
-  } else if (is.numeric(.x)) {
-    folder <- self$api$folders("get", .x)
-    .x <- folder$name
-  }
+  folders_list <- self$api$allFolderLooks(.x)
+  folders <- folders_list <- tibble::tibble(x = folders_list) |>
+    tidyr::unnest_wider(x) |>
+    dplyr::select(title, id)
+
+  .x <- folders$title
+
+  # if (is.character(.x)) {
+  #   # folder <- self$api$allFolders("search", name = .x)[[1]]
+  #   # folder <- folders |> dplyr::filter(id == .x)
+  # } else if (is.numeric(.x)) {
+  #   # folder <- self$api$folderApi$folders("get", .x)
+  #   # folder <- folders |> dplyr::filter(id == as.character(.x))
+  #   .x <- folders$title
+  # }
 
   if (!is.null(.x)) {
-    self$folders[[.x]] <- folder
+    self$folders <- split(folders$id, folders$title)
   } else {
     stop("Invalid index for folder assignment")
   }
@@ -283,6 +307,14 @@ fetch_folder <- function(.x, self) {
   .x
 }
 
+fetch_folder_info <- function(.x, self) {
+  folders_list <- self$api$allFolderLooks(.x)
+  folders <- folders_list <- tibble::tibble(x = folders_list) |>
+    tidyr::unnest_wider(x) |>
+    dplyr::select(title, id)
+
+  folders
+}
 
 
 #' @title Call HUD Export Items & Extras from the Clarity Looker API
@@ -325,26 +357,38 @@ clarity_api <- R6::R6Class(
     {
       self$api <- lookr::LookerSDK$new(configFile = ifelse(stringr::str_detect(configFile,
                                                                                "ini$"), file.path(configFile), file.path(configFile,
-                                                                                                                         "Looker.ini")))
+
+
+                                                                                                                                                                                                                                     "Looker.ini")))
       private$folder_info <- list()
+
       if (UU::is_legit(export_folder)) {
-        export_folder <- fetch_folder(export_folder, self)
-        private$folder_info$export <- export_folder
-        rlang::env_bind(self, !!!purrr::map(folder_looks(self$folders[[export_folder]]),
+        export_folder_names <- fetch_folder(export_folder, self)
+        private$folder_info$export <- export_folder_names
+        export_folder_info <- fetch_folder_info(export_folder, self)
+        private$folder_info$export_info <- export_folder_info
+        rlang::env_bind(self, !!!purrr::map(self$folders,
                                             ~private$call_data))
       }
       if (UU::is_legit(daily_folder)) {
-        daily_folder <- fetch_folder(daily_folder, self)
-        private$folder_info$daily_folder <- daily_folder
+        daily_folder_names <- fetch_folder(daily_folder, self)
+        private$folder_info$daily_folder <- daily_folder_names
+        daily_folder_info <- fetch_folder_info(daily_folder, self)
+        private$folder_info$daily_info <- daily_folder_info
       }
       if (UU::is_legit(look_folders)) {
-        purrr::walk(look_folders, fetch_folder, self = self)
-        purrr::iwalk(self$folders[!names(self$folders) %in% unlist(private$folder_info)], ~{
-
-          looks <- purrr::map(rlang::set_names(purrr::map_chr(.x$looks,
-                                                              "title")), ~private$call_data)
-          self[[.y]] <- rlang::list2(!!!looks)
-        })
+        # purrr::walk(look_folders, fetch_folder, self = self)
+        # purrr::iwalk(self$folders[!names(self$folders) %in% unlist(private$folder_info)], ~{
+        #
+        #   looks <- self$folders[!names(self$folders) %in% unlist(private$folder_info)] |> purrr::map(~private$call_data)
+        #   self[[.y]] <- rlang::list2(!!!looks)
+        # })
+        look_folder_names <- fetch_folder(look_folders, self)
+        private$folder_info$look_folder <- look_folder_names
+        look_folder_info <- fetch_folder_info(look_folders, self)
+        private$folder_info$look_info <- look_folder_info
+        rlang::env_bind(self, !!!purrr::map(self$folders,
+                                            ~private$call_data))
       }
       self$dirs <- dirs
     },

@@ -15,7 +15,7 @@ setup_looker <- function(client_id, client_secret, ini_filepath = "Looker.ini", 
   write(paste0(
     "[Looker]\n",
     "# API version is required\n",
-    "api_version=3.1\n",
+    "api_version=4.0\n",
     "# Base URL for API. Do not include /api/* in the url\n",
     "base_url=",base_url,"\n",
     "# API 3 client id\n",
@@ -70,7 +70,6 @@ hud_look_table_update <- function(look_table, look_html, look_type, add_new = FA
   .new_look_table <- parse_look_table(look_html)
   for (nm in names(.new_look_table)[names(.new_look_table) %in% look_table]) {
     look_table[[nm]]$look <- setNames(c(look_table[[nm]]$look, .new_look_table[[.y]]), c(names(look_table[[nm]]$look), look_type))
-    browser()
   }
 
   if (add_new) {

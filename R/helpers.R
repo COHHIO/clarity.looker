@@ -21,6 +21,7 @@ folder_looks <- function(folder) {
   purrr::map_int(folder$looks, "id") |> rlang::set_names(purrr::map_chr(folder$looks, "title"))
 }
 
+
 #' @title Retrieve Look info from a folder
 #' @description Retrieve Look Info from a folder for a specific look name
 #' @inheritParams folder_looks
