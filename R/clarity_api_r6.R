@@ -108,9 +108,9 @@ call_data <-
     if (.is_export) {
       id <- private$folder_info$export_info$id[private$folder_info$export_info$title == .data_nm]
     } else if (daily_update) {
-      .idx <- private$folder_info$daily_info$id[private$daily_info$export_info$title == .data_nm]
+      id <- private$folder_info$daily_info$id[private$folder_info$daily_info$title == .data_nm]
     } else {
-      .idx <- private$folder_info$looker_folder_info$id[private$looker_folder_info$export_info$title == .data_nm]
+      id <- private$folder_info$look_info$id[private$folder_info$look_info$title == .data_nm]
     }
 
     .arg_path <- deparse(rlang::enexpr(path))
@@ -135,7 +135,7 @@ call_data <-
     .args <- list(id)
     if (details || stringr::str_detect(.data_nm, "extras$")) {
       look_info <-
-        self$api$getLook(id)
+        self$api$runLook(id)
       if (details)
         return(look_info)
       .args$col_types <- col_types_from_col_names(col_names_from_look_vis_config(look_info))
@@ -165,12 +165,23 @@ call_data <-
         # call the API
         if (!from_disk || .write) {
           message(.data_nm, ": fetching data")
-          .data <-
-            rlang::exec(self$api$runLook,
-                    !!!.args,
-                    queryParams = list(limit = -1,
-                                       apply_vis = TRUE,
-                                       cache = FALSE))
+          # .data <-
+          #   rlang::exec(self$api$runLook,
+          #           !!!.args,
+          #           queryParams = list(limit = -1,
+          #                              apply_vis = TRUE,
+          #                              cache = FALSE))
+
+          .data <- self$api$runLook(lookId = .args[[1]], resultFormat = "json",
+                                    queryParams = list(apply_vis = TRUE,
+                                                       cache = FALSE)
+                                    )
+          # convert nested list to dataframe
+          .data <- purrr::map_df(.data, ~ {
+            .x[sapply(.x, is.null)] <- NA
+            as.data.frame(.x, stringsAsFactors = FALSE)
+          })
+
           # Naming
           if (!is.null(.args$col_names)) {
             attr(.data, "api_names") <- .data[1,]
@@ -178,9 +189,11 @@ call_data <-
           } else if (.is_export) {
             # If col_names not used, use hud_rename
             .data <- hud_rename(.data, spec$api_nm %||% .data_nm, names(spec$col_types))
+          } else if (.data_nm %in% private$folder_info$look_folder) {
+            names(.data) <- get(.data_nm)
           }
           # Error messages
-          check_api_data(.data, .data_nm, daily_update)
+          # check_api_data(.data, .data_nm, daily_update)
           message(.data_nm, ": data retrieved")
         }
 
@@ -208,7 +221,7 @@ call_data <-
         api_names = new_data[1,]
         new_data <- rlang::set_attrs(new_data, api_names = api_names)
         new_data <- new_data[-1,]
-        check_api_data(.data, .data_nm, daily_update)
+        # check_api_data(.data, .data_nm, daily_update)
         updated_data <- update_data(new_data, old_data)
         # The bind_rows in updated_data will remove the attributes so they must be re-added
         new_data <- rlang::set_attrs(new_data, api_names = api_names)
@@ -265,7 +278,8 @@ col_names_from_look_description <- function(look_info) {
 }
 
 col_names_from_look_vis_config <- function(look_info) {
-  look_info[["query"]][["vis_config"]][["series_labels"]][look_info[["query"]][["fields"]]]
+  # look_info[["query"]][["vis_config"]][["series_labels"]][look_info[["query"]][["fields"]]]
+  names(unlist(look_info[[1]]))
 }
 
 col_types_from_col_names <- function(col_names) {
@@ -399,9 +413,10 @@ clarity_api <- R6::R6Class(
                                                                            "YouthEducationStatus")) {
       if (!dir.exists(path))
         UU::mkpath(path)
-      to_fetch <- names(folder_looks(self$folders[[private$folder_info$export]])) |>
-        {\(x) {x[!x %in% skip]}}() |>
-          rlang::set_names()
+      # to_fetch <- names(folder_looks(self$folders[[private$folder_info$export]])) |>
+      #   {\(x) {x[!x %in% skip]}}() |>
+      #     rlang::set_names()
+      to_fetch <- private$folder_info$export_info$title
       .pid <- cli::cli_progress_bar(name = "get_export",
                                     status = "Export item: ",
                                     format = "{cli::pb_name}: {.path {cli::pb_status}} {cli::pb_current}/{cli::pb_total} [{cli::col_br_blue(cli::pb_elapsed)}]",
@@ -431,20 +446,20 @@ clarity_api <- R6::R6Class(
         details = details,
         path = path
       )
-      if (!missing(skip)) {
-        looks <- purrr::keep(folder$looks, ~!.x$title %in% skip)
-      } else {
-        looks <- folder$looks
-      }
+      # if (!missing(skip)) {
+      #   looks <- purrr::keep(folder$looks, ~!.x$title %in% skip)
+      # } else {
+        # looks <- folder$looks
+      #   looks <- unlist(unname(folder))
+      # }
 
-      looks <- rlang::set_names(looks, names(folder_looks(folder)))
-      .is_export <- folder$name == private$folder_info$export
-      fns <- purrr::map(looks, ~{
-        if (.is_export)
-          rlang::expr(self[[!!.x$title]])
-        else
-          rlang::expr(self[[!!folder$name]][[!!.x$title]])
-      })
+      # looks <- rlang::set_names(looks, names(folder_looks(folder)))
+
+      looks <- folder
+      .is_export <- identical(names(folder), private$folder_info$export)
+      looks <- data.frame(title = names(looks), look = unlist(looks), row.names = NULL)
+
+      fns <- purrr::map(1:nrow(looks), ~ rlang::expr(self[[!!looks$title[.x]]]))
       .pid <- cli::cli_progress_bar(name = "get_folder_looks",
                                     status = "Fetch look: ",
                                     format = "{cli::pb_name}: {.path {cli::pb_status}} {cli::pb_current}/{cli::pb_total} [{cli::col_br_blue(cli::pb_elapsed)}]",

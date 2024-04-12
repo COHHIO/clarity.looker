@@ -21,6 +21,89 @@ reconstruct_hud_extras <- function(configFile, look_folder = "HUD Extras", look_
     purrr::map(~do.call(c,rlang::list2(!!look_type := .x$id)))
 }
 
+CE_Referrals_extras <- c("PersonalID", "UniqueID", "ReferringEnrollmentID", "ReferralID",
+                        "ReferralConnectedEnrollmentsID", "ExitUpdatedTime", "LastUpdated",
+                        "ReferralEndDate", "ReferringAgency", "ReferringProjectID",
+                        "ReferredProjectID", "ReferringProjectName", "ReferredProjectName",
+                        "ReferringPTC", "ReferredPTC", "ReferralConnectedProjectName",
+                        "ReferralConnectedProjectType", "ReferringHouseholdID",
+                        "ReferralConnectedHouseholdID", "ReferredDate", "ReferralAcceptedDate",
+                        "ReferralCurrentlyOnQueue",
+                        "WasReferral", "ExitDestination", "ExitHoused", "ReferralConnectedMoveInDate",
+                        "DaysInQueue", "RemovedReason","RemovedSubReason", "Reassigned",
+                        "ReassignedDate", "ReferralDaysElapsed", "DeniedInfo",
+                        "DeniedType", "DeniedReason", "ExitAuto", "ActiveInProject",
+                        "IsLastEnrollment", "IsLastReferral", "ReferralResult")
+
+CE_Referrals_new_extras <- c("PersonalID", "UniqueID", "EnrollmentID", "ReferralID",
+                             "ExitUpdatedTime", "LastUpdated", "ReferralEndDate",
+                             "ReferringAgency", "ReferringProjectID", "ReferredProjectID",
+                             "ReferringProjectName", "ReferredProjectName", "ReferringPTC",
+                             "ReferredPTC", "ReferringHouseholdID", "DateReferred",
+                             "DateReferralAccepted", "IsCurrentlyOnQueue", "ExitDestination",
+                             "ExitHoused", "DaysInQueue", "RemovedReason", "RemovedSubReason",
+                             "Reassigned", "ReassignedDate", "ReferralDaysElapsed",
+                             "DeniedInfo", "DeniedType", "DeniedReason", "ExitAuto", "ActiveInProject",
+                             "IsLastEnrollment", "IsLastReferral", "ReferralResult")
+
+Client_COVID_extras <- c("PersonalID", "UniqueID", "Deleted", "C19AssessmentDate",
+                         "C19ScreeningDate", "C19Tested", "C19TestDate", "C19TestResults",
+                         "C19UnderInvestigation", "C19InvestigationDate", "C19ContactWithIll",
+                         "C19ContactWithIllDate", "C19ContactWithConfirmed", "C19ContactwithConfirmedDate",
+                         "C19HealthNotes", "HROver65", "HRSmoke", "HRImmunocompromised",
+                         "HRHistoryofRespiratoryIllness", "HRChronicIllness", "HRKidneyDisease",
+                         "Symptom2Fever", "Symptom1Cough", "Symptom2SoarThroat",
+                         "Symptom1BreathingDifficult", "Congestion", "Chills", "Nausea",
+                         "Weak", "MusclePain", "Diarrhea", "LostTasteSmell", "Headache")
+
+Client_Doses_extras <- c("PersonalID", "UniqueID", "EnrollmentID", "C19AssessmentDate",
+                         "C19VaccineConsent", "C19VaccineConcerns",
+                         "C19VaccineManufacturer", "Documentation", "Deleted")
+
+Client_extras <- c("UniqueID", "PersonalID", "EnrollmentID", "DateVeteranIdentified",
+                   "PHTrack", "ExpectedPHDate", "HOMESID", "ListStatus", "VAEligible",
+                   "SSVFIneligible", "ConsentToVaccine", "VaccineConcerns")
+
+Client_MentalHealth_extras <- c("UniqueID", "PersonalID", "ScoreDate", "Deleted",
+                                "MentalHealth", "MentalHealthLongTerm", "MentalHealthServices",
+                                "SubstanceAbuseServices", "SubstanceAbuse", "SubstanceAbuseLongTerm")
+
+Client_Offer_extras <- c("UniqueID", "PersonalID","AcceptDeclineDate", "OfferAccepted",
+                         "PHTypeOffered", "OfferDate")
+
+Client_SPDAT_extras <- c("UniqueID", "PersonalID", "ScoreDate", "Score", "CustomScore", "Deleted")
+
+Client_UniqueID_extras <- c("UniqueID", "PersonalID")
+
+Contact_extras <- c("UniqueID", "PersonalID", "EnrollmentID", "CurrentLivingSituation",
+                    "ProgramName", "ContactDate", "LocationDetails")
+
+Enrollment_extras <- c("PersonalID", "EnrollmentID", "UserCreating", "CountyServed",
+                       "CountyPrior", "LastPermanentAddress")
+
+Program_lookup_extras <- c("ProgramID", "ProgramName", "ProgramActive", "ProjectType",
+                           "ParticipationStatus", "AgencyID", "AgencyName", "AgencyActive",
+                           "PropertyManager", "StartDate", "EndDate", "LastUpdatedDate")
+
+Project_extras <- c("ProjectID", "ProjectName", "ProjectTypeCode", "Website",
+                    "Phone", "Hours", "APCountiesGeneral", "APCountiesYouth",
+                    "APCountiesVeteran", "CoCCompDocsReceived", "CoCCompChronicPrioritization",
+                    "CoCCompCostPerExit", "CoCCompHousingFirst", "CoCCompOnTrackSpending",
+                    "CoCCompUnspentFunds", "Geocode", "Address", "Address2", "City",
+                    "ZIP", "FundingSourceCode", "NonFederalFundingSourceCode",
+                    "OrganizationName", "FundingSourceID", "ProgramCoC")
+
+Services_extras <- c("UniqueID", "PersonalID", "ServiceID", "ServiceItemID",
+                    "HouseholdID", "EnrollmentID", "ServiceStartDate",
+                    "ServiceEndDate", "ServiceItemName", "FundName", "ServiceAmount",
+                    "FundingSourceID")
+
+UserNamesIDs_extras <- c("UserCreated", "UserCreatedText")
+
+User_extras <- c("UserID", "Deleted", "ProjectID", "ProjectName")
+
+
+
 
 # Replaced by CurrentLivingSituation
 #Contacts = 4,
