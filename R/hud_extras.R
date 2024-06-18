@@ -71,7 +71,7 @@ Client_MentalHealth_extras <- c("UniqueID", "PersonalID", "ScoreDate", "Deleted"
 Client_Offer_extras <- c("UniqueID", "PersonalID","AcceptDeclineDate", "OfferAccepted",
                          "PHTypeOffered", "OfferDate")
 
-Client_SPDAT_extras <- c("UniqueID", "PersonalID", "ScoreDate", "Score", "CustomScore", "Deleted")
+Client_SPDAT_extras <- c("UniqueID", "PersonalID", "ScoreDate", "Score", "CustomScore", "Deleted", "Assessment", "Total")
 
 Client_UniqueID_extras <- c("UniqueID", "PersonalID")
 
@@ -86,8 +86,8 @@ Program_lookup_extras <- c("ProgramID", "ProgramName", "ProgramActive", "Project
                            "PropertyManager", "StartDate", "EndDate", "LastUpdatedDate")
 
 Project_extras <- c("ProjectID", "ProjectName", "ProjectTypeCode", "Website",
-                    "Phone", "Hours", "APCountiesGeneral", "APCountiesYouth",
-                    "APCountiesVeteran", "CoCCompDocsReceived", "CoCCompChronicPrioritization",
+                    "Phone", "Hours", "APCountiesGeneral", "APCountiesVeteran",
+                    "APCountiesYouth", "CoCCompDocsReceived", "CoCCompChronicPrioritization",
                     "CoCCompCostPerExit", "CoCCompHousingFirst", "CoCCompOnTrackSpending",
                     "CoCCompUnspentFunds", "Geocode", "Address", "Address2", "City",
                     "ZIP", "FundingSourceCode", "NonFederalFundingSourceCode",
