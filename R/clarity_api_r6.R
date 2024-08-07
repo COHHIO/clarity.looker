@@ -4,11 +4,11 @@
 #' @description COHHIO specific directory tree _Recommended_
 #' @export
 dirs = list(
-  export = "data/export",
-  public = "data/public",
-  spm = "data/spm",
-  extras = "data/extras",
-  random = "data/random"
+  export = "inst/extdata/export",
+  public = "inst/extdata/public",
+  spm = "inst/extdata/spm",
+  extras = "inst/extdata/extras",
+  random = "inst/extdata/random"
 )
 
 # Use dput on this and copy to the R6 class otherwise utils::getSrcref will bug in roxygen2
