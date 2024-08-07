@@ -365,9 +365,9 @@ clarity_api <- R6::R6Class(
     #' This is optional and the path can be provided to individual methods as needed.
 
     initialize = function (configFile, export_folder = 9862, daily_folder = 9711,
-                           look_folders = 9874, dirs = list(export = "data/export",
-                                                                    public = "data/public", spm = "data/spm",
-                                                                    extras = "data/extras"))
+                           look_folders = 9874, dirs = list(export = "inst/extdata/export",
+                                                                    public = "inst/extdata/public", spm = "inst/extdata/spm",
+                                                                    extras = "inst/extdata/extras"))
     {
       self$api <- lookr::LookerSDK$new(configFile = ifelse(stringr::str_detect(configFile,
                                                                                "ini$"), file.path(configFile), file.path(configFile,
