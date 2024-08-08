@@ -113,7 +113,7 @@ os_download_folder <- function() {
 #' @return \code{(logical)} as to whether the extraction was successful
 #' @export
 
-hud_export_extract <- function(browser_dl_folder = os_download_folder(), extract_path = file.path("inst", ,"extdata", "export"), delete_archive = TRUE, moment = Sys.Date(), wait = lubridate::minutes(2)) {
+hud_export_extract <- function(browser_dl_folder = os_download_folder(), extract_path = file.path("inst", "extdata", "export"), delete_archive = TRUE, moment = Sys.Date(), wait = lubridate::minutes(2)) {
   downloads <- path.expand(browser_dl_folder)
   if (!(stringr::str_detect(downloads, "(?:7z$)|(?:zip$)") && file.exists(downloads))) {
     dls <- list.files(downloads, full.names = TRUE, pattern = "^hudx")
