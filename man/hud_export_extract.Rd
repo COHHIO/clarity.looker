@@ -5,8 +5,8 @@
 \title{Extract a previously downloaded HUD Export archive}
 \usage{
 hud_export_extract(
-  browser_dl_folder = "~/../Downloads",
-  extract_path = file.path("data", "export"),
+  browser_dl_folder = os_download_folder(),
+  extract_path = file.path("inst", "extdata", "export"),
   delete_archive = TRUE,
   moment = Sys.Date(),
   wait = lubridate::minutes(2)

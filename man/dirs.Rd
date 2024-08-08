@@ -5,7 +5,7 @@
 \alias{dirs}
 \title{Default directory tree for specific data types}
 \format{
-An object of class \code{list} of length 4.
+An object of class \code{list} of length 5.
 }
 \usage{
 dirs
