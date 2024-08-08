@@ -9,7 +9,9 @@ hud_feather(.data, path = "data", nm)
 \arguments{
 \item{.data}{\code{(tibble/data.frame)} The object to write to feather}
 
-\item{path}{\code{(character vector)} A character vector of the directory path to be passed to \link[base]{file.path}. If the filename is appended IE "Export.feather", the file will be named as such. Otherwise the name of the \code{.data} object will be used IE, if an object named \code{Affiliation} containing the Affiliation data is passed to \code{.data}, the resulting file will be \link{path}/Affiliation.feather.}
+\item{path}{\code{(character)} A single directory path or full file path where the feather file will be saved. If only a directory is provided, the file will be named after the \code{.data} object (e.g., "Affiliation.feather"). If a filename is provided in the path (e.g., "Export.feather"), the file will be saved with that name.}
+
+\item{nm}{\code{(character)} Optional name for the file. If not provided, the name of the \code{.data} object will be used.}
 }
 \value{
 A success message at the console

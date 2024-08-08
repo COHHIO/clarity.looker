@@ -7,13 +7,21 @@
 hud_look_table_update(look_table, look_html, look_type, add_new = FALSE)
 }
 \arguments{
-\item{look_table}{\code{(numeric)} output from \code{parse_look_table}}
+\item{look_table}{\code{(list)} The existing \code{.hud_export} spec, usually a list where each element corresponds to a look type.}
 
-\item{look_type}{\code{(character)} which Look type to update (or add)}
+\item{look_html}{\code{(character)} HTML content or path to the HTML file used to parse new look table entries.}
+
+\item{look_type}{\code{(character)} The Look type to update or add. This determines which look type to modify in the \code{look_table}.}
+
+\item{add_new}{\code{(logical)} Whether to add new look types not already present in \code{look_table}. \strong{Default} is \code{FALSE}.}
 }
 \value{
-Console output from dput with the new spec to copy/paste into hud_export.R
+Console output from \code{dput} with the updated spec. This output can be copied and pasted into \code{hud_export.R} to update the spec.
 }
 \description{
 Using the \code{look_table} returned from \code{parse_look_table}, update the \code{.hud_export} spec
+}
+\examples{
+Assuming parse_look_table and a look_table already exist
+hud_look_table_update(look_table = my_look_table, look_html = "path/to/look.html", look_type = "new_look_type", add_new = TRUE)
 }

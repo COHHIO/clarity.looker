@@ -245,7 +245,8 @@ hud_rename <- function(x, rm_prefixes, nms) {
 #' @title Write object to the *data* directory as feather file
 #' @description Writes a \code{tibble/data.frame} as a feather file to the path
 #' @param .data \code{(tibble/data.frame)} The object to write to feather
-#' @param path \code{(character vector)} A character vector of the directory path to be passed to \link[base]{file.path}. If the filename is appended IE "Export.feather", the file will be named as such. Otherwise the name of the `.data` object will be used IE, if an object named `Affiliation` containing the Affiliation data is passed to `.data`, the resulting file will be [path]/Affiliation.feather.
+#' @param path \code{(character)} A single directory path or full file path where the feather file will be saved. If only a directory is provided, the file will be named after the `.data` object (e.g., "Affiliation.feather"). If a filename is provided in the path (e.g., "Export.feather"), the file will be saved with that name.
+#' @param nm \code{(character)} Optional name for the file. If not provided, the name of the `.data` object will be used.
 #' @return A success message at the console
 #' @export
 
@@ -308,7 +309,7 @@ find_clients <- function(x, clients) {
 #' @title Filter for specific projects
 #'
 #' @param x \code{(data.frame)} with either ProjectID or ProjectName
-#' @param clients \code{(character)} of either ProjectID's or ProjectName's. The corresponding column must be present in the data to filter
+#' @param projects \code{(character)} of either ProjectID's or ProjectName's. The corresponding column must be present in the data to filter
 #'
 #' @return \code{(data.frame)} filtered for clients
 #' @export

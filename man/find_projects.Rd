@@ -9,7 +9,7 @@ find_projects(x, projects)
 \arguments{
 \item{x}{\code{(data.frame)} with either ProjectID or ProjectName}
 
-\item{clients}{\code{(character)} of either ProjectID's or ProjectName's. The corresponding column must be present in the data to filter}
+\item{projects}{\code{(character)} of either ProjectID's or ProjectName's. The corresponding column must be present in the data to filter}
 }
 \value{
 \code{(data.frame)} filtered for clients
