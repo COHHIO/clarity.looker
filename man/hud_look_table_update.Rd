@@ -21,7 +21,3 @@ Console output from \code{dput} with the updated spec. This output can be copied
 \description{
 Using the \code{look_table} returned from \code{parse_look_table}, update the \code{.hud_export} spec
 }
-\examples{
-Assuming parse_look_table and a look_table already exist
-hud_look_table_update(look_table = my_look_table, look_html = "path/to/look.html", look_type = "new_look_type", add_new = TRUE)
-}

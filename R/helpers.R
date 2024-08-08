@@ -353,7 +353,8 @@ is_link <- function(.col) {
 #' @export
 #'
 #' @examples
-#' data.frame(a = letters, b = seq_along(letters)) |>  dplyr::mutate(a = make_link(ID = b, link_text = a, type = "profile"))
+#' data.frame(a = letters, b = seq_along(letters)) |>
+#'   dplyr::mutate(a = make_link(ID = b, link_text = a, type = "profile"))
 
 
 make_link <- function(ID, link_text, type = NULL, chr = TRUE) {
