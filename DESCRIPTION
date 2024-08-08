@@ -9,14 +9,24 @@ Encoding: UTF-8
 Imports:
     cli,
     dplyr,
+    glue,
+    htmltools,
     httpuv,
     httr,
     lookr,
     lubridate,
+    purrr,
     readr,
     rlang (>= 1.0.0),
+    rvest,
+    slider,
+    stringdist,
     stringr,
-    UU
+    tibble,
+    tidyr,
+    tidyselect,
+    UU,
+    xml2
 Suggests:
   arrow
 Remotes:

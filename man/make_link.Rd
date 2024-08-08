@@ -34,5 +34,5 @@ make_link(ID, link_text, type = NULL, chr = TRUE)
 If used in a \link[DT]{datatable}, set \code{escape = FALSE}
 }
 \examples{
-data.frame(a = letters, b = seq_along(letters)) |>  dplyr::mutate(a = make_link(a, b))
+data.frame(a = letters, b = seq_along(letters)) |>  dplyr::mutate(a = make_link(ID = b, link_text = a, type = "profile"))
 }
