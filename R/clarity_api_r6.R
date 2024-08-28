@@ -483,7 +483,7 @@ clarity_api <- R6::R6Class(
           look_data_df <- read.csv(text = look_data)
 
           # Write to Feather format
-          write_feather(look_data_df, file.path(path, paste0(looks$title[.y], ".feather")))
+          arrow::write_feather(look_data_df, file.path(path, paste0(looks$title[.y], ".feather")))
         }
 
         # End time and calculate duration
