@@ -465,23 +465,6 @@ clarity_api <- R6::R6Class(
       sdk <- reticulate::import("looker_sdk")
       looker_sdk <- sdk$init40(config_file = "/Users/fortyfour/Documents/COHHIO/pylooker/looker.ini")
       purrr::imap(fns, ~{
-        # # Start time
-        # start_time <- Sys.time()
-        #
-        # # Update progress bar with current look name
-        # cli::cli_progress_update(id = .pid)
-        #
-        # fn <- rlang::call2(.x, !!!.args)
-        # suppressMessages(rlang::eval_bare(fn))
-        #
-        # # End time and calculate duration
-        # end_time <- Sys.time()
-        # duration <- round(difftime(end_time, start_time, units = "secs"), 2)
-        #
-        # # Print the look name and duration
-        # cli::cli_inform(
-        #   sprintf("Fetched %s in %s seconds.", looks$title[.y], duration)
-        # )
         # Start time
         start_time <- Sys.time()
 
@@ -496,8 +479,11 @@ clarity_api <- R6::R6Class(
         look_data <- looker_sdk$run_look(look_id = look_id, result_format = result_format)
 
         if (.write) {
-          # Write to disk if needed
-          write.csv(read.csv(text = look_data), file.path(path, paste0(looks$title[.y], ".csv")), row.names = FALSE)
+          # Convert the CSV data to a data frame
+          look_data_df <- read.csv(text = look_data)
+
+          # Write to Feather format
+          write_feather(look_data_df, file.path(path, paste0(looks$title[.y], ".feather")))
         }
 
         # End time and calculate duration
