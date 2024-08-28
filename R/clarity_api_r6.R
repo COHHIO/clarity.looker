@@ -446,16 +446,14 @@ clarity_api <- R6::R6Class(
         details = details,
         path = path
       )
-      # if (!missing(skip)) {
-      #   looks <- purrr::keep(folder$looks, ~!.x$title %in% skip)
-      # } else {
-        # looks <- folder$looks
-      #   looks <- unlist(unname(folder))
-      # }
 
-      # looks <- rlang::set_names(looks, names(folder_looks(folder)))
+      if (length(skip) > 0) {
+        looks <- purrr::discard(folder, ~ .x %in% skip)
+      } else {
+        looks <- folder
+      }
 
-      looks <- folder
+
       .is_export <- identical(names(folder), private$folder_info$export)
       looks <- data.frame(title = names(looks), look = unlist(looks), row.names = NULL)
 
@@ -464,11 +462,53 @@ clarity_api <- R6::R6Class(
                                     status = "Fetch look: ",
                                     format = "{cli::pb_name}: {.path {cli::pb_status}} {cli::pb_current}/{cli::pb_total} [{cli::col_br_blue(cli::pb_elapsed)}]",
                                     total = length(fns))
-
+      sdk <- reticulate::import("looker_sdk")
+      looker_sdk <- sdk$init40(config_file = "/Users/fortyfour/Documents/COHHIO/pylooker/looker.ini")
       purrr::imap(fns, ~{
-        cli::cli_progress_update(id = .pid, status = .y)
-        fn <- rlang::call2(.x, !!!.args)
-        suppressMessages(rlang::eval_bare(fn))
+        # # Start time
+        # start_time <- Sys.time()
+        #
+        # # Update progress bar with current look name
+        # cli::cli_progress_update(id = .pid)
+        #
+        # fn <- rlang::call2(.x, !!!.args)
+        # suppressMessages(rlang::eval_bare(fn))
+        #
+        # # End time and calculate duration
+        # end_time <- Sys.time()
+        # duration <- round(difftime(end_time, start_time, units = "secs"), 2)
+        #
+        # # Print the look name and duration
+        # cli::cli_inform(
+        #   sprintf("Fetched %s in %s seconds.", looks$title[.y], duration)
+        # )
+        # Start time
+        start_time <- Sys.time()
+
+        # Update progress bar with current look name
+        cli::cli_progress_update(id = .pid)
+
+        # Call Python Looker SDK to fetch data
+        look_id <- looks$look[.y]
+        result_format <- "csv"  # Or "json", depending on your preference
+
+        # Use reticulate to call Python function
+        look_data <- looker_sdk$run_look(look_id = look_id, result_format = result_format)
+
+        if (.write) {
+          # Write to disk if needed
+          write.csv(read.csv(text = look_data), file.path(path, paste0(looks$title[.y], ".csv")), row.names = FALSE)
+        }
+
+        # End time and calculate duration
+        end_time <- Sys.time()
+        duration <- round(difftime(end_time, start_time, units = "secs"), 2)
+
+        # Print the look name and duration
+        cli::cli_inform(
+          sprintf("Fetched %s in %s seconds.", looks$title[.y], duration)
+        )
+
       })
 
     },
