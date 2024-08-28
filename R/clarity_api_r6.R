@@ -494,15 +494,16 @@ clarity_api <- R6::R6Class(
 
           # Get the list of column names for the current look
           look_title <- looks$title[.y]
-          column_names <- get_column_names(look_title, envir = .GlobalEnv)
+          column_names <- get_column_names(look_title)
 
-          # Ensure columns match
-          if (!all(column_names %in% names(look_data_df))) {
-            cli::cli_abort("Some columns are missing from the data for look '{look_title}'")
+          # Check if the number of columns matches
+          if (length(column_names) == ncol(look_data_df)) {
+            # Rename the columns directly
+            names(look_data_df) <- column_names
+          } else {
+            # If they do not match, provide an error or handle accordingly
+            cli::cli_abort("The number of columns in the data does not match the expected column names for look '{look_title}'.")
           }
-
-          # Reorder columns
-          look_data_df <- look_data_df[match(column_names, names(look_data_df))]
 
           # Write to Feather format
           arrow::write_feather(look_data_df, file.path(path, paste0(look_title, ".feather")))
