@@ -467,7 +467,7 @@ clarity_api <- R6::R6Class(
 
       # Helper function to get column names
       get_column_names <- function(title) {
-        extras_list <- get(paste0(title, "_extras"), envir = .GlobalEnv, inherits = TRUE)
+        extras_list <- get(paste0(title), envir = .GlobalEnv, inherits = TRUE)
         if (is.null(extras_list)) {
           stop(sprintf("Column names list for '%s' not found", title))
         }
