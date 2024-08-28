@@ -437,10 +437,11 @@ clarity_api <- R6::R6Class(
     #' @param skip \code{(character)} vector of the names of looks in the folder to skip
     #' @return \code{(list)} of specified looks in folder
     get_folder_looks = function(folder, details = FALSE, .write = FALSE, path,
-                                skip = c("Client_COVID_extras",
-                                         "Client_Doses_extras")) {
-      if (!dir.exists(path))
+                                skip = c("Client_COVID_extras", "Client_Doses_extras")) {
+      if (!dir.exists(path)) {
         UU::mkpath(path)
+      }
+
       .args <- list(
         .write = .write,
         details = details,
@@ -453,7 +454,6 @@ clarity_api <- R6::R6Class(
         looks <- folder
       }
 
-
       .is_export <- identical(names(folder), private$folder_info$export)
       looks <- data.frame(title = names(looks), look = unlist(looks), row.names = NULL)
 
@@ -464,6 +464,16 @@ clarity_api <- R6::R6Class(
                                     total = length(fns))
       sdk <- reticulate::import("looker_sdk")
       looker_sdk <- sdk$init40(config_file = "/Users/fortyfour/Documents/COHHIO/pylooker/looker.ini")
+
+      # Helper function to get column names
+      get_column_names <- function(title) {
+        extras_list <- get(paste0(title, "_extras"), envir = .GlobalEnv, inherits = TRUE)
+        if (is.null(extras_list)) {
+          stop(sprintf("Column names list for '%s' not found", title))
+        }
+        return(extras_list)
+      }
+
       purrr::imap(fns, ~{
         # Start time
         start_time <- Sys.time()
@@ -482,8 +492,20 @@ clarity_api <- R6::R6Class(
           # Convert the CSV data to a data frame
           look_data_df <- read.csv(text = look_data)
 
+          # Get the list of column names for the current look
+          look_title <- looks$title[.y]
+          column_names <- get_column_names(look_title)
+
+          # Ensure columns match
+          if (!all(column_names %in% names(look_data_df))) {
+            cli::cli_abort("Some columns are missing from the data for look '{look_title}'")
+          }
+
+          # Reorder columns
+          look_data_df <- look_data_df[match(column_names, names(look_data_df))]
+
           # Write to Feather format
-          arrow::write_feather(look_data_df, file.path(path, paste0(looks$title[.y], ".feather")))
+          arrow::write_feather(look_data_df, file.path(path, paste0(look_title, ".feather")))
         }
 
         # End time and calculate duration
@@ -496,8 +518,8 @@ clarity_api <- R6::R6Class(
         )
 
       })
-
-    },
+    }
+    ,
     #' @field folders `{lookr}` folder data stored here
     folders = list()
   ),
