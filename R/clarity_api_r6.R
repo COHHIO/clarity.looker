@@ -494,7 +494,7 @@ clarity_api <- R6::R6Class(
 
           # Get the list of column names for the current look
           look_title <- looks$title[.y]
-          column_names <- get_column_names(look_title)
+          column_names <- get_column_names(look_title, envir = .GlobalEnv)
 
           # Ensure columns match
           if (!all(column_names %in% names(look_data_df))) {
