@@ -486,7 +486,7 @@ clarity_api <- R6::R6Class(
         result_format <- "csv"  # Or "json", depending on your preference
 
         # Use reticulate to call Python function
-        look_data <- looker_sdk$run_look(look_id = look_id, result_format = result_format, limit = -1)
+        look_data <- looker_sdk$run_look(look_id = look_id, result_format = result_format, limit = "-1")
 
         if (.write) {
           # Convert the CSV data to a data frame
