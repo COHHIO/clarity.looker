@@ -1,5 +1,5 @@
 Package: clarity.looker
-Version: 0.0.1
+Version: 0.1.0
 Title: A package for retrieve HMIS data and HUD Export items from the BitFocus Clarity Looker API
 Description: This package retrieves HUD Export CSVs and other HMIS data from the Clarity Looker API.
 Authors@R: c(person("Stephen","Holsenbeck", email = "sholsen@alumni.emory.edu", role = c("aut","cre")),
